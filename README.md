@@ -29,7 +29,7 @@ nextflow run main_bam.nf
 ## Usage
 
 ```
-nextflow run main_bam.nf --input tests/input/sequence*.fast5 --output results
+nextflow run main_bam.nf --input input/bam/bamfile*.bam --output results
 ```
 
 ## Contact
