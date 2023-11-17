@@ -1,0 +1,21 @@
+# You can use this file to create a conda environment for this pipeline:
+#   conda env create -f environment.yml
+name: nf-mito-calling
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - unzip=6.0
+  - java-jdk=8.0.112
+
+  - r-base=4.1.0
+  - r-rmarkdown=2.11
+  - r-ggplot2=3.3.5
+  - r-plyr=1.8.6
+  - r-data.table=1.14.0
+  - r-dt=0.19
+  - r-htmltools=0.5.2
+  - r-rmdformats=1.0.3
+  - r-knitr=1.37
+  - pandoc=2.14.2

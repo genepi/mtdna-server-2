@@ -1,0 +1,340 @@
+---
+title: mutserve report
+output:
+  html_document:
+    includes:
+      after_body: doc_suffix.html
+      before_body: doc_prefix.html
+      in_header: header.html
+    theme: null
+    toc: yes
+params:
+  name: 'Test'
+  variants_filename: ../tests/input/HG002_ONT_variants_annotated.txt
+  raw_filename: ../tests/input/HG002_ONT_raw.txt
+  contamination_filename: ../tests/input/HG002_ONT_contaminated.txt
+
+---
+
+<!---
+## Run R, and provide files:
+-->
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=12, fig.height=10}
+
+knitr::opts_chunk$set(echo = TRUE)
+options(warn = -1)
+
+
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(plyr))
+
+
+raw = read.table(params$raw_filename, header = TRUE, sep="\t");
+  message("raw file ok");
+variants = read.table(params$variants_filename, header = TRUE, sep="\t");
+  message("variant file ok");
+contamination= read.table(params$contamination_filename, header = TRUE, sep="\t");
+  message("contamination file ok");
+
+```
+
+----
+
+## Detected Heteroplasmies
+
+
+This interactive table shows the detected heteroplasmic sites per sample. The heteroplasmy level (HET.LEVEL) always displays the percentage of the minor component.
+
+```{r echo=FALSE, results='asis'}
+
+
+hetero <- variants[variants$Type==2,]
+#remove all NA
+hetero[is.na(hetero)] <- ""
+
+if(nrow(hetero)>0){
+
+	hetero$MAJOR.MIN<-with(hetero, paste(hetero$MajorBase,"/",hetero$MinorBase, sep=""))
+columns <- c("ID", "Pos","Ref", "MinorLevel", "VariantLevel","MAJOR.MIN","Coverage", "CoverageFWD", "CoverageREV","Substitution", "NuMTs_dayama", "HaploGrep2_weight", "AAC", "MutPred_Score", "CI_MitoTool", "Maplocus", "OXPHOS_complex", "LowComplexityRegion", "rCRS_Surr_seq")
+
+	kable(hetero[columns], "html", table.attr = "id=\"hetero_table\" class=\"table table-bordered table-striped display responsive nowrap\"",caption = "Table 1 - Heteroplasmic variants. Attention: in previous mtDNA-Server HET-LEVEL represented the minor components level, now MinorLevel", row.names = FALSE)
+
+} else{
+
+	cat("<div class='alert alert-neutral'>No heteroplasmic sites found!</div>")
+
+}
+```
+
+
+
+
+----
+
+## Detected Homoplasmies
+
+
+This interactive table shows the detected variant sites per sample. The column AAC represents the Amino Acid Change, the <a href="http://mutpred.mutdb.org/about.html">MutPred Score</a> (0-1 where values >0.5 are considered harmful and > 0.75 considered highly harmful) and <a href="http://www.sciencedirect.com/science/article/pii/S000292971100098X">mtDNA Selection Score</a> (values < 1 indicate weak or no harming effects) are pathogenicity scores. The HaploGrep scores (n.d.; 1-10) indicate if the variant is present in the current Phylotree17 (1) otherwise (0).
+
+```{r echo=FALSE, results='asis'}
+
+
+homopls <- variants[variants$Type==1,]
+homopls$MUT<-with(homopls, paste(homopls$Ref,">",homopls$Variant, sep=""))
+
+columns <- c("ID", "Pos", "MUT", "MinorLevel", "Coverage", "CoverageFWD", "CoverageREV", "Substitution","HaploGrep2_weight", "AAC", "MutPred_Score", "CI_MitoTool", "Maplocus", "OXPHOS_complex" )
+
+if(nrow(homopls)>0){
+
+	kable(homopls[columns], "html", caption = "Table 2 - Homoplasmic variants", table.attr = "id=\"homo_table\" class=\"table table-bordered table-striped\"", row.names = FALSE)
+
+} else{
+	cat("<div class='alert alert-neutral'>No homoplasmic sites found!</div>")
+}
+
+```
+
+----
+
+## Heteroplasmy Frequencies
+
+This table represents heteroplasmic sites with frequency >= 2. If a position shows up in too many samples, it could be the result of artifacts and needs to be re-checked!
+
+```{r echo=FALSE, results='asis'}
+
+if(nrow(hetero)>0){
+  freqMut <- data.frame(table(hetero$Mutation))
+  freqMut_annot <- merge(freqMut, hetero, by.x="Var1", by.y="Mutation")
+  b<-aggregate(Freq~Var1 + Pos + Variant + HaploGrep2_weight+ Phylotree17_haplogroups+ Helix_count_hom + Helix_count_het +Maplocus, freqMut_annot, first)
+
+	if (nrow(b[b$Freq>=2,])>=1){
+		kable(b[b$Freq>=2, -1], "html", row.names=FALSE, table.attr = "id=\"hetero_freq\" class=\"table table-bordered table-striped\"", caption = "Table 3 - Frequency Table of heteroplasmic variants")
+	}else{
+		cat("<div class='alert alert-neutral'>No shared heteroplasmic sites over samples have been detected</div>")
+	}
+}
+
+
+```
+
+----
+
+## Classified Haplogroups / Contamination-check
+
+Detected haplogroups using Haplocheck via <a href="http://haplogrep.uibk.ac.at">HaploGrep</a> based on <b>Phylotree 17</b>.
+
+A sample is listed as a <b> contamination</b>, if the major and minor haplogroup of the sample differ.
+Always verify the contamination by checking the phylogenetic distance of the two haplogroups with haplocheck.
+
+
+```{r echo=FALSE, results='asis', results='asis'}
+
+if(nrow(contamination)>0){
+
+columns <- c("Sample", "Major.Haplogroup", "Major.Haplogroup.Quality", "Contamination.Status","Contamination.Level","Sample.Coverage","Minor.Haplogroup")
+
+kable(contamination, "html", caption = "Table 4 - Haplogroups + Contamination Status", table.attr = "id=\"haplo_table\" class=\"table table-bordered table-striped\"", row.names = NA)
+} else{
+		cat("<div class='alert alert-neutral'>Issues detecting the sample's haplogroup</div>")
+	}
+```
+
+---
+
+
+```{r, echo=FALSE, results='asis'}
+if(nrow(hetero)>0){
+  cat("<hr>");
+	cat("<h2>Heteroplasmy Levels per Sample</h2>")
+}
+```
+
+```{r echo=FALSE, fig.width=12, fig.height=6}
+library(ggplot2)
+if(nrow(hetero)>0){
+
+  ggplot(hetero, aes(x=ID, y=VariantLevel)) + geom_jitter(aes(color=ID))+ theme(axis.text.x=element_text(angle=+90)) +  theme(legend.position = "none")
+}
+```
+
+```{r, echo=FALSE, results='asis'}
+if(nrow(hetero)>0){
+	cat("<center>Fig.1: Heteroplasmy level per sample. </center>")
+  cat("<hr>");
+	cat("<h2>Heteroplasmy Frequencies per Sample</h2>")
+}
+```
+
+```{r echo=FALSE, fig.width=12, fig.height=6}
+count <-as.data.frame(table(hetero$ID));
+names(count)[names(count)=="Var1"] <- "Sample";
+if(nrow(count)>0){
+	ggplot(count, aes(x=Sample, y=Freq)) + geom_bar(fill="cyan4", stat='identity') + theme(axis.text.x=element_text(angle=+90))
+}
+```
+
+```{r, echo=FALSE, results='asis'}
+if(nrow(hetero)>0){
+	cat("<center>Fig.2: Heteroplasmic sites per sample.</center>");
+	cat("<hr>");
+	cat("<h2>Heteroplasmy per Region over all Samples</h2>")
+	cat("<p>Amount of heteroplasmic sites grouped according their loci on the mitochondrial genome.</p>")
+}
+```
+
+```{r echo=FALSE, fig.width=12, fig.height=6, results='asis'}
+
+if(nrow(count(hetero$ID))>0 & nrow(count(hetero$ID))<10) {
+	ggplot(hetero, aes(x=Pos, y=VariantLevel)) +  geom_point(alpha=0.5, aes(color=ID)) + theme(legend.position = "bottom")
+} else {
+  if ((nrow(count(hetero$ID))>0)){
+  ggplot(hetero, aes(x=Pos, y=VariantLevel)) +  geom_point(alpha=0.5, aes(color=Maplocus, shape=Substitution)) + theme(legend.position = "bottom")
+    }
+}
+```
+
+```{r, echo=FALSE, results='asis'}
+if(nrow(hetero)>0){
+	cat("<center>Fig.3: Heteroplasmic sites grouped according their loci on the mitochondrial genome. </center>");
+}
+```
+
+
+```{r, echo=FALSE, results='asis'}
+if(nrow(hetero)>0){
+  cat("<hr>");
+	cat("<h2>Cumulative Coverage Plot</h2>")
+}
+```
+
+```{r echo=FALSE, fig.width=12, fig.height=6}
+rawSelected<- raw[seq(1, nrow(raw), 25),]
+columns<-c("SAMPLE", "POS", "COV.FWD", "COV.REV")
+rawSelected<-rawSelected[columns]
+
+if(nrow(count)>0 & nrow(count)<= 20 ){
+	ggplot(rawSelected, aes(x=POS, y=COV.FWD+COV.REV)) + geom_line(aes(color=SAMPLE)) +  theme(legend.position = "right")
+} else{
+  if (nrow(count>20)){
+  ggplot(rawSelected, aes(x=POS, y=COV.FWD+COV.REV)) + geom_line(aes(color=SAMPLE)) +  theme(legend.position = "none")
+}
+}
+```
+
+
+----
+
+## Individual Coverage Plots
+
+The dotted line in purple shows the mean coverage over all analysed samples. The dotted line in turquoise shows the mean coverage for this specific sample. Red line = coverage for reverse strand, Blue=coverage on forward strand, and darkgrey = total coverage.
+
+
+```{r echo=FALSE, fig.width=5.5, fig.height=4, result='asis'}
+
+
+max1<-max((rawSelected[3])+(rawSelected[4]))
+s<-count(rawSelected$SAMPLE)
+meanCov<-mean(rawSelected$COV.FWD+rawSelected$COV.REV)
+for( i in 1: nrow(s)) {
+print(ggplot() + geom_line(data=rawSelected[rawSelected$SAMPLE==as.character(s[i,1]),], aes(x= POS, y = COV.FWD), color="blue" , alpha =0.3) +  geom_line(data=rawSelected[rawSelected$SAMPLE==as.character(s[i,1]),], aes(x= POS, y = COV.REV), color="red", alpha =0.3) +  geom_line(data=rawSelected[rawSelected$SAMPLE==as.character(s[i,1]),], aes(x= POS, y = COV.FWD+ COV.REV), color="black" , alpha =0.5 ) +
+        geom_hline(data=rawSelected[rawSelected$SAMPLE==as.character(s[i,1]),],aes(yintercept=mean(COV.FWD+COV.REV)), colour="#0072B2", linetype="dashed")+ geom_hline(aes(yintercept=meanCov), colour="#7200B2", linetype="dashed") + xlab("mtDNA position") + ylab("Coverage") + ylim(c(0, max1)) +ggtitle(as.character(s[i,1])))
+}
+
+```
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#hetero_table').DataTable({
+
+       responsive: {
+            details: {
+                display: $.fn.dataTable.Responsive.display.modal( {
+                    header: function ( row ) {
+                        var data = row.data();
+                        return 'Details for '+data[0];
+                    }
+                } ),
+                renderer: function ( api, rowIdx, columns ) {
+                    var data = $.map( columns, function ( col, i ) {
+                        return '<b>' + col.title+':'+'</b><br>'+
+                                col.data+'<br><hr>';
+                    } ).join('');
+
+                    return $('<div/>').append( data );
+                }
+            }
+       },
+
+       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+          if ( aData[2] == "N" ){
+            $('td', nRow).css('background-color', '#f2dede');
+          }
+       }
+
+  	});
+	} );
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#homo_table').DataTable({
+    	"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            if ( aData[7]==("no")){
+              $('td', nRow).css('font-weight', 'bold');
+            }
+         }
+  	});
+	} );
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#hetero_freq').DataTable({
+    	"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            if ( aData[7]=="no"){
+              $('td', nRow).css('font-weight', 'bold');
+            }
+         }
+  	});
+	} );
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#haplo_table').DataTable({
+    	"fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            if ( aData[3]==("YES")){
+              $('td', nRow).css('background-color', '#f2dede');
+            }
+         }
+  	});
+	} );
+</script>
+
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#hetero_table').DataTable();
+	} );
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#homo_table').DataTable();
+	} );
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#haplo_table').DataTable();
+	} );
+
+<script type="text/javascript">
+  $(document).ready(function() {
+  	$('#hetero_freq').DataTable();
+	} );
+
+</script>
