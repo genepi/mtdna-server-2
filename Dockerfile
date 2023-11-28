@@ -1,5 +1,5 @@
 FROM nfcore/base:1.14
-MAINTAINER Hansi Weissensteiner <hansi.weissensteiner@i-med.ac.at>
+LABEL Hansi Weissensteiner <hansi.weissensteiner@i-med.ac.at>
 
 COPY environment.yml .
 RUN \
