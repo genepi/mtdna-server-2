@@ -34,7 +34,7 @@ nextflow run main_bam.nf --input input/bam/bamfile*.bam --output results
 
 ## Contact
 
-- Hansi Weissensteiner (@haansi), Institute of Genetic Epidemiology, Medical University of Innsbruck
+- Hansi Weissensteiner (@haansi), Institute of Genetic Epidemiology, Medical University of Innsbruck 
 
 
 ## License
