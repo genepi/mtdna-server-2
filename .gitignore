@@ -1,0 +1,8 @@
+output
+work
+*nextflow.log
+*nextflow.log.*
+.nextflow
+.DS_Store
+.nf-test
+cloudgene.report.json
