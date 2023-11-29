@@ -2,7 +2,7 @@
 
 include { MUTSERVE } from '../modules/local/mutserve'
 include { ANNOTATE } from '../modules/local/annotate'
-include { HAPLOGROUP_CLASSIFYING } from '../modules/local/haplogroup_classifying'
+include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
 include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
 include { REPORT } from '../modules/local/report'
 
@@ -21,8 +21,13 @@ workflow MITOCALLING {
     }
 
     bams_ch = Channel.fromPath(params.files)
-    ref_file = file("$projectDir/files/rCRS.fasta")
-    annotation_file= file("$projectDir/files/rCRS_annotation.txt")
+
+    if(params.reference.equals("rcrs")){
+       ref_file = file("$projectDir/files/rCRS.fasta")
+       annotation_file= file("$projectDir/files/rCRS_annotation.txt")
+    } else {
+        exit 1, "Reference " + params.reference + "not supported"
+    }
 
     MUTSERVE(
         bams_ch.collect(),
@@ -35,7 +40,7 @@ workflow MITOCALLING {
         annotation_file
     )
 
-    HAPLOGROUP_CLASSIFYING(
+    HAPLOGROUP_DETECTION(
         MUTSERVE.out.vcf_ch
     )    
 

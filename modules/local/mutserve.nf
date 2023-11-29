@@ -11,6 +11,6 @@ process MUTSERVE {
     path("variants.txt"), emit: txt_ch
 
     """
-    java -jar /opt/mutserve/mutserve.jar call --level 0.01 --reference ${reference} --mapQ 30 --baseQ 30 --deletions --output variants.vcf.gz --no-ansi ${bam_files_ch} --threads 1 --write-raw
+    java -jar /opt/mutserve/mutserve.jar call --level ${params.detection_limit} --reference ${reference} --mapQ $params.mutserve.mapQ --baseQ $params.mutserve.baseQ --deletions --output variants.vcf.gz --no-ansi ${bam_files_ch} --threads 1 --write-raw
     """
 }

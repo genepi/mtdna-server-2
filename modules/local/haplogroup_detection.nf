@@ -1,4 +1,4 @@
-process HAPLOGROUP_CLASSIFYING {
+process HAPLOGROUP_DETECTION {
 
     publishDir "${params.output}/haplogroups", mode: 'copy'
 

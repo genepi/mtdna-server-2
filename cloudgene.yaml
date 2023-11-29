@@ -7,7 +7,7 @@ category:
 
 workflow:
   steps:
-    - name: mtDNA QC, Variant Calling and Interactive Reporting
+    - name: mtDNA Quality-Control, Variant Calling and Interactive Reporting
       type: nextflow
       script: main.nf
       # params without UI
@@ -35,9 +35,25 @@ workflow:
   inputs:
 
     - id: files
-      description: Input Files (<a href="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41" target="_blank">VCF</a>)
+      description: Input Files
       type: local-folder
       pattern: "*.bam"
+
+    - id: reference
+      description: Reference
+      type: list
+      value: "rcrs"
+      values:
+        "rcrs": "rCRS"
+
+    - id: detection_limit
+      description: Detection Limit
+      type: list
+      value: 0.01
+      values:
+        0.01: 0.01
+        0.05: 0.05
+        0.1: 0.1      
 
     - id: mode
       description: Mode
