@@ -1,19 +1,52 @@
 
 
 include { MUTSERVE } from '../modules/local/mutserve'
+include { ANNOTATE } from '../modules/local/annotate'
+include { HAPLOGROUP_CLASSIFYING } from '../modules/local/haplogroup_classifying'
+include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
+include { REPORT } from '../modules/local/report'
 
 workflow MITOCALLING {
 
     println "Welcome to ${params.service.name}"
 
-    bams_ch = Channel.fromPath(params.input)
-    ref_file= file(params.reference)
+    requiredParams = [
+        'project', 'files', 'output'
+    ]
+
+    for (param in requiredParams) {
+        if (params[param] == null) {
+            exit 1, "Parameter ${param} is required."
+        }
+    }
+
+    bams_ch = Channel.fromPath(params.files)
+    ref_file = file("$projectDir/files/rCRS.fasta")
+    annotation_file= file("$projectDir/files/rCRS_annotation.txt")
 
     MUTSERVE(
-        bams_ch,
+        bams_ch.collect(),
         ref_file
     )
-   
+
+    ANNOTATE(
+        MUTSERVE.out.txt_ch,
+        ref_file,
+        annotation_file
+    )
+
+    HAPLOGROUP_CLASSIFYING(
+        MUTSERVE.out.vcf_ch
+    )    
+
+    CONTAMINATION_DETECTION(
+        MUTSERVE.out.vcf_ch
+    )
+
+    REPORT(
+        MUTSERVE.out.txt_ch
+    )        
+
 }
 
 workflow.onComplete {

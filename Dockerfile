@@ -26,3 +26,12 @@ RUN wget https://github.com/genepi/haplocheck/releases/download/v1.3.3/haplochec
 RUN unzip haplocheck.zip && \
     rm haplocheck.zip
 ENV PATH="/opt/haplocheck:${PATH}"
+
+RUN mkdir /opt/haplogrep
+WORKDIR "/opt/haplogrep"
+RUN wget https://github.com/genepi/haplogrep3/releases/download/v3.2.1/haplogrep3-3.2.1-linux.zip && \
+    unzip haplogrep3-3.2.1-linux.zip && \
+    rm haplogrep3-3.2.1-linux.zip
+ENV PATH="/opt/haplogrep:${PATH}"
+
+
