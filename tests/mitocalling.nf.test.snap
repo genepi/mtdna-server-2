@@ -1,0 +1,25 @@
+{
+    "Runs with single BAM file": {
+        "content": [
+            [
+                [
+                    "haplogroups.txt:md5,14e2601fd8852abe0f47869d8033a7b4"
+                ],
+                [
+                    "contamination.html:md5,53a0eae3fc64fab0456c0fe96447b3d9",
+                    "report.html:md5,14524efe5aa512a388853018e70f529e"
+                ],
+                [
+                    "variants.txt:md5,9a5641b89f88670ff70f4a815699b926",
+                    "variants.vcf.gz:md5,60f372898d3efcee971ec611d90d6a90"
+                ]
+            ],
+            {
+                "tasksFailed": 0,
+                "tasksCount": 5,
+                "tasksSucceeded": 5
+            }
+        ],
+        "timestamp": "2023-11-30T16:57:13.576961"
+    }
+}

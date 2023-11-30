@@ -21,7 +21,7 @@ docker build -t genepi/nf-mitocalling . # don't ingore the dot here
 ## Usage
 
 ```
-nextflow run main.nf -c tests/data/test_single_bam.config -profile development
+nextflow run main.nf -c tests/test_single_bam.config -profile development
 ```
 
 ## Contact
