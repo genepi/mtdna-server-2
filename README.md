@@ -18,12 +18,6 @@ Build docker image before run the pipeline:
 docker build -t genepi/nf-mitocalling . # don't ingore the dot here
 ```
 
-Test the pipeline and the created docker image with test-data:
-
-```
-nextflow run main_bam.nf
-```
-
 ## Usage
 
 ```
