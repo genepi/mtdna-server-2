@@ -1,7 +1,6 @@
 # nf-mito-calling
 
 > Nextflow pipeline to analyze mtDNA heteroplasmy
-
 ## Requirements
 
 - Nextflow:
@@ -10,14 +9,13 @@
 curl -s https://get.nextflow.io | bash
 ```
 
-- Docker
 
 ## Installation
 
 Build docker image before run the pipeline:
 
 ```
-docker build -t haansi/nf-mito-calling . # don't ingore the dot here
+docker build -t genepi/nf-mitocalling . # don't ingore the dot here
 ```
 
 Test the pipeline and the created docker image with test-data:
@@ -29,7 +27,7 @@ nextflow run main_bam.nf
 ## Usage
 
 ```
-nextflow run main_bam.nf --input input/bam/bamfile*.bam --output results
+nextflow run main.nf -c tests/data/test_single_bam.config -profile development
 ```
 
 ## Contact
