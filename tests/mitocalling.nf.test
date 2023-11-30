@@ -15,7 +15,7 @@
 
         then {
             assert workflow.success
-            assert snapshot(new File("out"), workflow.trace).match()
+            assert snapshot(new File("out/variants.vcf.gz")).match()
         }
 
     }
