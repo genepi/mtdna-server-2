@@ -8,7 +8,6 @@ channels:
 dependencies:
   - unzip=6.0
   - java-jdk=8.0.112
-
   - r-base=4.1.0
   - r-rmarkdown=2.11
   - r-ggplot2=3.3.5

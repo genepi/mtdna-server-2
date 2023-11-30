@@ -1,0 +1,71 @@
+id: nf-mitocalling
+name: Mitochondrial Variant calling and QC
+description: This is the new mtDNA-Server.
+version: v2.0.0-beta1
+website: https://mitoverse.readthedocs.io/
+category:
+
+workflow:
+  steps:
+    - name: mtDNA Quality-Control, Variant Calling and Interactive Reporting
+      type: nextflow
+      script: main.nf
+      # params without UI
+      params:
+        project: "${CLOUDGENE_JOB_NAME}"
+        user:
+          email: "${CLOUDGENE_USER_EMAIL}"
+          name: "${CLOUDGENE_USER_NAME}"
+        service:
+          name: "${CLOUDGENE_SERVICE_NAME}"
+          email: "${CLOUDGENE_CONTACT_EMAIL}"
+          url: "${CLOUDGENE_SERVICE_URL}"
+      processes:
+        - process: "MITOCALLING:MUTSERVE"
+          label: "Variant Calling"
+        - process: "MITOCALLING:ANNOTATE"
+          label: "Annotation"
+        - process: "MITOCALLING:HAPLOGROUP_CLASSIFYING"
+          label: "Haplogroup Detection"
+        - process: "MITOCALLING:CONTAMINATION_DETECTION"
+          label: "Contamination Detection"
+        - process: "MITOCALLING:REPORT"
+          label: "Report Generation"
+
+  inputs:
+
+    - id: files
+      description: Input Files
+      type: local-folder
+      pattern: "*.bam"
+
+    - id: reference
+      description: Reference
+      type: list
+      value: "rcrs"
+      values:
+        "rcrs": "rCRS"
+
+    - id: detection_limit
+      description: Detection Limit
+      type: list
+      value: 0.01
+      values:
+        0.01: 0.01
+        0.05: 0.05
+        0.1: 0.1      
+
+    - id: mode
+      description: Mode
+      type: list
+      value: mutserve
+      values:
+        mutserve: SNPs only
+        mutect2: SNPs + Indel Calling
+
+  outputs:
+    - id: output
+      description: Output
+      type: local-folder
+      download: true
+      temp: false
