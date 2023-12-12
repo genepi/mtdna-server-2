@@ -18,3 +18,5 @@ dependencies:
   - r-rmdformats=1.0.3
   - r-knitr=1.37
   - pandoc=2.14.2
+  - samtools=1.18
+  - csvtk=0.26.0

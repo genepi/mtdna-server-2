@@ -1,5 +1,6 @@
 
-
+include { CALCULATE_STATISTICS } from '../modules/local/calculate_statistics'
+include { SUMMARIZE_STATISTICS } from '../modules/local/summarize_statistics'
 include { MUTSERVE } from '../modules/local/mutserve'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
@@ -28,6 +29,14 @@ workflow MITOCALLING {
     } else {
         exit 1, "Reference " + params.reference + "not supported"
     }
+
+    CALCULATE_STATISTICS(
+        bams_ch
+    )
+
+    SUMMARIZE_STATISTICS(
+        CALCULATE_STATISTICS.out.stats_ch.collect()
+    )
 
     MUTSERVE(
         bams_ch.collect(),
