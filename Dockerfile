@@ -12,7 +12,8 @@ RUN \
 
 RUN mkdir /opt/mutserve
 WORKDIR "/opt/mutserve"
-RUN wget https://github.com/seppinho/mutserve/releases/download/v2.0.0-rc12/mutserve.zip
+#RUN wget https://github.com/seppinho/mutserve/releases/download/v2.0.0-rc12/mutserve.zip
+COPY files/mutserve.zip .
 RUN unzip mutserve.zip && \
     rm mutserve.zip
 ENV PATH="/opt/mutserve:${PATH}"

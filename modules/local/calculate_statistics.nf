@@ -4,11 +4,12 @@ process CALCULATE_STATISTICS {
     path bam_file
 
     output:
-    path("*summary.txt"), emit: stats_ch
+    path("*summary.tab.txt"), emit: stats_ch
 
 
     script:
     def output_name = "${bam_file.baseName}.summary.txt"
+    def output_name_tab = "${bam_file.baseName}.summary.tab.txt"
 
     """
     ## calculate summary statistics
@@ -30,5 +31,7 @@ process CALCULATE_STATISTICS {
     echo ${bam_file.baseName}\tMeanDepth\t\${mean_depth} >> $output_name
     echo ${bam_file.baseName}\tMeanBaseQuality\t\${mean_base_quality} >> $output_name
     echo ${bam_file.baseName}\tMeanMapQuality\t\${mean_map_quality} >> $output_name
+
+    csvtk space2tab $output_name -o $output_name_tab
     """
 }

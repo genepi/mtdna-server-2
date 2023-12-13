@@ -40,7 +40,8 @@ workflow MITOCALLING {
 
     MUTSERVE(
         bams_ch.collect(),
-        ref_file
+        ref_file,
+        SUMMARIZE_STATISTICS.out.excluded_ch
     )
 
     ANNOTATE(
