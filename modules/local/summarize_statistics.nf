@@ -12,6 +12,13 @@ process SUMMARIZE_STATISTICS {
 
     """
     csvtk concat -t ${statistics} -T -o sample_statistics.txt
-    java -jar /opt/mutserve/mutserve.jar stats --input sample_statistics.txt --baseQ $params.mutserve.baseQ --mapQ $params.mutserve.mapQ --output excluded_samples.txt
+    java -jar /opt/mutserve/mutserve.jar stats \
+    --input sample_statistics.txt \
+    --detection-limit $params.detection_limit  \
+    --reference $params.reference  \
+    --baseQ $params.mutserve.baseQ \
+    --mapQ $params.mutserve.mapQ \
+    --alignQ $params.mutserve.alignQ \
+    --output excluded_samples.txt
     """
 }

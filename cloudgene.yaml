@@ -1,13 +1,13 @@
 id: nf-mitocalling
-name: Mitochondrial Variant calling and QC
-description: This is the new mtDNA-Server.
+name: mtDNA Variant Analysis
+description: mtdna-Server2
 version: v2.0.0-beta1
 website: https://mitoverse.readthedocs.io/
 category:
 
 workflow:
   steps:
-    - name: mtDNA Quality-Control, Variant Calling and Interactive Reporting
+    - name: mtDNA Variant Analysis
       type: nextflow
       script: main.nf
       # params without UI
@@ -21,17 +21,27 @@ workflow:
           email: "${CLOUDGENE_CONTACT_EMAIL}"
           url: "${CLOUDGENE_SERVICE_URL}"
       processes:
+        - process: "MITOCALLING:CALCULATE_STATISTICS"
+          label: "Calculate Statistics"
+          view: progressbar
+        - process: "MITOCALLING:SUMMARIZE_STATISTICS"
+          label: "Summarize Statistics"
+          view: progressbar
         - process: "MITOCALLING:MUTSERVE"
           label: "Variant Calling"
+          view: progressbar
         - process: "MITOCALLING:ANNOTATE"
           label: "Annotation"
+          view: progressbar
         - process: "MITOCALLING:HAPLOGROUP_CLASSIFYING"
           label: "Haplogroup Detection"
+          view: progressbar
         - process: "MITOCALLING:CONTAMINATION_DETECTION"
           label: "Contamination Detection"
+          view: progressbar
         - process: "MITOCALLING:REPORT"
           label: "Report Generation"
-
+          view: progressbar
   inputs:
 
     - id: files
