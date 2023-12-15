@@ -33,7 +33,7 @@ workflow:
         - process: "MITOCALLING:ANNOTATE"
           label: "Annotation"
           view: progressbar
-        - process: "MITOCALLING:HAPLOGROUP_CLASSIFYING"
+        - process: "MITOCALLING:HAPLOGROUP_DETECTION"
           label: "Haplogroup Detection"
           view: progressbar
         - process: "MITOCALLING:CONTAMINATION_DETECTION"
