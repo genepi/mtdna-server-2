@@ -1,6 +1,7 @@
 
 include { CALCULATE_STATISTICS } from '../modules/local/calculate_statistics'
 include { INPUT_VALIDATION } from '../modules/local/input_validation'
+include { QUALITY_CONTROL } from '../modules/local/quality_control'
 include { MUTSERVE } from '../modules/local/mutserve'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
@@ -8,7 +9,7 @@ include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detecti
 include { REPORT } from '../modules/local/report'
 
 workflow MITOCALLING {
-
+ 
     println "Welcome to ${params.service.name}"
 
     requiredParams = [
@@ -36,6 +37,11 @@ workflow MITOCALLING {
 
     INPUT_VALIDATION(
         CALCULATE_STATISTICS.out.stats_ch.collect()
+    )
+
+    QUALITY_CONTROL(
+        INPUT_VALIDATION.out.excluded_ch,
+        CALCULATE_STATISTICS.out.fastqc_ch.collect()
     )
 
     MUTSERVE(

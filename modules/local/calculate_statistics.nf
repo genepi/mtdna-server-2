@@ -4,7 +4,8 @@ process CALCULATE_STATISTICS {
     path bam_file
 
     output:
-    path("*summary.tab.txt"), emit: stats_ch
+    path "*summary.tab.txt", emit: stats_ch
+    path "*.zip", emit: fastqc_ch
 
 
     script:
@@ -33,5 +34,8 @@ process CALCULATE_STATISTICS {
     echo ${bam_file.baseName}\tMeanMapQuality\t\${mean_map_quality} >> $output_name
 
     csvtk space2tab $output_name -o $output_name_tab
+
+    fastqc $bam_file -o .
+
     """
 }

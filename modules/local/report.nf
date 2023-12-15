@@ -1,6 +1,6 @@
 process REPORT {
 
-    publishDir "${params.output}/reports", mode: 'copy'
+    publishDir "${params.output}", mode: 'copy'
 
     input:
     path variants_ch

@@ -27,6 +27,9 @@ workflow:
         - process: "MITOCALLING:INPUT_VALIDATION"
           label: "Input Validation"
           view: progressbar
+        - process: "MITOCALLING:QUALITY_CONTROL"
+          label: "Quality Control Report"
+          view: progressbar          
         - process: "MITOCALLING:MUTSERVE"
           label: "Variant Calling"
           view: progressbar

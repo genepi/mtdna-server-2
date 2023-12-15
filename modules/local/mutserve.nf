@@ -1,6 +1,6 @@
 process MUTSERVE {
 
-    publishDir "${params.output}/variants", mode: 'copy'
+    publishDir "${params.output}", mode: 'copy'
 
     input:
     path bam_files_ch
