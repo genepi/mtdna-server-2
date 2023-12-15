@@ -13,6 +13,5 @@ process SUMMARIZE_STATISTICS {
     """
     csvtk concat -t ${statistics} -T -o sample_statistics.txt
     java -jar /opt/mutserve/mutserve.jar stats --input sample_statistics.txt --baseQ $params.mutserve.baseQ --mapQ $params.mutserve.mapQ --output excluded_samples.txt
-    echo HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20101123_copy > excluded_samples.txt
     """
 }
