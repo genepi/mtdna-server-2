@@ -1,6 +1,6 @@
 
 include { CALCULATE_STATISTICS } from '../modules/local/calculate_statistics'
-include { SUMMARIZE_STATISTICS } from '../modules/local/summarize_statistics'
+include { INPUT_VALIDATION } from '../modules/local/input_validation'
 include { MUTSERVE } from '../modules/local/mutserve'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
@@ -34,14 +34,14 @@ workflow MITOCALLING {
         bams_ch
     )
 
-    SUMMARIZE_STATISTICS(
+    INPUT_VALIDATION(
         CALCULATE_STATISTICS.out.stats_ch.collect()
     )
 
     MUTSERVE(
         bams_ch.collect(),
         ref_file,
-        SUMMARIZE_STATISTICS.out.excluded_ch
+        INPUT_VALIDATION.out.excluded_ch
     )
 
     ANNOTATE(

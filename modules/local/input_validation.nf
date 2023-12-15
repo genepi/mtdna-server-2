@@ -1,4 +1,4 @@
-process SUMMARIZE_STATISTICS {
+process INPUT_VALIDATION {
 
     publishDir "${params.output}/statistics", mode: 'copy'
 

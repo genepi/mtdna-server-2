@@ -22,10 +22,10 @@ workflow:
           url: "${CLOUDGENE_SERVICE_URL}"
       processes:
         - process: "MITOCALLING:CALCULATE_STATISTICS"
-          label: "Calculate Statistics"
+          label: "Calculate Sample Statistics"
           view: progressbar
-        - process: "MITOCALLING:SUMMARIZE_STATISTICS"
-          label: "Summarize Statistics"
+        - process: "MITOCALLING:INPUT_VALIDATION"
+          label: "Input Validation"
           view: progressbar
         - process: "MITOCALLING:MUTSERVE"
           label: "Variant Calling"
