@@ -2,40 +2,42 @@
 [![mtdna-server-2](https://github.com/genepi/mtdna-server-2/actions/workflows/run-tests.yml/badge.svg)](https://github.com/genepi/mtdna-server-2/actions/workflows/run-tests.yml)
 [![nf-test](https://img.shields.io/badge/tested_with-nf--test-337ab7.svg)](https://github.com/askimed/nf-test)
 
-Welcome to mtdna-Server 2. This repository includes the mtDNA-Server-2 Workflow ported to Nextflow.
+Welcome to mtdna-Server 2. This repository includes the mtDNA-Server-2 Workflow ported to Nextflow. 
 
-## Access mtDNA-Server 2
-- mtDNA-Server 2 is hosted as a service on [mitoverse](https://mitoverse.i-med.ac.at/).
-- mtDNA-Server 2 can also be installed [locally](#run-mtdna-server-2-locally-as-a-webservice) as a service.
+## Access
+mtDNA-Server 2 is hosted as a service on our [mitoverse](https://mitoverse.i-med.ac.at/) platform.
+
 
 ## Documentation
 Documentation can be accessed [here](https://mitoverse.readthedocs.io). 
 
-## Run mtDNA-Server 2 locally (command-line workflow only)
+## Local Installation
 
-### Requirements
+### Run mtDNA-Server 2 workflow
+
+#### Requirements
 
 - Nextflow:
 ```
 curl -s https://get.nextflow.io | bash
 ```
 
-### Execution
+#### Execution
 
 ```
 docker build -t genepi/mtdna-server-2 . # don't ingore the dot here
 nextflow run main.nf -c tests/test_single_bam.config -profile development
 ```
 
-## Run mtdna-Server 2 locally (as a webservice)
+### Run mtDNA-Server 2 as a webservice
 
-### Requirements:
+#### Requirements:
 
 - Install Nextflow
 - Docker or Singularity
 - Java 14
 
-### Installation
+#### Installation
 
 - Install cloudgene3: `curl -s install.cloudgene.io | bash -s 3.0.0-beta4`
 - Download latest source code zip file from releases
