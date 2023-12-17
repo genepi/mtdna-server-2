@@ -24,6 +24,9 @@ workflow:
         - process: "MTDNA_SERVER_2:CALCULATE_STATISTICS"
           label: "Calculate Sample Statistics"
           view: progressbar
+        - process: "MTDNA_SERVER_2:INDEX"
+          label: "Index Samples"
+          view: progressbar          
         - process: "MTDNA_SERVER_2:INPUT_VALIDATION"
           label: "Input Validation"
           view: progressbar
