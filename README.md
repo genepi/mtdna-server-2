@@ -4,6 +4,9 @@
 
 This repository includes the mtDNA-Server-2 Workflow ported to Nextflow.
 
+## Access mtDNA-Server 2
+- mtDNA-Server 2 is hosted as a service on [mitoverse](https://mitoverse.i-med.ac.at/)
+- mtDNA-Server 2 can also be installed [locally](##mtdna-server-2) as a service.  
 ## Requirements
 
 - Nextflow:
@@ -13,21 +16,16 @@ curl -s https://get.nextflow.io | bash
 ```
 
 
-## Installation
+## Run mtdna-Server 2 locally
 
 Build docker image before run the pipeline:
 
 ```
 docker build -t genepi/mtdna-server-2 . # don't ingore the dot here
-```
-
-## Usage
-
-```
 nextflow run main.nf -c tests/test_single_bam.config -profile development
-```
 
-## Run with Cloudgene
+
+## Run mtdna-Server 2 as a webservice
 
 ### Requirements:
 
