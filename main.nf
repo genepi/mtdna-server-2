@@ -17,9 +17,9 @@ nextflow.enable.dsl = 2
 ========================================================================================
 */
 
-include { MITOCALLING } from './workflows/mitocalling'
+include { MTDNA_SERVER_2 } from './workflows/mtdna_server_2'
 
 workflow {
-    MITOCALLING ()
+    MTDNA_SERVER_2 ()
 }
 

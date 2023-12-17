@@ -21,31 +21,34 @@ workflow:
           email: "${CLOUDGENE_CONTACT_EMAIL}"
           url: "${CLOUDGENE_SERVICE_URL}"
       processes:
-        - process: "MITOCALLING:CALCULATE_STATISTICS"
+        - process: "MTDNA_SERVER_2:CALCULATE_STATISTICS"
           label: "Calculate Sample Statistics"
           view: progressbar
-        - process: "MITOCALLING:INPUT_VALIDATION"
+        - process: "MTDNA_SERVER_2:INPUT_VALIDATION"
           label: "Input Validation"
           view: progressbar
-        - process: "MITOCALLING:QUALITY_CONTROL"
+        - process: "MTDNA_SERVER_2:QUALITY_CONTROL"
           label: "Quality Control Report"
           view: progressbar          
-        - process: "MITOCALLING:MUTSERVE"
+        - process: "MTDNA_SERVER_2:MUTSERVE"
           label: "Variant Calling (mutserve)"
           view: progressbar
-        - process: "MITOCALLING:MUTECT2"
+        - process: "MTDNA_SERVER_2:MUTECT2"
           label: "Variant Calling (Mutect2)"
           view: progressbar  
-        - process: "MITOCALLING:ANNOTATE"
+        - process: "MTDNA_SERVER_2:MUTECT2_SUMMARIZE"
+          label: "Collecting results"
+          view: progressbar            
+        - process: "MTDNA_SERVER_2:ANNOTATE"
           label: "Annotation"
           view: progressbar
-        - process: "MITOCALLING:HAPLOGROUP_DETECTION"
+        - process: "MTDNA_SERVER_2:HAPLOGROUP_DETECTION"
           label: "Haplogroup Detection"
           view: progressbar
-        - process: "MITOCALLING:CONTAMINATION_DETECTION"
+        - process: "MTDNA_SERVER_2:CONTAMINATION_DETECTION"
           label: "Contamination Detection"
           view: progressbar
-        - process: "MITOCALLING:REPORT"
+        - process: "MTDNA_SERVER_2:REPORT"
           label: "Report Generation"
           view: progressbar
   inputs:

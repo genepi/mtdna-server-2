@@ -10,7 +10,7 @@ include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
 include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
 include { REPORT } from '../modules/local/report'
 
-workflow MITOCALLING {
+workflow MTDNA_SERVER_2 {
  
     println "Welcome to ${params.service.name}"
 
