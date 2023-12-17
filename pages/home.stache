@@ -30,7 +30,7 @@
                                 			</p>
                     			{{else}}
                     			<p>
-                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/index.html#!run/haplocheck">Run</a>
+                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/mtdna-server-2">Run</a>
                     			</p>
                                 			{{/is}}
             				</div>
@@ -53,7 +53,7 @@ Comprehensive Reports<br>
                     			</p>
                     			{{else}}
                     			<p>
-                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/mtdna-server-2">Run</a>
+                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/index.html#!run/haplocheck">Run</a>
                     			</p>
                     			{{/is}}
 				</div>
