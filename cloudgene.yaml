@@ -1,7 +1,7 @@
-id: nf-mitocalling
+id: mtdna-server-2
 name: mtDNA Variant Analysis
-description: mtdna-Server2
-version: v2.0.0-beta1
+description: mtDNA-Server 2
+version: v2.0.0-beta2
 website: https://mitoverse.readthedocs.io/
 category:
 
@@ -73,7 +73,7 @@ workflow:
         0.01: 0.01
         0.05: 0.05
         0.1: 0.1      
-        
+
     - id: baseQ
       description: Minimal Base Quality
       type: number
