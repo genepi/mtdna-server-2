@@ -31,8 +31,11 @@ workflow:
           label: "Quality Control Report"
           view: progressbar          
         - process: "MITOCALLING:MUTSERVE"
-          label: "Variant Calling"
+          label: "Variant Calling (mutserve)"
           view: progressbar
+        - process: "MITOCALLING:MUTECT2"
+          label: "Variant Calling (Mutect2)"
+          view: progressbar  
         - process: "MITOCALLING:ANNOTATE"
           label: "Annotation"
           view: progressbar
@@ -73,8 +76,8 @@ workflow:
       type: list
       value: mutserve
       values:
-        mutserve: SNPs only
-        mutect2: SNPs + Indel Calling
+        mutserve: SNPs only (mutserve)
+        mutect2: SNPs + Indel Calling (Mutect2)
 
   outputs:
     - id: output
