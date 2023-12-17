@@ -116,7 +116,7 @@ workflow.onComplete {
                 body "Hi ${params.user.name}, the job failed :("
             }
         }
-        report.error("Imputation failed.")
+        report.error("Job failed.")
         return
     }
 
@@ -126,7 +126,7 @@ workflow.onComplete {
             to "${params.user.email}"
             subject "[${params.service.name}] Job ${params.project} is complete."
         }
-        report.ok("Sent email with password to <b>${params.user.email}</b>")
+        report.ok("Sent email notification to <b>${params.user.email}</b>")
     } else {
 
     }
