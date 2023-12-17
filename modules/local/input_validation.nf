@@ -8,7 +8,7 @@ process INPUT_VALIDATION {
     output:
     path("sample_statistics.txt"), emit: summarized_ch
     path("excluded_samples.txt"), emit: excluded_ch
-
+    path("contig.txt"), emit: contig_ch
 
     """
     csvtk concat -t ${statistics} -T -o sample_statistics.txt
@@ -19,6 +19,7 @@ process INPUT_VALIDATION {
     --baseQ $params.mutserve.baseQ \
     --mapQ $params.mutserve.mapQ \
     --alignQ $params.mutserve.alignQ \
-    --output excluded_samples.txt
+    --output-excluded-samples excluded_samples.txt \
+    --output-contig contig.txt
     """
 }

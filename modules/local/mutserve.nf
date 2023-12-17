@@ -12,6 +12,14 @@ process MUTSERVE {
     path("variants.txt"), emit: txt_ch
 
     """
-    java -jar /opt/mutserve/mutserve.jar call --level ${params.detection_limit} --reference ${reference} --mapQ $params.mutserve.mapQ --baseQ $params.mutserve.baseQ --deletions --output variants.vcf.gz --no-ansi ${bam_files_ch} --excluded-samples ${excluded_samples} --threads 1 --write-raw
+    java -jar /opt/mutserve/mutserve.jar call \
+    --level ${params.detection_limit} \
+    --reference ${reference} \
+    --mapQ $params.mutserve.mapQ \
+    --baseQ $params.mutserve.baseQ \
+    --deletions --output variants.vcf.gz \
+    --no-ansi ${bam_files_ch} \
+    --excluded-samples ${excluded_samples} \
+    --threads 1 --write-raw
     """
 }
