@@ -14,12 +14,13 @@ process INPUT_VALIDATION {
     csvtk concat -t ${statistics} -T -o sample_statistics.txt
     java -jar /opt/mutserve/mutserve.jar stats \
     --input sample_statistics.txt \
-    --detection-limit $params.detection_limit  \
-    --reference $params.reference  \
-    --baseQ $params.mutserve.baseQ \
-    --mapQ $params.mutserve.mapQ \
-    --alignQ $params.mutserve.alignQ \
+    --detection-limit ${params.detection_limit}  \
+    --reference ${params.reference}  \
+    --baseQ ${params.mutserve.baseQ}\
+    --mapQ ${params.mutserve.mapQ} \
+    --alignQ ${params.mutserve.alignQ} \
     --output-excluded-samples excluded_samples.txt \
-    --output-contig contig.txt
+    --output-contig contig.txt \
+    --tool ${params.mode}
     """
 }
