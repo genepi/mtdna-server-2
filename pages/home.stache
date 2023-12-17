@@ -1,0 +1,127 @@
+
+
+<div class="py-5 text-white" style="background-image: url('https://mitoverse.i-med.ac.at/static/images/stars.jpeg');">
+	<div class="container  " style = "margin-bottom: 100px;">
+
+		<h1 class="text-center jumbotron-heading pb-5" style="font-size: 300%">Mitoverse </h1>
+
+		<h2 class="text-center pb-5">All software tools for <u><b>mitochondrial DNA</b></u> in one central place</h2>
+
+
+		<div class="card-deck text-center ">
+
+
+			<div class="card box-shadow bg-light text-dark">
+            				<div class="card-body">
+            				    <h4>mtDNAServer 2</h4>
+            					<p>
+            					Variant Calling<br>
+            					Heteroplasmy Detection<br>
+            Works with BAM Files<br>
+            Comprehensive Quality Control<br>
+            Variant Annotation<br>
+            Interactive Reports<br>
+            <a href="https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/" target="_blank">Learn more...</a>
+
+                                </p>
+                                	{{#is(loggedIn, false)}}
+                                			<p>
+                                				<a class="btn btn-lg btn-success" href="/#!pages/login">Login</a>
+                                			</p>
+                    			{{else}}
+                    			<p>
+                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/haplocheck%401.3.3">Run</a>
+                    			</p>
+                                			{{/is}}
+            				</div>
+            			</div>
+
+			<div class="card box-shadow bg-light text-dark">
+				<div class="card-body">
+				    <h4>Haplocheck</h4>
+					<p>
+In-sample Contamination Detection<br>
+Works with BAM and VCF Files<br>
+Highly Accurate Analysis<br>
+User-Friendly Interface<br>
+Comprehensive Reports<br>
+<a href="https://mitoverse.readthedocs.io/haplocheck/haplocheck/" target="_blank">Learn more...</a>
+                    </p>
+                    	{{#is(loggedIn, false)}}
+                    			<p>
+                    				<a class="btn btn-lg btn-success" href="/#!pages/login">Login</a>
+                    			</p>
+                    			{{else}}
+                    			<p>
+                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/nf-mitocalling%40v2.0.0-beta1">Run</a>
+                    			</p>
+                    			{{/is}}
+				</div>
+			</div>
+
+			<div class="card box-shadow bg-light text-dark">
+				<div class="card-body">
+				    <h4>Haplogrep 3</h4>
+					<p>
+					Haplogroup Classification Service<br>
+Works with FASTA and VCF Files<br>
+Based on Phylotree<br>
+Variant Annotation<br>
+Interactive Reports<br>
+<a href="https://haplogrep.i-med.ac.at/" target="_blank">Learn more...</a>
+
+                    </p>
+
+                    			<p>
+                    				<a class="btn btn-lg btn-success" href="https://haplogrep.i-med.ac.at/">Run</a>
+                    			</p>
+				</div>
+			</div>
+
+		</div>
+
+
+
+	</div>
+</div>
+
+
+<!-- News and Logos -->
+<div class="py-5 bg-light">
+	<div class="container  ">
+		<div class="card ">
+			<div class="card-body">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8">
+							<h5 style="padding-top: 10px; padding-bottom: 0px; margin-bottom: 10px;">Latest News</h5>
+							<hr style="padding-top: 0px; margin-top: 0px;">
+
+
+ <p>
+      <small class="text-muted"><i class="far fa-calendar-alt"></i> Feb 07 2021</small><br> Haplocheck has been published in <a href="http://dx.doi.org/10.1101/gr.256545.119" target="_blank">Genome Research</a>.
+                                      </p>
+ 
+<p>
+      <small class="text-muted"><i class="far fa-calendar-alt"></i> Dec 21 2020</small><br> mtDNA-Server v2. First Beta is available for testing.
+                                      </p>
+                                                      
+<p>
+                                                                <small class="text-muted"><i class="far fa-calendar-alt"></i> May 06 2020</small><br> Haplocheck v1.1.2 released. Haplocheck is a phylogeny-based contamination detection for mitochondrial and whole-genome sequencing studies. <br> For local usage, download the latest version <a href="https://github.com/genepi/haplocheck" target="_blank">here</a></a>.
+                                                        </p>
+  
+                                                      <p>
+                                                                <small class="text-muted"><i class="far fa-calendar-alt"></i> August 23 2019</small><br> Haplocheck v1.0.5 released. Release notes can be found <a href="https://github.com/genepi/haplocheck/releases/tag/v1.0.5" target="_blank">here</a>.
+                                                        </p>	
+						<p>
+								<small class="text-muted"><i class="far fa-calendar-alt"></i> January 27 2019</small><br> Init Beta Release. Release notes can be found <a href="https://github.com/genepi/haplocheck/releases/tag/v.0.0.1" target="_blank">here</a>.
+							</p>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
