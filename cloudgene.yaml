@@ -1,6 +1,6 @@
 id: mtdna-server-2
-name: Welcome to mtDNA-Server 2!
-description: mtDNA-Server 2
+name: mtDNA-Server 2
+description: mtDNA Variant Calling as a service
 version: v2.0.0-beta2
 website: https://mitoverse.readthedocs.io/
 category:
