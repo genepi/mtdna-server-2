@@ -13,7 +13,7 @@
 
 			<div class="card box-shadow bg-light text-dark">
             				<div class="card-body">
-            				    <h4>mtDNAServer 2</h4>
+            				    <h4>mtDNA-Server 2</h4>
             					<p>
             					Variant Calling<br>
             					Heteroplasmy Detection<br>
@@ -30,7 +30,7 @@
                                 			</p>
                     			{{else}}
                     			<p>
-                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/haplocheck%401.3.3">Run</a>
+                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/index.html#!run/haplocheck">Run</a>
                     			</p>
                                 			{{/is}}
             				</div>
@@ -53,7 +53,7 @@ Comprehensive Reports<br>
                     			</p>
                     			{{else}}
                     			<p>
-                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/nf-mitocalling%40v2.0.0-beta1">Run</a>
+                    				<a class="btn btn-lg btn-success" href="https://mitoverse.i-med.ac.at/#!run/mtdna-server-2">Run</a>
                     			</p>
                     			{{/is}}
 				</div>
