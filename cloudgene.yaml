@@ -73,6 +73,18 @@ workflow:
         0.01: 0.01
         0.05: 0.05
         0.1: 0.1      
+        
+    - id: baseQ
+      description: Minimal Base Quality
+      type: number
+      visible: false 
+      value: 20  
+      
+    - id: mapQ
+      description: Minimal Map Quality
+      type: number
+      visible: false
+      value: 20      
 
     - id: mode
       description: Mode
