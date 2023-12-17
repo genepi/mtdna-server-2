@@ -6,14 +6,25 @@ Welcome to mtdna-Server 2. This repository includes the mtDNA-Server-2 Workflow 
 
 ## Access mtDNA-Server 2
 - mtDNA-Server 2 is hosted as a service on [mitoverse](https://mitoverse.i-med.ac.at/).
-- mtDNA-Server 2 can also be installed [locally](#run-mtdna-server-2-locally) as a service.
+- mtDNA-Server 2 can also be installed [locally](#run-mtdna-server-2-locally-as-a-webservice) as a service.
 
-## Requirements
+## Documentation
+Documentation can be accessed [here](https://mitoverse.readthedocs.io). 
+
+## Run mtDNA-Server 2 locally (command-line workflow only)
+
+### Requirements
 
 - Nextflow:
-
 ```
 curl -s https://get.nextflow.io | bash
+```
+
+### Execution
+
+```
+docker build -t genepi/mtdna-server-2 . # don't ingore the dot here
+nextflow run main.nf -c tests/test_single_bam.config -profile development
 ```
 
 ## Run mtdna-Server 2 locally (as a webservice)
@@ -34,14 +45,6 @@ curl -s https://get.nextflow.io | bash
 - Login with default admin account: username `admin` and password `admin1978`
 - mtDNA-Server-2 can be tested with the following [test file](https://github.com/genepi/mtdna-server-2/raw/main/tests/data/bam/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20101123.bam))
 
-## Run mtDNA-Server 2 locally (command-line workflow only)
-
-Build docker image before run the pipeline:
-
-```
-docker build -t genepi/mtdna-server-2 . # don't ingore the dot here
-nextflow run main.nf -c tests/test_single_bam.config -profile development
-```
 ## Publication
 Weissensteiner H*, Forer L*, Fuchsberger C, Schöpf B, Kloss-Brandstätter A, Specht G, Kronenberg F, Schönherr S: mtDNA-Server: next-generation sequencing data analysis of human mitochondrial DNA in the cloud. Nucleic Acids Res. 44:W64-9, 2016. PMID: [27084948](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4987870/)
 
