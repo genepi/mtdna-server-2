@@ -42,6 +42,8 @@ Build docker image before run the pipeline:
 docker build -t genepi/mtdna-server-2 . # don't ingore the dot here
 nextflow run main.nf -c tests/test_single_bam.config -profile development
 ```
+## Publication
+Weissensteiner H*, Forer L*, Fuchsberger C, Schöpf B, Kloss-Brandstätter A, Specht G, Kronenberg F, Schönherr S: mtDNA-Server: next-generation sequencing data analysis of human mitochondrial DNA in the cloud. Nucleic Acids Res. 44:W64-9, 2016. PMID: [27084948](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4987870/)
 
 ## Contact
 Institute of Genetic Epidemiology, Medical University of Innsbruck 
