@@ -24,6 +24,6 @@ jobs:
     - name: Add nf-test to path
       run: echo "/opt/nf-test" >> $GITHUB_PATH;
     - name: Build Docker 
-      run:  docker build -t genepi/nf-mitocalling .     
+      run:  docker build -t genepi/mtdna-server-2 .     
     - name: Run Tests 
       run:  nf-test test
