@@ -80,13 +80,13 @@ workflow:
     - id: baseQ
       description: Minimal Base Quality
       type: number
-      visible: false 
+      visible: true 
       value: 20  
       
     - id: mapQ
       description: Minimal Map Quality
       type: number
-      visible: false
+      visible: true
       value: 20      
 
     - id: mode
