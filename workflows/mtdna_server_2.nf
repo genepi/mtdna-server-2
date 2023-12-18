@@ -113,7 +113,8 @@ workflow.onComplete {
             sendMail{
                 to "${params.user.email}"
                 subject "[${params.service.name}] Job ${params.project} failed."
-                body "Hi ${params.user.name}, the job failed :("
+                body "Hi ${params.user.name}, your job failed :(. Logs can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
+
             }
         }
         report.error("Job failed.")
@@ -125,6 +126,7 @@ workflow.onComplete {
         sendMail{
             to "${params.user.email}"
             subject "[${params.service.name}] Job ${params.project} is complete."
+            body "Hi ${params.user.name}, your job completed successfully and can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
         }
         report.ok("Sent email notification to <b>${params.user.email}</b>")
     } else {
