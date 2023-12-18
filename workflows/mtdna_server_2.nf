@@ -112,6 +112,7 @@ workflow.onComplete {
         if (params.config.send_mail){
             sendMail{
                 to "${params.user.email}"
+                from "${params.service.email}"
                 subject "[${params.service.name}] Job ${params.project} failed."
                 body "Hi ${params.user.name}, your job failed :(. Logs can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
 
@@ -125,6 +126,7 @@ workflow.onComplete {
     if (params.config.send_mail){
         sendMail{
             to "${params.user.email}"
+            from "${params.service.email}"
             subject "[${params.service.name}] Job ${params.project} is complete."
             body "Hi ${params.user.name}, your job completed successfully and can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
         }
