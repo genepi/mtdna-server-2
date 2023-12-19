@@ -8,6 +8,7 @@ params:
   haplocheck: ../tests/data/report2/haplocheck.txt
   variants:  ../tests/data/report2/variants_ann.txt
   statistics:  ../tests/data/report2/sample_statistics.txt
+  pipeline_parameters:  ../tests/data/report2/pipeline_parameters.txt  
 ---
 
 ```{r setup, include=FALSE}
@@ -27,6 +28,7 @@ variants <- read.delim(params$variants)
 contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
+pipeline_params <- read.delim(params$pipeline_parameters)
 
 
 statTable<-spread(statistics, key = Parameter, value = Value)
