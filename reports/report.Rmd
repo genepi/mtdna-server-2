@@ -1,12 +1,6 @@
 ---
 title: "mtDNA-Server 2"
 output:
-  #rmdformats::robobook:
-  #  self_contained: true
-  #  thumbnails: false
-  #  lightbox: true
-  #  gallery: false
-  #  highlight: tango
   flexdashboard::flex_dashboard:
     orientation: rows
 params:
@@ -33,6 +27,26 @@ variants <- read.delim(params$variants)
 contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
+
+
+statTable<-spread(statistics, key = Parameter, value = Value)
+statTable$MeanCoverage<-as.numeric(statTable$MeanDepth)
+statTable$MeanBaseQuality<-as.numeric(statTable$MeanBaseQuality)
+
+variantCount<-data.table(t(table(variants$ID)))
+variantCount$SampleID<-sub('\\.bam$', '', variantCount$V2)
+contamination$SampleID<-sub('\\.bam$', '', contamination$Sample) 
+haplogroups$SampleNID<-sub('\\.bam$', '', haplogroups$SampleID) 
+
+statsTableMerged<-merge(statTable, contamination, by.x="Sample", by.y="SampleID")
+statsTableMergedVariant<-merge(statsTableMerged, variantCount, by.x="Sample", by.y="SampleID")
+statsTableMergedVariantHaplo<-merge(statsTableMergedVariant, haplogroups, by.x="Sample", by.y="SampleNID")
+
+statsTableMergedVariantHaplo <- statsTableMergedVariantHaplo %>% arrange(Sample)
+
+contaminated_samples = statsTableMergedVariantHaplo %>% mutate("Contamination_Status" = "Contamination.Status") %>% filter(Contamination_Status == "YES");
+
+
 ```
 
 
@@ -50,20 +64,20 @@ valueBox(nrow(haplogroups), icon = "fa-users")
 ### Excluded Samples
 
 ```{r}
-valueBox(-1, icon = "fa-comments")
+valueBox(-1, icon = "fa-filter")
 ```
 
 ### Samples with Bad Quality
 
 ```{r}
-valueBox(-1, icon = "fa-comments")
+valueBox(-1, icon = "fa-exclamation")
 ```
 
 
-### Contaminated samples
+### Contaminated Samples
 
 ```{r}
-valueBox(-1, icon = "fa-comments")
+valueBox(nrow(contaminated_samples), icon = "fa-flask")
 ```
 
 
@@ -75,23 +89,9 @@ Row
 ### Summary
 
 ```{r echo=FALSE, results='asis'}
-
-statTable<-spread(statistics, key = Parameter, value = Value)
-statTable$MeanCoverage<-as.numeric(statTable$MeanDepth)
-statTable$MeanBaseQuality<-as.numeric(statTable$MeanBaseQuality)
-
-variantCount<-data.table(t(table(variants$ID)))
-variantCount$SampleID<-sub('\\.bam$', '', variantCount$V2)
-contamination$SampleID<-sub('\\.bam$', '', contamination$Sample) 
-haplogroups$SampleNID<-sub('\\.bam$', '', haplogroups$SampleID) 
-
-statsTableMerged<-merge(statTable, contamination, by.x="Sample", by.y="SampleID")
-statsTableMergedVariant<-merge(statsTableMerged, variantCount, by.x="Sample", by.y="SampleID")
-statsTableMergedVariantHaplo<-merge(statsTableMergedVariant, haplogroups, by.x="Sample", by.y="SampleNID")
-
 statsTableMergedVariantHaplo %>%
-  select("Sample", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanDepth", "MeanMapQuality") %>%
-datatable()
+  select("Sample", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality") %>%
+  datatable(colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality"))
 ```
 
 Row
@@ -119,7 +119,7 @@ ggplotly(
     theme(axis.text.x=element_text(angle=+90)) + 
     geom_hline(yintercept=20, color="red", linetype="dashed") +
     xlab("Samples") +
-    ylab("NMean Base Quality")
+    ylab("Mean Base Quality")
 )
 ```
 
@@ -127,13 +127,10 @@ ggplotly(
 
 # Contamination
 
-- Contaminated samples: `r nrow(haplogroups %>% mutate("Contamination_Status" = "Contamination.Status") %>% filter(Contamination_Status == "YES"))` / `r nrow(haplogroups)`
-
 ```{r echo=FALSE, results='asis'}
-statsTableMergedVariantHaplo %>%
-  select("Sample", "Contamination.Status", "Contamination.Level") %>%
-  rename("Contamination_Status" = "Contamination.Status") %>% filter(Contamination_Status == "YES") %>%
-datatable()
+contaminated_samples %>%
+  select("Sample", "Contamination_Status", "Contamination.Level") %>%
+  datatable(colnames=c("Sample", "Contamination","Level"))
 ```
 
 ---
@@ -143,12 +140,10 @@ datatable()
 
 ### Summary
 
-Table with sample name, number of variants,
-
 ```{r echo=FALSE, results='asis'}
 statsTableMergedVariantHaplo %>%
   select("Sample", "N") %>%
-datatable()
+  datatable(colnames=c("Sample", "Number of Variants"))
 ```
 
 ### Shared Variants
@@ -189,7 +184,14 @@ Row
 
 ```{r echo=FALSE, results='asis'}
 ggplotly(
-  ggplot(haplogroups, aes(y=Quality, x=SampleID)) + geom_col(alpha=0.7)   + geom_hline(yintercept=0.90, color="green", linetype="dashed") + geom_hline(yintercept=0.80, color="orange", linetype="dashed") + geom_hline(yintercept=0.70, color="red", linetype="dashed") + theme_minimal() + theme(axis.text.x=element_text(angle=+90))
+  ggplot(haplogroups) +
+    geom_col(aes(y=Quality, x=SampleNID), alpha=0.7) +
+    geom_hline(yintercept=0.90, color="green", linetype="dashed") +
+    geom_hline(yintercept=0.80, color="orange", linetype="dashed") +
+    geom_hline(yintercept=0.70, color="red", linetype="dashed") +
+    xlab("Samples") +
+    ylab("Haplogroup Quality") +
+    theme(axis.text.x=element_text(angle=+90))
 )
 ```
 
