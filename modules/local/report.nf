@@ -28,7 +28,7 @@ process REPORT {
   Rscript -e "require('rmarkdown'); render('${report}',
    params = list(
        pipeline_parameters = 'params.txt',
-       variants = '${variants}',vi wo 
+       variants = '${variants}',
        haplogroups = '${haplogroups}',
        haplocheck = '${haplocheck}',
        statistics = '${statistics}',
