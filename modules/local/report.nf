@@ -1,14 +1,26 @@
 process REPORT {
 
-    publishDir "${params.output}", mode: 'copy'
+  publishDir "$params.output", mode: 'copy'
 
-    input:
-    path variants_ch
+  input:
+    path report
+    path variants
+    path haplogroups
+    path haplocheck
+    path statistics
 
-    output:
-    path ("report.html"), emit: report_ch
+  output:
+    file "*.html" 
 
-    """
-    java -jar /opt/mutserve/mutserve.jar report --input ${variants_ch} --output report.html
-    """
+  """
+  Rscript -e "require('rmarkdown'); render('${report}',
+   params = list(
+       variants = '${variants}',
+       haplogroups = '${haplogroups}',
+       haplocheck = '${haplocheck}',
+       statistics = '${statistics}'
+   ),
+   knit_root_dir='\$PWD', output_file='\$PWD/results.html')"
+  """
+
 }
