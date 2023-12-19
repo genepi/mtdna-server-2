@@ -135,8 +135,10 @@ contaminated_samples %>%
 
 ---
 
-# Variants
+# Variants and Heteroplasmies
 
+Row
+-------------------------------------
 
 ### Summary
 
@@ -146,19 +148,31 @@ statsTableMergedVariantHaplo %>%
   datatable(colnames=c("Sample", "Number of Variants"))
 ```
 
-### Shared Variants
+Row
+-------------------------------------
+
+### Common Variants and Hetereoplasmies
 
 
----
-
-# Heteroplasmies
-
-
-### Summary
-
-Table with sample name, number of Heteroplasmies,
-
-### Shared Heteroplasmies
+```{r echo=FALSE, results='asis'}
+summary_data <- aggregate(  ID ~ Pos + Type , data = variants, FUN = length)
+summary_data <- summary_data %>% filter(ID >= 2)
+summary_data <- summary_data %>% mutate(
+  label = case_when(
+    Type == 1 ~ "Variant",
+    Type == 2 ~ "Heteroplasmy",
+    TRUE ~ "Unknown"
+  )
+)
+summary_data$AF<-summary_data$ID / max(length(unique(variants$ID)))
+ggplotly(
+  ggplot(summary_data, aes(x = Pos, y = AF, color=label)) +
+    geom_point() +
+    xlab("Position") +
+    ylab("Allele Frequency") +
+    labs(color = "Type")
+)
+```
 
 ---
 
