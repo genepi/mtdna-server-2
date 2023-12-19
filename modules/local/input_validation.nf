@@ -4,14 +4,17 @@ process INPUT_VALIDATION {
 
     input:
     path statistics
+    path mapping
 
     output:
     path("sample_statistics.txt"), emit: summarized_ch
+    path("sample_mappings.txt"), emit: mapping_ch
     path("excluded_samples.txt"), emit: excluded_ch
     path("contig.txt"), emit: contig_ch
 
     """
     csvtk concat -t ${statistics} -T -o sample_statistics.txt
+    csvtk concat -t ${mapping} -T -o sample_mappings.txt
     java -jar /opt/mutserve/mutserve.jar stats \
     --input sample_statistics.txt \
     --detection-limit ${params.detection_limit}  \

@@ -15,7 +15,7 @@ if (params.output_reports == null || params.output_auxiliary == null ) {
     params.output_auxiliary = params.output    
 }
    
-   include { INDEX } from '../modules/local/index'
+include { INDEX } from '../modules/local/index'
 include { CALCULATE_STATISTICS } from '../modules/local/calculate_statistics'
 include { INPUT_VALIDATION } from '../modules/local/input_validation'
 include { QUALITY_CONTROL } from '../modules/local/quality_control'
@@ -53,7 +53,8 @@ workflow MTDNA_SERVER_2 {
     )
 
     INPUT_VALIDATION(
-        CALCULATE_STATISTICS.out.stats_ch.collect()
+        CALCULATE_STATISTICS.out.stats_ch.collect(),
+        CALCULATE_STATISTICS.out.mapping_ch.collect()
     )
 
 
@@ -111,7 +112,8 @@ workflow MTDNA_SERVER_2 {
     variants_txt_ch,
     HAPLOGROUP_DETECTION.out.haplogroups_ch,
     CONTAMINATION_DETECTION.out.contamination_txt_ch,
-    INPUT_VALIDATION.out.summarized_ch
+    INPUT_VALIDATION.out.summarized_ch,
+    INPUT_VALIDATION.out.mapping_ch
     )
 
 }

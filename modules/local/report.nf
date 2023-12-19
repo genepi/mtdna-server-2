@@ -1,15 +1,16 @@
 process REPORT {
 
-  publishDir "${params.output_reports}", mode: 'copy'
+    publishDir "${params.output_reports}", mode: 'copy'
 
-  input:
+    input:
     path report
     path variants
     path haplogroups
     path haplocheck
     path statistics
+    path mapping
 
-  output:
+    output:
     file "*.html" 
 
   """
@@ -27,10 +28,11 @@ process REPORT {
   Rscript -e "require('rmarkdown'); render('${report}',
    params = list(
        pipeline_parameters = 'params.txt',
-       variants = '${variants}',
+       variants = '${variants}',vi wo 
        haplogroups = '${haplogroups}',
        haplocheck = '${haplocheck}',
-       statistics = '${statistics}'
+       statistics = '${statistics}',
+       mapping = '${mapping}'
    ),
    knit_root_dir='\$PWD', output_file='\$PWD/report.html')"
   """

@@ -8,6 +8,7 @@ params:
   haplocheck: ../tests/data/report2/haplocheck.txt
   variants:  ../tests/data/report2/variants_ann.txt
   statistics:  ../tests/data/report2/sample_statistics.txt
+  mapping:  ../tests/data/report2/mapping.txt  
   pipeline_parameters:  ../tests/data/report2/pipeline_parameters.txt  
 ---
 
@@ -29,7 +30,7 @@ contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
 pipeline_params <- read.delim(params$pipeline_parameters)
-
+mapping <- read.delim(params$mapping)
 
 statTable<-spread(statistics, key = Parameter, value = Value)
 statTable$MeanCoverage<-as.numeric(statTable$MeanDepth)
