@@ -24,7 +24,9 @@ workflow MTDNA_SERVER_2 {
         }
     }
 
-    bams_ch = Channel.fromPath(params.files)
+    def report = new CloudgeneReport()
+
+    bams_ch = Channel.fromPath(params.files, checkIfExists:true)
 
     if(params.reference.equals("rcrs")){
         ref_file_mutserve = file("$projectDir/files/rcrs_mutserve.fasta")
@@ -118,8 +120,10 @@ workflow.onComplete {
 
             }
         }
-        report.error("Job failed.")
+        report.error("Job failed. Reason: " + workflow.errorMessage)
         return
+    } else {
+        report.ok("Job terminated successfully. Duration: " + workflow.duration)
     }
 
     //job successful
