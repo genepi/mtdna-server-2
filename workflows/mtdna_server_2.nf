@@ -31,9 +31,7 @@ include { REPORT } from '../modules/local/report'
 
 workflow MTDNA_SERVER_2 {
  
-   report_file_ch = file("$projectDir/reports/report.Rmd")
-
-
+    report_file_ch = file("$projectDir/reports/report.Rmd")
     bams_ch = Channel.fromPath(params.files)
 
     if(params.reference.equals("rcrs")){
