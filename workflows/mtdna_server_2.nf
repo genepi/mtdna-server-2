@@ -23,6 +23,9 @@ workflow MTDNA_SERVER_2 {
             exit 1, "Parameter ${param} is required."
         }
     }
+   
+   report_file_ch = file("$projectDir/reports/report.Rmd")
+
 
     bams_ch = Channel.fromPath(params.files)
 
@@ -96,7 +99,13 @@ workflow MTDNA_SERVER_2 {
         annotation_file
     )
 
-    //TODO REPORT!
+    REPORT(
+    report_file_ch,
+    variants_txt_ch,
+    HAPLOGROUP_DETECTION.out.haplogroups_ch,
+    CONTAMINATION_DETECTION.out.contamination_txt_ch,
+    INPUT_VALIDATION.out.summarized_ch
+    )
 
 }
 

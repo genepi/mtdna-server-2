@@ -11,6 +11,9 @@ dependencies:
   - r-rmarkdown=2.25
   - r-ggplot2=3.4.4
   - r-plyr=1.8.9
+  - r-tidyverse=2.0.0 
+  - r-plotly=4.10.3
+  - r-flexdashboard=0.5.1
   - r-data.table=1.14.10
   - r-dt=0.31
   - r-htmltools=0.5.7
