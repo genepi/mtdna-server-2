@@ -217,14 +217,29 @@ ggplotly(
 
 # About
 
+Row
+-------------------------------------
+
+### About this report
+
+This software was developed at the [Institute of Genetic Epidemiology](https://genepi.i-med.ac.at/), [Medical University of Innsbruck](https://i-med.ac.at/)
+
+![](https://avatars2.githubusercontent.com/u/210220?s=30) [Lukas Forer](mailto:lukas.forer@i-med.ac.at) ([@lukfor](https://twitter.com/lukfor))
+
+![](https://avatars2.githubusercontent.com/u/1931865?s=30) [Hansi Weissensteiner](mailto:hansi.weissensteiner@i-med.ac.at) ([@whansi](https://twitter.com/whansi))
+
+![](https://avatars2.githubusercontent.com/u/1942824?s=30) [Sebastian Schoenherr](mailto:sebastian.schoenherr@i-med.ac.at) ([@seppinho](https://twitter.com/seppinho))
+
+Row
+-------------------------------------
+
 ### Software versions
 
 table
 
+Row
+-------------------------------------
+
 ### Workflow parameters
 
 table
-
-### About this report
-
-This report was produced using mtDNA-Server 2. link...
