@@ -16,9 +16,9 @@ process INPUT_VALIDATION {
     --input sample_statistics.txt \
     --detection-limit ${params.detection_limit}  \
     --reference ${params.reference}  \
-    --baseQ ${params.mutserve.baseQ}\
-    --mapQ ${params.mutserve.mapQ} \
-    --alignQ ${params.mutserve.alignQ} \
+    --baseQ ${params.variant_calling.baseQ}\
+    --mapQ ${params.variant_calling.mapQ} \
+    --alignQ ${params.variant_calling.alignQ} \
     --output-excluded-samples excluded_samples.txt \
     --output-contig contig.txt \
     --tool ${params.mode}
