@@ -14,6 +14,7 @@ process CALCULATE_STATISTICS {
 
     """
     ## calculate summary statistics
+    samtools samples  ${bam_file}
     samtools coverage ${bam_file} > samtools_coverage_${bam_file.baseName}.txt
     csvtk grep -t -f3 -p 16569 samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt
 

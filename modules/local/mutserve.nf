@@ -1,6 +1,6 @@
 process MUTSERVE {
 
-    publishDir "${params.output}", mode: 'copy'
+    publishDir "${params.output}", mode: 'copy',pattern: '*.vcf.gz'
 
     input:
     path bam_files_ch

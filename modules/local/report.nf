@@ -1,6 +1,6 @@
 process REPORT {
 
-  publishDir "$params.output", mode: 'copy'
+  publishDir "${params.output_reports}", mode: 'copy'
 
   input:
     path report
@@ -33,7 +33,7 @@ process REPORT {
        haplocheck = '${haplocheck}',
        statistics = '${statistics}'
    ),
-   knit_root_dir='\$PWD', output_file='\$PWD/results.html')"
+   knit_root_dir='\$PWD', output_file='\$PWD/report.html')"
   """
 
 }

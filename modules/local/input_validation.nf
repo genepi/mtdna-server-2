@@ -1,6 +1,6 @@
 process INPUT_VALIDATION {
 
-    publishDir "${params.output}/statistics", mode: 'copy'
+    publishDir "${params.output_auxiliary}", mode: 'copy',pattern: '*s.txt'
 
     input:
     path statistics
