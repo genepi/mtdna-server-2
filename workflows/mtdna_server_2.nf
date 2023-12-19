@@ -1,4 +1,21 @@
-include { INDEX } from '../modules/local/index'
+println "Welcome to ${params.service.name}"
+
+requiredParams = [
+    'project', 'files', 'output'
+]
+
+for (param in requiredParams) {
+    if (params[param] == null) {
+        exit 1, "Parameter ${param} is required."
+    }
+}   
+   
+if (params.output_reports == null || params.output_auxiliary == null ) {
+    params.output_reports = params.output
+    params.output_auxiliary = params.output    
+}
+   
+   include { INDEX } from '../modules/local/index'
 include { CALCULATE_STATISTICS } from '../modules/local/calculate_statistics'
 include { INPUT_VALIDATION } from '../modules/local/input_validation'
 include { QUALITY_CONTROL } from '../modules/local/quality_control'
@@ -10,20 +27,10 @@ include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
 include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
 include { REPORT } from '../modules/local/report'
 
+
+
 workflow MTDNA_SERVER_2 {
  
-    println "Welcome to ${params.service.name}"
-
-    requiredParams = [
-        'project', 'files', 'output'
-    ]
-
-    for (param in requiredParams) {
-        if (params[param] == null) {
-            exit 1, "Parameter ${param} is required."
-        }
-    }
-   
    report_file_ch = file("$projectDir/reports/report.Rmd")
 
 
