@@ -30,13 +30,13 @@ process CALCULATE_STATISTICS {
     mean_base_quality=\$(csvtk cut -t -f 8 mtdna.txt)
     mean_map_quality=\$(csvtk cut -t -f 9 mtdna.txt)
     echo -e "Sample\tParameter\tValue" > $output_name
-    echo -e "${bam_file.baseName}\tContig\t\${contig}" >> $output_name
-    echo -e "${bam_file.baseName}\tNumberofReads\t\${numreads}" >> $output_name
-    echo -e "${bam_file.baseName}\tCoveredBases\t\${covered_bases}" >> $output_name
-    echo -e "${bam_file.baseName}\tCoveragePercentage\t\${covered_bases_percentage}" >> $output_name
-    echo -e "${bam_file.baseName}\tMeanDepth\t\${mean_depth}" >> $output_name
-    echo -e "${bam_file.baseName}\tMeanBaseQuality\t\${mean_base_quality}" >> $output_name
-    echo -e "${bam_file.baseName}\tMeanMapQuality\t\${mean_map_quality}" >> $output_name
+    echo -e "${bam_file}\tContig\t\${contig}" >> $output_name
+    echo -e "${bam_file}\tNumberofReads\t\${numreads}" >> $output_name
+    echo -e "${bam_file}\tCoveredBases\t\${covered_bases}" >> $output_name
+    echo -e "${bam_file}\tCoveragePercentage\t\${covered_bases_percentage}" >> $output_name
+    echo -e "${bam_file}\tMeanDepth\t\${mean_depth}" >> $output_name
+    echo -e "${bam_file}\tMeanBaseQuality\t\${mean_base_quality}" >> $output_name
+    echo -e "${bam_file}\tMeanMapQuality\t\${mean_map_quality}" >> $output_name
 
     fastqc $bam_file -o .
 
