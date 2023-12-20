@@ -32,7 +32,7 @@ include { REPORT } from '../modules/local/report'
 workflow MTDNA_SERVER_2 {
  
     report_file_ch = file("$projectDir/reports/report.Rmd")
-    bams_ch = Channel.fromPath(params.files)
+    bams_ch = Channel.fromPath(params.files, checkIfExists:true)
 
     if(params.reference.equals("rcrs")){
         ref_file_mutserve = file("$projectDir/files/rcrs_mutserve.fasta")
@@ -135,8 +135,10 @@ workflow.onComplete {
 
             }
         }
-        report.error("Job failed.")
+        report.error("Job failed. Reason: " + workflow.errorMessage)
         return
+    } else {
+        report.ok("Job terminated successfully. Duration: " + workflow.duration)
     }
 
     //job successful
