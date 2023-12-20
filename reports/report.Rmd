@@ -56,30 +56,28 @@ mapping <- mapping %>%
       )
   )
 
-statistics<-spread(statistics, key = Parameter, value = Value)
-statistics$MeanCoverage<-as.numeric(statistics$MeanDepth)
-statistics$MeanBaseQuality<-as.numeric(statistics$MeanBaseQuality)
-statistics<-merge(statistics, mapping, by.x="Sample", by.y="Filename")
+statistics <- spread(statistics, key = Parameter, value = Value)
+statistics$MeanCoverage <- as.numeric(statistics$MeanDepth)
+statistics$MeanBaseQuality <- as.numeric(statistics$MeanBaseQuality)
+statistics <- merge(statistics, mapping, by.x="Sample", by.y="Filename")
 
 
+haplogroups <- merge(haplogroups, mapping, by.x="SampleID", by.y="Filename") %>%
+  arrange(Sample_Label)
 
-haplogroups<-merge(haplogroups, mapping, by.x="SampleID", by.y="Filename") %>% arrange(Sample_Label)
-contamination<-merge(contamination, mapping, by.x="Sample", by.y="Filename") %>% arrange(Sample_Label)
-
-variants_count<-data.table(t(table(variants$ID)))
-variants_count<-merge(variants_count, mapping, by.x="V2", by.y="Filename") %>% arrange(Sample_Label)
-
-variants<-merge(variants, mapping, by.x="ID", by.y="Filename") %>% arrange(Sample_Label)
-
-#statsTableMerged<-merge(statTable, contamination, by.x="Sample", by.y="SampleID")
-#statsTableMergedVariant<-merge(statsTableMerged, variantCount, by.x="Sample", by.y="SampleID")
-#statsTableMergedVariantHaplo<-merge(statsTableMergedVariant, haplogroups, by.x="Sample", by.y="SampleNID")
-
-#statsTableMergedVariantHaplo <- statsTableMergedVariantHaplo %>% arrange(Sample)
+contamination <- merge(contamination, mapping, by.x="Sample", by.y="Filename") %>%
+  arrange(Sample_Label)
 
 contaminated_samples = contamination %>%
-  mutate("Contamination_Status" = "Contamination.Status") %>%
+  rename("Contamination_Status" = "Contamination.Status") %>%
   filter(Contamination_Status == "YES");
+
+variants_count <- data.table(t(table(variants$ID)))
+variants_count <- merge(variants_count, mapping, by.x="V2", by.y="Filename") %>%
+  arrange(Sample_Label)
+
+variants <- merge(variants, mapping, by.x="ID", by.y="Filename") %>%
+  arrange(Sample_Label)
 
 
 ```
