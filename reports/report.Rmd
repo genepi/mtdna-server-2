@@ -3,6 +3,8 @@ title: "mtDNA-Server 2"
 output:
   flexdashboard::flex_dashboard:
     orientation: rows
+    navbar:
+      - { title: "About", href: "https://mitoverse.i-med.ac.at/#!pages/contact", align: right }
 params:
   haplogroups: ../tests/data/report/haplogroups.txt
   haplocheck: ../tests/data/report/haplocheck.txt
@@ -10,7 +12,7 @@ params:
   statistics:  ../tests/data/report/sample_statistics.txt
   mapping:  ../tests/data/report/sample_mappings.txt  
   excluded_samples:  ../tests/data/report/excluded_samples.txt
-  pipeline_parameters:  ../tests/data/report/params.txt  
+  pipeline_parameters:  ../tests/data/report/params.txt
 ---
 
 ```{r setup, include=FALSE}
@@ -79,6 +81,8 @@ variants_count <- merge(variants_count, mapping, by.x="V2", by.y="Filename") %>%
 variants <- merge(variants, mapping, by.x="ID", by.y="Filename") %>%
   arrange(Sample_Label)
 
+variant_caller <- pipeline_params %>%
+  filter(Parameter == "Variant Caller")
 
 ```
 
@@ -100,10 +104,10 @@ valueBox(nrow(statistics), icon = "fa-users")
 valueBox(nrow(excluded_samples), icon = "fa-filter")
 ```
 
-### Samples with Bad Quality
+### Variant Caller
 
 ```{r}
-valueBox(-1, icon = "fa-exclamation")
+valueBox(paste(variant_caller$Value), icon = "fa-cog")
 ```
 
 
@@ -283,33 +287,4 @@ ggplotly(
     ylab("Haplogroup Quality") +
     theme(axis.text.x=element_text(angle=+90))
 )
-```
-
-
-
----
-
-# About
-
-Row
--------------------------------------
-
-### About this report
-
-This software was developed at the [Institute of Genetic Epidemiology](https://genepi.i-med.ac.at/), [Medical University of Innsbruck](https://i-med.ac.at/)
-
-![](https://avatars2.githubusercontent.com/u/210220?s=30) [Lukas Forer](mailto:lukas.forer@i-med.ac.at) ([@lukfor](https://twitter.com/lukfor))
-
-![](https://avatars2.githubusercontent.com/u/1931865?s=30) [Hansi Weissensteiner](mailto:hansi.weissensteiner@i-med.ac.at) ([@whansi](https://twitter.com/whansi))
-
-![](https://avatars2.githubusercontent.com/u/1942824?s=30) [Sebastian Schoenherr](mailto:sebastian.schoenherr@i-med.ac.at) ([@seppinho](https://twitter.com/seppinho))
-
-Row
--------------------------------------
-
-### Workflow parameters and Software versions
-
-```{r echo=FALSE, results='asis'}
-pipeline_params %>%
-  kable()
 ```
