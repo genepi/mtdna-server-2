@@ -1,0 +1,11 @@
+Sample	Filename
+HG01060	HG01060.mapped.ILLUMINA.bwa.PUR.exome.20120522.bam.mt.bam
+HG00285	HG00285.mapped.ILLUMINA.bwa.FIN.exome.20120522.bam.mt.bam
+HG03046	HG03046.mapped.ILLUMINA.bwa.GWD.exome.20121211.bam.mt.bam
+HG00180	HG00180.mapped.ILLUMINA.bwa.FIN.exome.20130415.bam.mt.bam
+NA18593	NA18593.mapped.ILLUMINA.bwa.CHB.exome.20121211.bam.mt.bam
+HG01354	HG01354.mapped.ILLUMINA.bwa.CLM.exome.20120522.bam.mt.bam
+NA19435	NA19435.mapped.ILLUMINA.bwa.LWK.exome.20130415.bam.mt.bam
+HG02236	HG02236.mapped.ILLUMINA.bwa.IBS.exome.20130415.bam.mt.bam
+HG00245	HG00245.mapped.ILLUMINA.bwa.GBR.exome.20121211.bam.mt.bam
+HG01817	HG01817.mapped.ILLUMINA.bwa.CDX.exome.20120522.bam.mt.bam

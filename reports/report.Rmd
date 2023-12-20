@@ -4,12 +4,12 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
 params:
-  haplogroups: ../tests/data/report2/haplogroups.txt
-  haplocheck: ../tests/data/report2/haplocheck.txt
-  variants:  ../tests/data/report2/variants_ann.txt
-  statistics:  ../tests/data/report2/sample_statistics.txt
-  mapping:  ../tests/data/report2/mapping.txt  
-  pipeline_parameters:  ../tests/data/report2/pipeline_parameters.txt  
+  haplogroups: ../tests/data/report/haplogroups.txt
+  haplocheck: ../tests/data/report/haplocheck.txt
+  variants:  ../tests/data/report/variants_ann.txt
+  statistics:  ../tests/data/report/sample_statistics.txt
+  mapping:  ../tests/data/report/mapping.txt  
+  pipeline_parameters:  ../tests/data/report/pipeline_parameters.txt  
 ---
 
 ```{r setup, include=FALSE}
