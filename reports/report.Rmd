@@ -38,7 +38,12 @@ contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
 pipeline_params <- read.delim(params$pipeline_parameters)
-excluded_samples <- read.delim(params$excluded_samples, header = FALSE)
+
+excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE, ))
+if(inherits(excluded_samples, "try-error")) {
+  excluded_samples = data.frame(V1=c())
+}
+
 
 mapping <- read.delim(params$mapping)
 mapping <- mapping %>%
@@ -149,12 +154,16 @@ Row
 ### Mean Coverage per sample
 
 ```{r echo=FALSE, results='asis'}
+
+colors <- c("darkgreen", "red")
+names(colors) <- c("PASSED", "FAILED")
+
 ggplotly(
   ggplot(statistics) +
     geom_col(aes(x=Sample_Label, y=MeanCoverage, fill=qc), alpha=0.7) +
     theme(axis.text.x=element_text(angle=+90)) + 
     geom_hline(yintercept=MIN_MEAN_DEPTH, color="black", linetype="dashed") +
-    scale_fill_manual(values=c("red", "darkgreen")) +
+    scale_fill_manual(values=colors) +
     xlab("Samples") +
     ylab("Mean Coverage") +
     labs(fill = "")
@@ -169,7 +178,7 @@ ggplotly(
     geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc), alpha=0.7) +
     theme(axis.text.x=element_text(angle=+90)) + 
     geom_hline(yintercept=MIN_MEAN_BASE_QUALITY, color="black", linetype="dashed") +
-    scale_fill_manual(values=c("red", "darkgreen")) +
+    scale_fill_manual(values=colors) +
     xlab("Samples") +
     ylab("Mean Base Quality") +
     labs(fill = "")
