@@ -1,0 +1,6 @@
+"Sample"	"Contamination Status"	"Contamination Level"	"Distance"	"Sample Coverage"
+"HG00180.mapped.ILLUMINA.bwa.FIN.exome.20130415.bam.mt.bam"	"NO"	"ND"	"0"	"117"
+"HG01817.mapped.ILLUMINA.bwa.CDX.exome.20120522.bam.mt.bam"	"NO"	"ND"	"0"	"50"
+"HG02236.mapped.ILLUMINA.bwa.IBS.exome.20130415.bam.mt.bam"	"NO"	"ND"	"0"	"104"
+"NA18593.mapped.ILLUMINA.bwa.CHB.exome.20121211.bam.mt.bam"	"NO"	"ND"	"0"	"56"
+"NA19435.mapped.ILLUMINA.bwa.LWK.exome.20130415.bam.mt.bam"	"NO"	"ND"	"0"	"81"

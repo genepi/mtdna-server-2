@@ -1,6 +1,6 @@
 process HAPLOGROUP_DETECTION {
 
-    publishDir "${params.output}/haplogroups", mode: 'copy'
+    publishDir "${params.output_auxiliary}", mode: 'copy'
 
     input:
     path variants_ch

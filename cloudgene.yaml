@@ -98,8 +98,21 @@ workflow:
         mutect2: SNPs + Indel Calling (Mutect2)
 
   outputs:
+
+    - id: output_reports
+      description: Reports
+      type: local-folder
+      download: true
+      temp: false
+
     - id: output
-      description: Output
+      description: Variants
+      type: local-folder
+      download: true
+      temp: false
+
+    - id: output_auxiliary
+      description: Auxiliary Files
       type: local-folder
       download: true
       temp: false

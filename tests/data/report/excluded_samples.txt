@@ -1,0 +1,5 @@
+HG03046.mapped.ILLUMINA.bwa.GWD.exome.20121211.bam.mt.bam	Low Mean Depth < 50
+HG01060.mapped.ILLUMINA.bwa.PUR.exome.20120522.bam.mt.bam	Low Mean Depth < 50
+HG01354.mapped.ILLUMINA.bwa.CLM.exome.20120522.bam.mt.bam	Low Mean Depth < 50
+HG00285.mapped.ILLUMINA.bwa.FIN.exome.20120522.bam.mt.bam	Low Mean Depth < 50
+HG00245.mapped.ILLUMINA.bwa.GBR.exome.20121211.bam.mt.bam	Low Mean Depth < 50
