@@ -8,17 +8,25 @@ params:
   haplocheck: ../tests/data/report/haplocheck.txt
   variants:  ../tests/data/report/variants_ann.txt
   statistics:  ../tests/data/report/sample_statistics.txt
-  mapping:  ../tests/data/report/mapping.txt  
-  pipeline_parameters:  ../tests/data/report/pipeline_parameters.txt  
+  mapping:  ../tests/data/report/sample_mappings.txt  
+  excluded_samples:  ../tests/data/report/excluded_samples.txt
+  pipeline_parameters:  ../tests/data/report/params.txt  
 ---
 
 ```{r setup, include=FALSE}
+
+
+MIN_COVERAGE_PERCENTAGE = 90;
+MIN_MEAN_BASE_QUALITY = 15;
+MIN_MEAN_DEPTH = 50
+
 library(ggplot2)
 library(DT)
 library(tidyverse)
 library(data.table)
 library(plotly)
 library(flexdashboard)
+library(knitr)
 
 knitr::opts_chunk$set(echo = FALSE)
 ```
@@ -30,24 +38,43 @@ contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
 pipeline_params <- read.delim(params$pipeline_parameters)
+excluded_samples <- read.delim(params$excluded_samples, header = FALSE)
+
 mapping <- read.delim(params$mapping)
+mapping <- mapping %>%
+  rename(Sample_Label = Sample)
+mapping <- mapping %>%
+  mutate(
+    qc = case_when(
+        Filename %in% excluded_samples$V1 ~ "FAILED",
+        TRUE ~ "PASSED"
+      )
+  )
 
-statTable<-spread(statistics, key = Parameter, value = Value)
-statTable$MeanCoverage<-as.numeric(statTable$MeanDepth)
-statTable$MeanBaseQuality<-as.numeric(statTable$MeanBaseQuality)
+statistics<-spread(statistics, key = Parameter, value = Value)
+statistics$MeanCoverage<-as.numeric(statistics$MeanDepth)
+statistics$MeanBaseQuality<-as.numeric(statistics$MeanBaseQuality)
+statistics<-merge(statistics, mapping, by.x="Sample", by.y="Filename")
 
-variantCount<-data.table(t(table(variants$ID)))
-variantCount$SampleID<-sub('\\.bam$', '', variantCount$V2)
-contamination$SampleID<-sub('\\.bam$', '', contamination$Sample) 
-haplogroups$SampleNID<-sub('\\.bam$', '', haplogroups$SampleID) 
 
-statsTableMerged<-merge(statTable, contamination, by.x="Sample", by.y="SampleID")
-statsTableMergedVariant<-merge(statsTableMerged, variantCount, by.x="Sample", by.y="SampleID")
-statsTableMergedVariantHaplo<-merge(statsTableMergedVariant, haplogroups, by.x="Sample", by.y="SampleNID")
 
-statsTableMergedVariantHaplo <- statsTableMergedVariantHaplo %>% arrange(Sample)
+haplogroups<-merge(haplogroups, mapping, by.x="SampleID", by.y="Filename") %>% arrange(Sample_Label)
+contamination<-merge(contamination, mapping, by.x="Sample", by.y="Filename") %>% arrange(Sample_Label)
 
-contaminated_samples = statsTableMergedVariantHaplo %>% mutate("Contamination_Status" = "Contamination.Status") %>% filter(Contamination_Status == "YES");
+variants_count<-data.table(t(table(variants$ID)))
+variants_count<-merge(variants_count, mapping, by.x="V2", by.y="Filename") %>% arrange(Sample_Label)
+
+variants<-merge(variants, mapping, by.x="ID", by.y="Filename") %>% arrange(Sample_Label)
+
+#statsTableMerged<-merge(statTable, contamination, by.x="Sample", by.y="SampleID")
+#statsTableMergedVariant<-merge(statsTableMerged, variantCount, by.x="Sample", by.y="SampleID")
+#statsTableMergedVariantHaplo<-merge(statsTableMergedVariant, haplogroups, by.x="Sample", by.y="SampleNID")
+
+#statsTableMergedVariantHaplo <- statsTableMergedVariantHaplo %>% arrange(Sample)
+
+contaminated_samples = contamination %>%
+  mutate("Contamination_Status" = "Contamination.Status") %>%
+  filter(Contamination_Status == "YES");
 
 
 ```
@@ -61,13 +88,13 @@ Row
 ### Number of Samples
 
 ```{r}
-valueBox(nrow(haplogroups), icon = "fa-users")
+valueBox(nrow(statistics), icon = "fa-users")
 ```
 
 ### Excluded Samples
 
 ```{r}
-valueBox(-1, icon = "fa-filter")
+valueBox(nrow(excluded_samples), icon = "fa-filter")
 ```
 
 ### Samples with Bad Quality
@@ -89,12 +116,30 @@ Row
 -------------------------------------
     
     
-### Summary
+### Summary  {data-width=750}
 
 ```{r echo=FALSE, results='asis'}
-statsTableMergedVariantHaplo %>%
-  select("Sample", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality") %>%
-  datatable(colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality"))
+statistics %>%
+  select("Sample_Label", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc") %>%
+  datatable(
+    colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality", "QC"),
+    options = list(
+      bPaginate = FALSE
+    )
+  ) %>% 
+  formatStyle(
+    'qc',
+    backgroundColor = styleEqual(c("FAILED", "PASSED"), c('darkred', 'green')),
+    color = 'white'
+  )
+```
+
+
+### Workflow parameters and Software versions {data-width=250}
+
+```{r echo=FALSE, results='asis'}
+pipeline_params %>%
+  kable()
 ```
 
 Row
@@ -105,11 +150,14 @@ Row
 
 ```{r echo=FALSE, results='asis'}
 ggplotly(
-  ggplot(statTable) +
-    geom_col(aes(x=Sample, y=MeanCoverage), alpha=0.7) +
+  ggplot(statistics) +
+    geom_col(aes(x=Sample_Label, y=MeanCoverage, fill=qc), alpha=0.7) +
     theme(axis.text.x=element_text(angle=+90)) + 
+    geom_hline(yintercept=MIN_MEAN_DEPTH, color="black", linetype="dashed") +
+    scale_fill_manual(values=c("red", "darkgreen")) +
     xlab("Samples") +
-    ylab("Mean Coverage")
+    ylab("Mean Coverage") +
+    labs(fill = "")
 )
 ```
 
@@ -117,12 +165,14 @@ ggplotly(
 
 ```{r echo=FALSE, results='asis'}
 ggplotly(
-  ggplot(statTable) +
-    geom_col(aes(x=Sample, y=MeanBaseQuality), alpha=0.7) +
+  ggplot(statistics) +
+    geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc), alpha=0.7) +
     theme(axis.text.x=element_text(angle=+90)) + 
-    geom_hline(yintercept=20, color="red", linetype="dashed") +
+    geom_hline(yintercept=MIN_MEAN_BASE_QUALITY, color="black", linetype="dashed") +
+    scale_fill_manual(values=c("red", "darkgreen")) +
     xlab("Samples") +
-    ylab("Mean Base Quality")
+    ylab("Mean Base Quality") +
+    labs(fill = "")
 )
 ```
 
@@ -132,8 +182,13 @@ ggplotly(
 
 ```{r echo=FALSE, results='asis'}
 contaminated_samples %>%
-  select("Sample", "Contamination_Status", "Contamination.Level") %>%
-  datatable(colnames=c("Sample", "Contamination","Level"))
+  select("Sample_Label", "Contamination_Status", "Contamination.Level") %>%
+  datatable(
+    colnames=c("Sample", "Contamination","Level"),
+    options = list(
+      bPaginate = FALSE
+    )
+  )
 ```
 
 ---
@@ -146,9 +201,14 @@ Row
 ### Summary
 
 ```{r echo=FALSE, results='asis'}
-statsTableMergedVariantHaplo %>%
-  select("Sample", "N") %>%
-  datatable(colnames=c("Sample", "Number of Variants"))
+variants_count %>%
+  select("Sample_Label", "N") %>%
+  datatable(
+    colnames=c("Sample", "Number of Variants"),
+    options = list(
+      bPaginate = FALSE
+    )
+  )
 ```
 
 Row
@@ -158,8 +218,8 @@ Row
 
 
 ```{r echo=FALSE, results='asis'}
-summary_data <- aggregate(  ID ~ Pos + Type , data = variants, FUN = length)
-summary_data <- summary_data %>% filter(ID >= 2)
+summary_data <- aggregate(  Sample_Label ~ Pos + Type , data = variants, FUN = length)
+summary_data <- summary_data %>% filter(Sample_Label >= 2)
 summary_data <- summary_data %>% mutate(
   label = case_when(
     Type == 1 ~ "Variant",
@@ -167,7 +227,7 @@ summary_data <- summary_data %>% mutate(
     TRUE ~ "Unknown"
   )
 )
-summary_data$AF<-summary_data$ID / max(length(unique(variants$ID)))
+summary_data$AF<-summary_data$Sample_Label / max(length(unique(variants$Sample_Label)))
 ggplotly(
   ggplot(summary_data, aes(x = Pos, y = AF, color=label)) +
     geom_point() +
@@ -189,9 +249,14 @@ Row
 ### Summary
 
 ```{r echo=FALSE, results='asis'}
-statsTableMergedVariantHaplo %>%
-  select("Sample", "Haplogroup","Quality") %>%
-datatable()
+haplogroups %>%
+  select("Sample_Label", "Haplogroup", "Quality") %>%
+  datatable(
+    colnames=c("Sample", "Haplogroup", "Quality"),
+    options = list(
+      bPaginate = FALSE
+    )
+  )
 ```
 
 Row
@@ -202,7 +267,7 @@ Row
 ```{r echo=FALSE, results='asis'}
 ggplotly(
   ggplot(haplogroups) +
-    geom_col(aes(y=Quality, x=SampleNID), alpha=0.7) +
+    geom_col(aes(y=Quality, x=Sample_Label), alpha=0.7) +
     geom_hline(yintercept=0.90, color="green", linetype="dashed") +
     geom_hline(yintercept=0.80, color="orange", linetype="dashed") +
     geom_hline(yintercept=0.70, color="red", linetype="dashed") +
@@ -234,13 +299,9 @@ This software was developed at the [Institute of Genetic Epidemiology](https://g
 Row
 -------------------------------------
 
-### Software versions
+### Workflow parameters and Software versions
 
-table
-
-Row
--------------------------------------
-
-### Workflow parameters
-
-table
+```{r echo=FALSE, results='asis'}
+pipeline_params %>%
+  kable()
+```
