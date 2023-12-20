@@ -106,12 +106,13 @@ workflow MTDNA_SERVER_2 {
     )
 
     REPORT(
-    report_file_ch,
-    variants_txt_ch,
-    HAPLOGROUP_DETECTION.out.haplogroups_ch,
-    CONTAMINATION_DETECTION.out.contamination_txt_ch,
-    INPUT_VALIDATION.out.summarized_ch,
-    INPUT_VALIDATION.out.mapping_ch
+        report_file_ch,
+        variants_txt_ch,
+        HAPLOGROUP_DETECTION.out.haplogroups_ch,
+        CONTAMINATION_DETECTION.out.contamination_txt_ch,
+        INPUT_VALIDATION.out.summarized_ch,
+        INPUT_VALIDATION.out.mapping_ch,
+        INPUT_VALIDATION.out.excluded_ch
     )
 
 }
