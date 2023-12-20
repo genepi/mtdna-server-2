@@ -23,9 +23,9 @@ process REPORT {
   echo -e "Variant Caller\t${params.mode}" >> params.txt
   echo -e "Detection Limit\t${params.detection_limit}" >> params.txt
   echo -e "Reference\t${params.reference}" >> params.txt
-  echo -e "Base Quality\t${params.variant_calling.baseQ}" >> params.txt
-  echo -e "Map Quality\t${params.variant_calling.mapQ}" >> params.txt
-  echo -e "Alignment Quality\t${params.variant_calling.alignQ}" >> params.txt  
+  echo -e "Base Quality\t${params.baseQ}" >> params.txt
+  echo -e "Map Quality\t${params.mapQ}" >> params.txt
+  echo -e "Alignment Quality\t${params.alignQ}" >> params.txt  
 
   Rscript -e "require('rmarkdown'); render('${report}',
    params = list(

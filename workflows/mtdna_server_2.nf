@@ -63,6 +63,8 @@ workflow MTDNA_SERVER_2 {
         CALCULATE_STATISTICS.out.fastqc_ch.collect()
     )
 
+    haplogrep_ch = []
+    contamination_ch = []
     if (params.mode == 'mutect2') {
 
         MUTECT2(
@@ -94,9 +96,13 @@ workflow MTDNA_SERVER_2 {
             MUTSERVE.out.vcf_ch
         )    
 
+        haplogrep_ch = HAPLOGROUP_DETECTION.out.haplogroups_ch
+       
         CONTAMINATION_DETECTION(
             MUTSERVE.out.vcf_ch
         )
+
+         contamination_ch =  CONTAMINATION_DETECTION.out.contamination_txt_ch
     } 
 
     ANNOTATE(
@@ -108,8 +114,8 @@ workflow MTDNA_SERVER_2 {
     REPORT(
         report_file_ch,
         variants_txt_ch,
-        HAPLOGROUP_DETECTION.out.haplogroups_ch,
-        CONTAMINATION_DETECTION.out.contamination_txt_ch,
+        haplogrep_ch,
+        contamination_ch,
         INPUT_VALIDATION.out.summarized_ch,
         INPUT_VALIDATION.out.mapping_ch,
         INPUT_VALIDATION.out.excluded_ch

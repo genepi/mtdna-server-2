@@ -23,8 +23,8 @@ process MUTSERVE {
     java -Xmx${avail_mem}M -jar /opt/mutserve/mutserve.jar call \
     --level ${params.detection_limit} \
     --reference ${reference} \
-    --mapQ ${params.variant_calling.mapQ} \
-    --baseQ ${params.variant_calling.baseQ} \
+    --mapQ ${params.mapQ} \
+    --baseQ ${params.baseQ} \
     --deletions --output variants.vcf.gz \
     --no-ansi ${bam_files_ch} \
     --excluded-samples ${excluded_samples} \

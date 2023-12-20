@@ -20,7 +20,7 @@ process MUTECT2 {
     --mitochondria-mode \
     -R ${reference} \
     -L ${detected_contig} \
-    --min-base-quality-score ${params.variant_calling.baseQ} \
+    --min-base-quality-score ${params.baseQ} \
     -I ${bam_file} \
     -O raw.vcf.gz
     
