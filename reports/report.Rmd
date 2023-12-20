@@ -124,6 +124,10 @@ Row
 ### Summary  {data-width=750}
 
 ```{r echo=FALSE, results='asis'}
+
+colors <- c("#28a745", "#dc3545")
+names(colors) <- c("PASSED", "FAILED")
+
 statistics %>%
   select("Sample_Label", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc") %>%
   datatable(
@@ -134,7 +138,7 @@ statistics %>%
   ) %>% 
   formatStyle(
     'qc',
-    backgroundColor = styleEqual(c("FAILED", "PASSED"), c('darkred', 'green')),
+    backgroundColor = styleEqual(c("FAILED", "PASSED"), colors),
     color = 'white'
   )
 ```
@@ -155,12 +159,9 @@ Row
 
 ```{r echo=FALSE, results='asis'}
 
-colors <- c("darkgreen", "red")
-names(colors) <- c("PASSED", "FAILED")
-
 ggplotly(
   ggplot(statistics) +
-    geom_col(aes(x=Sample_Label, y=MeanCoverage, fill=qc), alpha=0.7) +
+    geom_col(aes(x=Sample_Label, y=MeanCoverage, fill=qc)) +
     theme(axis.text.x=element_text(angle=+90)) + 
     geom_hline(yintercept=MIN_MEAN_DEPTH, color="black", linetype="dashed") +
     scale_fill_manual(values=colors) +
@@ -175,7 +176,7 @@ ggplotly(
 ```{r echo=FALSE, results='asis'}
 ggplotly(
   ggplot(statistics) +
-    geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc), alpha=0.7) +
+    geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc)) +
     theme(axis.text.x=element_text(angle=+90)) + 
     geom_hline(yintercept=MIN_MEAN_BASE_QUALITY, color="black", linetype="dashed") +
     scale_fill_manual(values=colors) +
