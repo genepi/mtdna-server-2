@@ -1,23 +1,47 @@
-    nextflow_pipeline {
+nextflow_pipeline {
 
     name "Test Workflow main.nf"
     script "main.nf"
     
-    test("Runs with single BAM file") {
+    test("Runs with single BAM file and mutserve") {
 
         when {
             params {
                project = "test-job"
-               files   = "$projectDir/tests/data/bam/*.bam"
-               output  = "out"
+               files = "$projectDir/tests/data/bam/*.bam"
+               mode = "mutserve"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
             }
         }
 
         then {
             assert workflow.success
-            //assert snapshot(new File("out/variants.vcf.gz")).match()
+            assert snapshot(path("${launchDir}/out/variants_ann.txt")).match()
         }
 
     }
 
+        test("Runs with single BAM file and mutect2") {
+
+        when {
+            params {
+               project = "test-job"
+               files = "$projectDir/tests/data/bam/*.bam"
+               mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            //TODO: sort variants file by sample after merging to get a deterministic order
+            //assert snapshot(path("${launchDir}/out/variants_ann.txt")).match()
+        }
+
     }
+
+}

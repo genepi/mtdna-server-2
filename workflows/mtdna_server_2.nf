@@ -63,8 +63,8 @@ workflow MTDNA_SERVER_2 {
         CALCULATE_STATISTICS.out.fastqc_ch.collect()
     )
 
-    haplogrep_ch = []
-    contamination_ch = []
+    haplogrep_ch = file("$projectDir/files/haplogroups.txt")
+    contamination_ch = file("$projectDir/files/haplocheck.txt")
     if (params.mode == 'mutect2') {
 
         MUTECT2(
