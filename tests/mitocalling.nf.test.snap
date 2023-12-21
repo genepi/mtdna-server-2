@@ -1,33 +1,14 @@
 {
-    "Runs with single BAM file": {
+    "Runs with single BAM file and mutect2": {
         "content": [
-            {
-                "directory": false,
-                "file": false,
-                "freeSpace": 0,
-                "canonicalPath": "/home/seb/git/nf-mito-calling/out/variants.vcf.gz",
-                "usableSpace": 0,
-                "hidden": false,
-                "totalSpace": 0,
-                "path": "out/variants.vcf.gz",
-                "name": "variants.vcf.gz",
-                "absolute": false,
-                "absolutePath": "/home/seb/git/nf-mito-calling/out/variants.vcf.gz",
-                "parent": [
-                    [
-                        "haplogroups.txt:md5,14e2601fd8852abe0f47869d8033a7b4"
-                    ],
-                    [
-                        "contamination.html:md5,53a0eae3fc64fab0456c0fe96447b3d9",
-                        "report.html:md5,14524efe5aa512a388853018e70f529e"
-                    ],
-                    [
-                        "variants.txt:md5,9a5641b89f88670ff70f4a815699b926",
-                        "variants.vcf.gz:md5,60f372898d3efcee971ec611d90d6a90"
-                    ]
-                ]
-            }
+            "variants_ann.txt:md5,accf5a353be01302f95b001338cf554a"
         ],
-        "timestamp": "2023-11-30T17:44:10.056786"
+        "timestamp": "2023-12-21T13:01:38.349898"
+    },
+    "Runs with single BAM file and mutserve": {
+        "content": [
+            "variants_ann.txt:md5,64598b248689e6225c554b5d32c1bbd9"
+        ],
+        "timestamp": "2023-12-21T10:15:48.759709"
     }
 }

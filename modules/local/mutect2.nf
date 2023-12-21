@@ -34,9 +34,9 @@ process MUTECT2 {
 
     rm raw.vcf.gz
 
-    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage" > ${bam_file.baseName}.txt
+    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.txt
 
-    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\n' ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.txt
+    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\t0\n' ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.txt
 
     """
 }
