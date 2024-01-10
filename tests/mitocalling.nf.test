@@ -8,7 +8,7 @@ nextflow_pipeline {
         when {
             params {
                project = "test-job"
-               files = "$projectDir/tests/data/bam/*.bam"
+               files = "$projectDir/tests/data/bam/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20101123.bam"
                mode = "mutserve"
                output = "out"
                output_reports = "reports"
