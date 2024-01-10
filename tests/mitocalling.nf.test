@@ -23,6 +23,25 @@ nextflow_pipeline {
 
     }
 
+    test("Runs with BAM file including different header contigs") {
+
+        when {
+            params {
+               project = "test-job"
+               files = "$projectDir/tests/data/bam/mitohpc/*bam"
+               mode = "mutserve"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert snapshot(path("${launchDir}/out/variants_ann.txt")).match()
+        }
+
+    }
+
         test("Runs with single BAM file and mutect2") {
 
         when {

@@ -20,7 +20,7 @@ process CALCULATE_STATISTICS {
 
     ## calculate summary statistics
     samtools coverage ${bam_file} > samtools_coverage_${bam_file.baseName}.txt
-    csvtk grep -t -f3 -p 16569 samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt
+    csvtk grep -t -f3 -p 16569 -C '\$' samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt
 
     contig=\$(csvtk cut -t -f 1 mtdna.txt)
     numreads=\$(csvtk cut -t -f 4 mtdna.txt)
