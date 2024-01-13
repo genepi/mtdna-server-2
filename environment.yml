@@ -28,3 +28,4 @@ dependencies:
   - multiqc=1.18
   - gatk4=4.4.0.0
   - bcftools=1.19
+  - emboss=6.6.0
