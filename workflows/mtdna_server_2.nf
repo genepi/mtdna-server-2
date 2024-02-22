@@ -26,8 +26,9 @@ include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
 include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
 include { REPORT } from '../modules/local/report'
-
-
+include { BAM_TO_FASTQ } from '../modules/local/2-stage/bam_to_fastq'
+include { STAGE_1 } from '../modules/local/2-stage/stage_1'
+include { STAGE_2 } from '../modules/local/2-stage/stage_2'
 
 workflow MTDNA_SERVER_2 {
  
@@ -80,6 +81,35 @@ workflow MTDNA_SERVER_2 {
         )
 
         variants_txt_ch = MUTECT2_SUMMARIZE.out.txt_summarized_ch
+    }
+
+     else if (params.mode == '2-STAGE') {
+    
+        STAGE_1 (
+            bams_ch,
+            ref_file_mutect2,
+            ref_file_mutserve,
+            INDEX.out.fasta_index_ch,
+            detected_contig
+
+        )
+        BAM_TO_FASTQ (
+            bams_ch
+        )
+
+        STAGE_2 (
+            BAM_TO_FASTQ.out.fastq_ch,
+            STAGE_1.out.consensus_ch
+        )
+
+      
+        MUTSERVE(
+            STAGE_2.out.realigned_ch.collect(),
+            STAGE_1.out.consensus_ch,
+            INPUT_VALIDATION.out.excluded_ch
+        )
+
+        variants_txt_ch = MUTSERVE.out.txt_ch
     }
 
     else {
