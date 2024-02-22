@@ -1,4 +1,6 @@
-process MUTECT2_SUMMARIZE {
+process SUMMARIZE_VARIANTS {
+
+    publishDir "${params.output}", mode: 'copy'
 
     input:
     path variants_txt

@@ -1,6 +1,6 @@
-process MUTECT2 {
+process STRATEGY_MUTECT2 {
 
-    publishDir "${params.output}", mode: 'copy'
+    //publishDir "${params.output}", mode: 'copy'
 
     input:
     path bam_file
@@ -10,10 +10,8 @@ process MUTECT2 {
     val detected_contig
 
     output:
-    path("${bam_file.baseName}.vcf.gz"), emit: vcf_ch
-    path("${bam_file.baseName}.mutect2.txt"), emit: txt_ch
-    path("${bam_file.baseName}.mutect2.filtered.txt"), emit: combined_results
-
+    path("${bam_file.baseName}.mutect2.filtered.txt"), emit: results
+    
     """
     samtools index ${bam_file}
 
@@ -31,13 +29,23 @@ process MUTECT2 {
     -V raw.vcf.gz \
     -O ${bam_file.baseName}.vcf.gz
 
+     bcftools norm -m-any -f ${reference} ${bam_file.baseName}.vcf.gz -o ${bam_file.baseName}.filtered.vcf.gz -Oz
+
+tabix ${bam_file.baseName}.filtered.vcf.gz
+    gatk LeftAlignAndTrimVariants \
+   -R ${reference}  \
+   -V ${bam_file.baseName}.vcf.gz \
+   -O ${bam_file.baseName}.filtered2.vcf.gz \
+   --max-indel-length 208
+
     rm raw.vcf.gz
 
     echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.mutect2.txt
 
-    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\t0\n'  ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.mutect2.txt
+    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\t0\n'  ${bam_file.baseName}.filtered2.vcf.gz >> ${bam_file.baseName}.mutect2.txt
 
     awk -F'\t' 'NR == 1 || length(\$4) > 1 || length(\$5) > 1' ${bam_file.baseName}.mutect2.txt > ${bam_file.baseName}.mutect2.filtered.txt
+
 
     """
 }
