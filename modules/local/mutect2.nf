@@ -33,11 +33,13 @@ process MUTECT2 {
 
     rm raw.vcf.gz
 
+    bcftools norm -m-any -f ${reference} ${bam_file.baseName}.vcf.gz -o ${bam_file.baseName}.norm.vcf.gz -Oz
+
     echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.mutect2.txt
 
-    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\t0\n'  ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.mutect2.txt
+    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\tINDEL\n'  ${bam_file.baseName}.norm.vcf.gz >> ${bam_file.baseName}.mutect2.txt
 
-    awk -F'\t' 'NR == 1 || length(\$4) > 1 || length(\$5) > 1' ${bam_file.baseName}.mutect2.txt > ${bam_file.baseName}.mutect2.filtered.txt
+    awk -F'\t' 'NR == 1 || ((length(\$4) > 1 || length(\$5) > 1) && length(\$4) != length(\$5))' ${bam_file.baseName}.mutect2.txt > ${bam_file.baseName}.mutect2.filtered.txt
 
     """
 }

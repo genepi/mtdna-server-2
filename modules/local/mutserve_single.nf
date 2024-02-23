@@ -31,7 +31,7 @@ process MUTSERVE_SINGLE {
     ${bam_file} 
 
     echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.mutserve.txt
-    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP\t%GT]\n' ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.mutserve.txt
+    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP\t]SNV\n' ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.mutserve.txt
     awk -F'\t' 'NR == 1 || (length(\$4) == 1 && length(\$5) == 1)' ${bam_file.baseName}.mutserve.txt > ${bam_file.baseName}.mutserve.filtered.txt
    
     """
