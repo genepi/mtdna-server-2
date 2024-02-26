@@ -6,7 +6,7 @@ process MUTSERVE {
     path excluded_samples
 
     output:
-    path("${bam_file.baseName}.txt"), emit: mutserve_txt_ch
+    path("${bam_file.simpleName}.txt"), emit: mutserve_txt_ch
     tuple path("${bam_file.baseName}.vcf.gz"), val('mutserve_fusion'), emit: mutserve_fusion_vcf_ch
     path("${bam_file.baseName}.vcf.gz"), emit: mutserve_vcf_ch
     path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutserve_vcf_idx_ch
@@ -30,7 +30,12 @@ process MUTSERVE {
         --write-raw \
         ${bam_file} 
 
-    bcftools norm -m-any -f ${reference} ${bam_file.baseName}.vcf.gz -o ${bam_file.baseName}.norm.vcf.gz -Oz
+    bcftools norm \
+        -m-any \
+        -f ${reference} \
+        -o ${bam_file.baseName}.norm.vcf.gz -Oz \
+        ${bam_file.baseName}.vcf.gz 
+    
     mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
     tabix ${bam_file.baseName}.vcf.gz
     """
