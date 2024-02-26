@@ -21,13 +21,12 @@ include { INPUT_VALIDATION } from '../modules/local/input_validation'
 include { QUALITY_CONTROL } from '../modules/local/quality_control'
 include { MUTSERVE } from '../modules/local/mutserve'
 include { MUTECT2 } from '../modules/local/mutect2'
-include { SUMMARIZE_VARIANTS } from '../modules/local/summarize_variants'
+include { FILTER_VARIANTS } from '../modules/local/filter_variants'
+include { MERGING_VARIANTS } from '../modules/local/merging_variants'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
 include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
 include { REPORT } from '../modules/local/report'
-include { MUTSERVE_SINGLE } from '../modules/local/mutserve_single'
-
 
 
 workflow MTDNA_SERVER_2 {
@@ -76,11 +75,11 @@ workflow MTDNA_SERVER_2 {
         detected_contig
         )
 
-        SUMMARIZE_VARIANTS(
+        MERGING_VARIANTS(
         MUTECT2.out.txt_ch.collect()
         )
 
-        variants_txt_ch = SUMMARIZE_VARIANTS.out.txt_summarized_ch
+        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
     }
 
     else if (params.mode == 'mutserve') {
@@ -106,29 +105,33 @@ workflow MTDNA_SERVER_2 {
          contamination_ch =  CONTAMINATION_DETECTION.out.contamination_txt_ch
     } 
 
-       else if (params.mode == 'combined') {
+    else if (params.mode == 'fusion') {
 
-        MUTSERVE_SINGLE(
+        MUTSERVE(
             bams_ch,
             ref_file_mutserve,
             INPUT_VALIDATION.out.excluded_ch
         )
 
         MUTECT2(
-        bams_ch,
-        ref_file_mutect2,
-        INPUT_VALIDATION.out.excluded_ch,
-        INDEX.out.fasta_index_ch,
-        detected_contig
+            bams_ch,
+            ref_file_mutect2,
+            INPUT_VALIDATION.out.excluded_ch,
+            INDEX.out.fasta_index_ch,
+            detected_contig
         )
         
-        merged_ch = MUTECT2.out.combined_results.collect().combine(MUTSERVE_SINGLE.out.combined_results.collect())
+        merged_ch = MUTSERVE.out.mutserve_vcf_ch.concat(MUTECT2.out.mutect2_vcf_ch)
 
-        SUMMARIZE_VARIANTS(
-        merged_ch
+        FILTER_VARIANTS (
+            merged_ch
         )
 
-        variants_txt_ch = SUMMARIZE_VARIANTS.out.txt_summarized_ch
+        MERGING_VARIANTS(
+            FILTER_VARIANTS.out.combined_methods_ch.collect()
+        )
+
+        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
 
     }
 
