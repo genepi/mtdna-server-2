@@ -1,10 +1,9 @@
 process MERGING_VARIANTS {
 
-    //publishDir "${params.output}", mode: 'copy'
-
     input:
     path variants_txt
     val mode
+
     output:
     path("variants.merged.txt"), emit: txt_summarized_ch
 

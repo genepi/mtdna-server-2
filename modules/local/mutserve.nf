@@ -1,7 +1,5 @@
 process MUTSERVE {
 
-    //publishDir "${params.output}", mode: 'copy'
-
     input:
     path bam_file
     path reference
@@ -12,6 +10,7 @@ process MUTSERVE {
     tuple path("${bam_file.baseName}.vcf.gz"), val('mutserve_fusion'), emit: mutserve_fusion_vcf_ch
     path("${bam_file.baseName}.vcf.gz"), emit: mutserve_vcf_ch
     path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutserve_vcf_idx_ch
+    
     script:
     def avail_mem = 1024
     if (task.memory) {

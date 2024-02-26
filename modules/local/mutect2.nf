@@ -34,10 +34,8 @@ process MUTECT2 {
     bcftools norm -m-any -f ${reference} ${bam_file.baseName}.vcf.gz -o ${bam_file.baseName}.norm.vcf.gz -Oz
     mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
 
-    #required for mutect2 only mode!
+    #required for mutect2-only mode!
     echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.txt
     bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\tMUTECT2\n' ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.txt
-
-  
     """
 }
