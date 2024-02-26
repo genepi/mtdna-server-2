@@ -1,7 +1,5 @@
 process MUTECT2 {
 
-    //publishDir "${params.output}", mode: 'copy', pattern: 'vcf.gz'
-
     input:
     path bam_file
     path reference
@@ -10,9 +8,10 @@ process MUTECT2 {
     val detected_contig
 
     output:
-    tuple path("${bam_file.baseName}.vcf.gz"), val('mutect2'), emit: mutect2_vcf_ch
-    path("${bam_file.baseName}.mutect2.txt"), emit: txt_ch
-    path("${bam_file.baseName}.mutect2.filtered.txt"), emit: combined_results
+    path("${bam_file.baseName}.txt"), emit: mutect2_txt_ch
+    tuple path("${bam_file.baseName}.vcf.gz"), val('mutect2_fusion'), emit: mutect2_fusion_vcf_ch
+    path("${bam_file.baseName}.vcf.gz"), emit: mutect2_vcf_ch
+    path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutect2_vcf_idx_ch
 
     """
     samtools index ${bam_file}
@@ -32,15 +31,13 @@ process MUTECT2 {
     -O ${bam_file.baseName}.vcf.gz
 
     rm raw.vcf.gz
-
     bcftools norm -m-any -f ${reference} ${bam_file.baseName}.vcf.gz -o ${bam_file.baseName}.norm.vcf.gz -Oz
     mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
 
-    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.mutect2.txt
+    #required for mutect2 only mode!
+    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${bam_file.baseName}.txt
+    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\tMUTECT2\n' ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.txt
 
-    bcftools query -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\tINDEL\n'  ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.mutect2.txt
-
-    awk -F'\t' 'NR == 1 || ((length(\$4) > 1 || length(\$5) > 1) && length(\$4) != length(\$5))' ${bam_file.baseName}.mutect2.txt > ${bam_file.baseName}.mutect2.filtered.txt
-
+  
     """
 }

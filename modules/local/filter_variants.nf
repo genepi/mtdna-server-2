@@ -14,11 +14,12 @@ process FILTER_VARIANTS {
     """
     echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" > ${vcf_file.baseName}.${method}.txt
     
-    if [[ ${method} == "mutserve" ]]
+    if [[ ${method} == "mutserve_fusion" ]]
     then
         bcftools query -f '${vcf_name}.bam\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP\t%GT]\n' ${vcf_file} >> ${vcf_file.baseName}.${method}.txt
-        awk -F'\t' 'NR == 1 || (length(\$4) == 1 && length(\$5) == 1)' ${vcf_file.baseName}.mutserve.txt > ${vcf_file.baseName}.${method}.filtered.txt
-    else
+        awk -F'\t' 'NR == 1 || (length(\$4) == 1 && length(\$5) == 1)' ${vcf_file.baseName}.${method}.txt > ${vcf_file.baseName}.${method}.filtered.txt
+    elif [[ ${method} == "mutect2_fusion" ]]
+    then
         bcftools query -f '${vcf_name}.bam\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\tINDEL\n'  ${vcf_file} >> ${vcf_file.baseName}.${method}.txt
         awk -F'\t' 'NR == 1 || ((length(\$4) > 1 || length(\$5) > 1) && length(\$4) != length(\$5))' ${vcf_file.baseName}.${method}.txt > ${vcf_file.baseName}.${method}.filtered.txt
     fi
