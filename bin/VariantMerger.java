@@ -57,7 +57,6 @@ public class VariantMerger implements Callable<Integer> {
 				// since no hit, write previous row.
 				writer.setRow(lastRow);
 				writer.next();
-
 				diff = refLength - variantlength;
 				lastPos = pos;
 				lastRow = reader.getRow();
@@ -77,7 +76,7 @@ public class VariantMerger implements Callable<Integer> {
 	}
 
 	public boolean comparePositions(int lastPos, int pos, int diff) {
-		for (int i = 0; i <= diff; i++) {
+		for (int i = 0; i <= Math.abs(diff); i++) {
 			if ((lastPos + i) == pos) {
 				return true;
 			}
