@@ -7,9 +7,9 @@
     },
     "Runs with single BAM file and mutserve": {
         "content": [
-            "variants.annotated.txt:md5,21b561f9b05098cdc137f43b4988570e"
+            "variants.annotated.txt:md5,aac0aee87ce1a91f8c35264be248b52e"
         ],
-        "timestamp": "2024-02-26T23:02:15.242706827"
+        "timestamp": "2024-02-27T15:19:15.934593072"
     },
     "Runs with BAM file including different header contigs": {
         "content": [
