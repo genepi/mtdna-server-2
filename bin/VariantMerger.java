@@ -42,7 +42,7 @@ public class VariantMerger implements Callable<Integer> {
 			int variantlength = reader.getString("Variant").length();
 
 			// init new position
-			if (lastPos == 0) {
+			if (lastPos == 0 || pos == 3107 ) {
 				diff = refLength - variantlength;
 				lastPos = pos;
 				lastRow = reader.getRow();

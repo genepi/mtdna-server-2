@@ -37,6 +37,6 @@ process MUTSERVE {
         ${bam_file.baseName}.vcf.gz 
     
     mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
-    tabix ${bam_file.baseName}.vcf.gz
+    tabix -f ${bam_file.baseName}.vcf.gz
     """
 }

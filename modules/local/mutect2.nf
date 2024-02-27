@@ -37,6 +37,7 @@ process MUTECT2 {
         ${bam_file.baseName}.vcf.gz 
     
     mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
+    tabix -f ${bam_file.baseName}.vcf.gz
 
     #required for mutect2-only mode!
     echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" \

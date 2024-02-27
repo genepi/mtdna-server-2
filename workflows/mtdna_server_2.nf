@@ -147,12 +147,16 @@ workflow MTDNA_SERVER_2 {
         file_count
         )
 
-    HAPLOGROUPS_CONTAMINATION (
-        VCF_MERGE.out.vcf_merged_ch
-    )    
+    if (params.mode != 'mutect2') {
+        HAPLOGROUPS_CONTAMINATION (
+            VCF_MERGE.out.vcf_merged_ch
+        )
+        haplogrep_ch = HAPLOGROUPS_CONTAMINATION.out.haplogroups_ch
+        contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
+        
+    }
 
-    haplogrep_ch = HAPLOGROUPS_CONTAMINATION.out.haplogroups_ch
-    contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
+
 
     ANNOTATE(
         variants_txt_ch,
