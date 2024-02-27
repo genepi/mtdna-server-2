@@ -1,5 +1,5 @@
-println "Welcome to ${params.service.name}"
-
+println "Welcome to ${params.service.name} ${workflow.manifest.version}"
+println "(c) ${workflow.manifest.author}"
 requiredParams = [
     'project', 'files', 'output'
 ]
