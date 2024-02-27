@@ -21,12 +21,12 @@ include { INPUT_VALIDATION } from '../modules/local/input_validation'
 include { QUALITY_CONTROL } from '../modules/local/quality_control'
 include { MUTSERVE } from '../modules/local/mutserve'
 include { MUTECT2 } from '../modules/local/mutect2'
-include { MUTECT2_SUMMARIZE } from '../modules/local/mutect2_summarize'
+include { FILTER_VARIANTS } from '../modules/local/filter_variants'
+include { MERGING_VARIANTS } from '../modules/local/merging_variants'
+include { VCF_MERGE } from '../modules/local/vcf_merge'
 include { ANNOTATE } from '../modules/local/annotate'
-include { HAPLOGROUP_DETECTION } from '../modules/local/haplogroup_detection'
-include { CONTAMINATION_DETECTION } from '../modules/local/contamination_detection'
+include { HAPLOGROUPS_CONTAMINATION } from '../modules/local/haplogroups_contamination'
 include { REPORT } from '../modules/local/report'
-
 
 
 workflow MTDNA_SERVER_2 {
@@ -65,45 +65,98 @@ workflow MTDNA_SERVER_2 {
 
     haplogrep_ch = file("$projectDir/files/haplogroups.txt")
     contamination_ch = file("$projectDir/files/haplocheck.txt")
-    if (params.mode == 'mutect2') {
 
-        MUTECT2(
-        bams_ch,
-        ref_file_mutect2,
-        INPUT_VALIDATION.out.excluded_ch,
-        INDEX.out.fasta_index_ch,
-        detected_contig
-        )
-
-        MUTECT2_SUMMARIZE(
-        MUTECT2.out.txt_ch.collect()
-        )
-
-        variants_txt_ch = MUTECT2_SUMMARIZE.out.txt_summarized_ch
-    }
-
-    else {
+    if (params.mode == 'mutserve') {
 
         MUTSERVE(
-            bams_ch.collect(),
+            bams_ch,
             ref_file_mutserve,
             INPUT_VALIDATION.out.excluded_ch
         )
 
-        variants_txt_ch = MUTSERVE.out.txt_ch
-
-        HAPLOGROUP_DETECTION(
-            MUTSERVE.out.vcf_ch
-        )    
-
-        haplogrep_ch = HAPLOGROUP_DETECTION.out.haplogroups_ch
-       
-        CONTAMINATION_DETECTION(
-            MUTSERVE.out.vcf_ch
+        MERGING_VARIANTS(
+            MUTSERVE.out.mutserve_txt_ch.collect(),
+            params.mode
         )
 
-         contamination_ch =  CONTAMINATION_DETECTION.out.contamination_txt_ch
+        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
+        variants_vcf_ch = MUTSERVE.out.mutserve_vcf_ch.collect()
+        variants_vcf_idx_ch = MUTSERVE.out.mutserve_vcf_idx_ch.collect()
+        file_count =  MUTSERVE.out.mutserve_vcf_ch.count()
+       
     } 
+
+    else if (params.mode == 'mutect2') {
+
+        MUTECT2(
+            bams_ch,
+            ref_file_mutect2,
+            INPUT_VALIDATION.out.excluded_ch,
+            INDEX.out.fasta_index_ch,
+            detected_contig
+        )
+
+        MERGING_VARIANTS(
+            MUTECT2.out.mutect2_txt_ch.collect(),
+            params.mode
+        )
+
+        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
+        variants_vcf_ch = MUTECT2.out.mutect2_vcf_ch.collect()
+        variants_vcf_idx_ch = MUTECT2.out.mutect2_vcf_idx_ch.collect()
+        file_count =  MUTECT2.out.mutect2_vcf_ch.count()
+    }
+
+    else if (params.mode == 'fusion') {
+
+        MUTSERVE(
+            bams_ch,
+            ref_file_mutserve,
+            INPUT_VALIDATION.out.excluded_ch
+        )
+
+        MUTECT2(
+            bams_ch,
+            ref_file_mutect2,
+            INPUT_VALIDATION.out.excluded_ch,
+            INDEX.out.fasta_index_ch,
+            detected_contig
+        )
+        
+        merged_ch = MUTSERVE.out.mutserve_fusion_vcf_ch.concat(MUTECT2.out.mutect2_fusion_vcf_ch)
+
+        FILTER_VARIANTS (
+            merged_ch
+        )
+
+        MERGING_VARIANTS(
+            FILTER_VARIANTS.out.combined_methods_ch.collect(),
+            params.mode
+        )
+
+        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
+        // only use mutserve calls for haplogroup and contamination detection
+        variants_vcf_ch = MUTSERVE.out.mutserve_vcf_ch.collect()
+        variants_vcf_idx_ch = MUTSERVE.out.mutserve_vcf_idx_ch.collect()
+        file_count =  MUTSERVE.out.mutserve_vcf_ch.count()
+    }
+
+    VCF_MERGE (
+        variants_vcf_ch,
+        variants_vcf_idx_ch,
+        file_count
+        )
+
+    if (params.mode != 'mutect2') {
+        HAPLOGROUPS_CONTAMINATION (
+            VCF_MERGE.out.vcf_merged_ch
+        )
+        haplogrep_ch = HAPLOGROUPS_CONTAMINATION.out.haplogroups_ch
+        contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
+        
+    }
+
+
 
     ANNOTATE(
         variants_txt_ch,
@@ -124,10 +177,7 @@ workflow MTDNA_SERVER_2 {
 }
 
 workflow.onComplete {
-    //TODO: use templates
-    //TODO: move in EmailHelper class
-    //see https://www.nextflow.io/docs/latest/mail.html for configuration etc...
-   
+  
     def report = new CloudgeneReport()
    
     //job failed

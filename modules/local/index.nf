@@ -7,6 +7,7 @@ process INDEX {
 
 	"""
     samtools faidx $reference
-    samtools dict $reference -o ${reference.baseName}.dict
+    	samtools dict $reference \
+	    -o ${reference.baseName}.dict
 	"""
 }

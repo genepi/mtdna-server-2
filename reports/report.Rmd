@@ -230,12 +230,21 @@ Row
 
 
 ```{r echo=FALSE, results='asis'}
+variants <- variants %>%
+  mutate(Type = case_when(
+    Type == "0/1" ~ "2",
+    Type == "1/0" ~ "2",
+    Type == "INDEL" ~ "3",
+    TRUE ~ as.character(Type)
+  ))
+
 summary_data <- aggregate(  Sample_Label ~ Pos + Type , data = variants, FUN = length)
-summary_data <- summary_data %>% filter(Sample_Label >= 2)
+summary_data <- summary_data %>% filter(Sample_Label >= 1)
 summary_data <- summary_data %>% mutate(
   label = case_when(
     Type == 1 ~ "Variant",
     Type == 2 ~ "Heteroplasmy",
+    Type == 3 ~ "INDEL",
     TRUE ~ "Unknown"
   )
 )

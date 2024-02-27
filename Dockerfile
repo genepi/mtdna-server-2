@@ -38,4 +38,14 @@ RUN wget https://github.com/genepi/haplogrep3/releases/download/v3.2.1/haplogrep
     rm haplogrep3-3.2.1-linux.zip
 ENV PATH="/opt/haplogrep:${PATH}"
 
+WORKDIR "/opt"
+RUN wget https://github.com/jbangdev/jbang/releases/download/v0.91.0/jbang-0.91.0.zip && \
+    unzip -q jbang-*.zip && \
+    mv jbang-0.91.0 jbang  && \
+    rm jbang*.zip
+
+ENV PATH="/opt/jbang/bin:${PATH}"
+WORKDIR "/opt"
+COPY ./bin/VariantMerger.java ./
+RUN jbang export portable -O=VariantMerger.jar VariantMerger.java
 

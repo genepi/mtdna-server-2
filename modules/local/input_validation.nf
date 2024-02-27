@@ -13,17 +13,23 @@ process INPUT_VALIDATION {
     path("contig.txt"), emit: contig_ch
 
     """
-    csvtk concat -t ${statistics} -T -o sample_statistics.txt
-    csvtk concat -t ${mapping} -T -o sample_mappings.txt
+    csvtk concat \
+        -t ${statistics} \
+        -T -o sample_statistics.txt
+    
+    csvtk concat \
+        -t ${mapping} \
+        -T -o sample_mappings.txt
+    
     java -jar /opt/mutserve/mutserve.jar stats \
-    --input sample_statistics.txt \
-    --detection-limit ${params.detection_limit}  \
-    --reference ${params.reference}  \
-    --baseQ ${params.baseQ}\
-    --mapQ ${params.mapQ} \
-    --alignQ ${params.alignQ} \
-    --output-excluded-samples excluded_samples.txt \
-    --output-contig contig.txt \
-    --tool ${params.mode}
+        --input sample_statistics.txt \
+        --detection-limit ${params.detection_limit}  \
+        --reference ${params.reference}  \
+        --baseQ ${params.baseQ}\
+        --mapQ ${params.mapQ} \
+        --alignQ ${params.alignQ} \
+        --output-excluded-samples excluded_samples.txt \
+        --output-contig contig.txt \
+        --tool ${params.mode}
     """
 }

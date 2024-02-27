@@ -8,9 +8,13 @@ process ANNOTATE {
     path annotation
 
     output:
-    path ("${variants_ch.baseName}_ann.txt"), emit: variants_ann_ch
+    path ("${variants_ch.baseName}.annotated.txt"), emit: variants_ann_ch
 
     """
-    java -jar /opt/mutserve/mutserve.jar annotate --input ${variants_ch} --output ${variants_ch.baseName}_ann.txt --annotation ${annotation}
+    java -jar /opt/mutserve/mutserve.jar \
+        annotate \
+        --input ${variants_ch} \
+        --output ${variants_ch.baseName}.annotated.txt \
+        --annotation ${annotation}
     """
 }

@@ -1,14 +1,20 @@
 {
+    "Runs with single BAM file and mutect2": {
+        "content": [
+            "variants.annotated.txt:md5,94fa4b4d0613f61410618a7eba4c5c97"
+        ],
+        "timestamp": "2024-02-26T23:09:58.251860914"
+    },
     "Runs with single BAM file and mutserve": {
         "content": [
-            "variants_ann.txt:md5,1d8423fc3e89a12e226e5e4b89f60150"
+            "variants.annotated.txt:md5,21b561f9b05098cdc137f43b4988570e"
         ],
-        "timestamp": "2024-01-10T14:27:36.082310248"
+        "timestamp": "2024-02-26T23:02:15.242706827"
     },
     "Runs with BAM file including different header contigs": {
         "content": [
-            "variants_ann.txt:md5,c2aa6c45193a921f4a20238fe9bf6cd8"
+            "variants.annotated.txt:md5,d68e6fed173c766228164438a24ecf5a"
         ],
-        "timestamp": "2024-01-10T14:28:13.798945731"
+        "timestamp": "2024-02-26T23:03:07.470112898"
     }
 }

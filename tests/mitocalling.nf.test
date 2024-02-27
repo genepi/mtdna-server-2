@@ -18,7 +18,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
-            assert snapshot(path("${launchDir}/out/variants_ann.txt")).match()
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt")).match()
         }
 
     }
@@ -37,7 +37,7 @@ nextflow_pipeline {
         }
 
         then {
-            assert snapshot(path("${launchDir}/out/variants_ann.txt")).match()
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt")).match()
         }
 
     }
@@ -57,8 +57,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.success
-            //TODO: sort variants file by sample after merging to get a deterministic order
-            //assert snapshot(path("${launchDir}/out/variants_ann.txt")).match()
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt")).match()
         }
 
     }

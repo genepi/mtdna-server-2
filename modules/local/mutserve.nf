@@ -1,34 +1,42 @@
 process MUTSERVE {
 
-    publishDir "${params.output}", mode: 'copy',pattern: '*.vcf.gz'
-
     input:
-    path bam_files_ch
+    path bam_file
     path reference
     path excluded_samples
 
     output:
-    path("variants.vcf.gz"), emit: vcf_ch
-    path("variants.txt"), emit: txt_ch
-
+    path("${bam_file.simpleName}.txt"), emit: mutserve_txt_ch
+    tuple path("${bam_file.baseName}.vcf.gz"), val('mutserve_fusion'), emit: mutserve_fusion_vcf_ch
+    path("${bam_file.baseName}.vcf.gz"), emit: mutserve_vcf_ch
+    path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutserve_vcf_idx_ch
+    
     script:
     def avail_mem = 1024
-    if (!task.memory) {
-        log.info '[MUTSERVE] Available memory not known - defaulting to 1GB. Specify process memory requirements to change this.'
-    } else {
+    if (task.memory) {
         avail_mem = (task.memory.mega*0.8).intValue()
     }    
 
     """
-    java -Xmx${avail_mem}M -jar /opt/mutserve/mutserve.jar call \
-    --level ${params.detection_limit} \
-    --reference ${reference} \
-    --mapQ ${params.mapQ} \
-    --baseQ ${params.baseQ} \
-    --deletions --output variants.vcf.gz \
-    --no-ansi ${bam_files_ch} \
-    --excluded-samples ${excluded_samples} \
-    --threads ${task.cpus} \
-    --write-raw
+    java -Xmx${avail_mem}M -jar /opt/mutserve/mutserve.jar \
+        call \
+        --level ${params.detection_limit} \
+        --reference ${reference} \
+        --mapQ ${params.mapQ} \
+        --baseQ ${params.baseQ} \
+        --output ${bam_file.baseName}.vcf.gz \
+        --no-ansi \
+        --excluded-samples ${excluded_samples} \
+        --write-raw \
+        ${bam_file} 
+
+    bcftools norm \
+        -m-any \
+        -f ${reference} \
+        -o ${bam_file.baseName}.norm.vcf.gz -Oz \
+        ${bam_file.baseName}.vcf.gz 
+    
+    mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
+    tabix -f ${bam_file.baseName}.vcf.gz
     """
 }
