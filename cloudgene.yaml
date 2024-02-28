@@ -2,7 +2,7 @@ id: mtdna-server-2
 name: mtDNA-Server 2 - Mitochondrial Variant Calling 
 description: "You can upload data in BAM format and the application return homoplasmic and heterplasmic sites.<br><br>No dataset at hand? No problem, download and extract our example dataset: <a href=\"https://mitoverse.i-med.ac.at/downloads/6-samples.zip\" class=\"btn btn-sm btn-secondary\" style=\"color:#ffffff !important\"><i class=\"fa fa-file\"></i> 6-samples.zip</a><br><br>"
 
-version: v2.0.2
+version: v2.1.1
 website: https://mitoverse.readthedocs.io/
 category:
 
@@ -40,17 +40,19 @@ workflow:
         - process: "MTDNA_SERVER_2:MUTECT2"
           label: "Variant Calling (Mutect2)"
           view: progressbar  
-        - process: "MTDNA_SERVER_2:MUTECT2_SUMMARIZE"
-          label: "Collecting results"
+        - process: "MTDNA_SERVER_2:FILTER_VARIANTS"
+          label: "Filtering"       
+        - process: "MTDNA_SERVER_2:MERGING_VARIANTS"
+          label: "Merging"
           view: progressbar            
         - process: "MTDNA_SERVER_2:ANNOTATE"
           label: "Annotation"
           view: progressbar
-        - process: "MTDNA_SERVER_2:HAPLOGROUP_DETECTION"
-          label: "Haplogroup Detection"
+        - process: "MTDNA_SERVER_2:HAPLOGROUPS_CONTAMINATION"
+          label: "Haplogroup % Contamination Detection"
           view: progressbar
-        - process: "MTDNA_SERVER_2:CONTAMINATION_DETECTION"
-          label: "Contamination Detection"
+        - process: "MTDNA_SERVER_2:VCF_MERGE"
+          label: "VCF Merge"
           view: progressbar
         - process: "MTDNA_SERVER_2:REPORT"
           label: "Report Generation"
@@ -75,6 +77,7 @@ workflow:
       value: 0.01
       values:
         0.01: 0.01
+        0.03: 0.03
         0.05: 0.05
         0.1: 0.1      
 
@@ -93,10 +96,11 @@ workflow:
     - id: mode
       description: Mode
       type: list
-      value: mutserve
+      value: fusion
       values:
-        mutserve: SNPs only (mutserve)
-        mutect2: SNPs + Indel Calling (Mutect2)
+        mutserve: mutserve (SNV only)
+        mutect2: mutect2  (SNV+INDEL, Mutect2)
+        fusion: fusion (mitoverse + mutect2)
 
   outputs:
 
