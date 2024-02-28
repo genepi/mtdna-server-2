@@ -66,10 +66,12 @@ workflow MTDNA_SERVER_2 {
     haplogrep_ch = file("$projectDir/files/haplogroups.txt")
     contamination_ch = file("$projectDir/files/haplocheck.txt")
 
+    validated_files = INPUT_VALIDATION.out.validated_files.flatten()
+
     if (params.mode == 'mutserve') {
 
         MUTSERVE(
-            INPUT_VALIDATION.out.validated_files,
+            validated_files,
             ref_file_mutserve
         )
 
@@ -88,7 +90,7 @@ workflow MTDNA_SERVER_2 {
     else if (params.mode == 'mutect2') {
 
         MUTECT2(
-            INPUT_VALIDATION.out.validated_files,
+            validated_files,
             ref_file_mutect2,
             INDEX.out.fasta_index_ch,
             detected_contig
@@ -108,12 +110,12 @@ workflow MTDNA_SERVER_2 {
     else if (params.mode == 'fusion') {
 
         MUTSERVE(
-            INPUT_VALIDATION.out.validated_files,
+            validated_files,
             ref_file_mutserve
         )
 
         MUTECT2(
-           INPUT_VALIDATION.out.validated_files,
+            validated_files,
             ref_file_mutect2,
             INDEX.out.fasta_index_ch,
             detected_contig
