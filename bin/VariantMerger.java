@@ -40,16 +40,18 @@ public class VariantMerger implements Callable<Integer> {
 			int pos = reader.getInteger("Pos");
 			int refLength = reader.getString("Ref").length();
 			int variantlength = reader.getString("Variant").length();
+			String type = reader.getString("Type");
 
 			// init new position
-			if (lastPos == 0 || pos == 3107 ) {
+			if (lastPos == 0 || pos == 3107) {
 				diff = refLength - variantlength;
 				lastPos = pos;
 				lastRow = reader.getRow();
 				continue;
 			}
 
-			if (comparePositions(lastPos, pos, diff)) {
+			if (comparePositions(lastPos, pos, diff, type, reader)) {
+				System.out.println("HERE");
 				writer.setRow(lastRow);
 				writer.next();
 				lastPos = 0;
@@ -75,9 +77,10 @@ public class VariantMerger implements Callable<Integer> {
 		System.exit(exitCode);
 	}
 
-	public boolean comparePositions(int lastPos, int pos, int diff) {
+	public boolean comparePositions(int lastPos, int pos, int diff, String type, CsvTableReader reader) {
+		
 		for (int i = 0; i <= Math.abs(diff); i++) {
-			if ((lastPos + i) == pos) {
+			if ((lastPos + i) == pos && !type.equals("INDEL")) {
 				return true;
 			}
 		}
