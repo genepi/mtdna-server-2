@@ -3,7 +3,6 @@ process MUTSERVE {
     input:
     path bam_file
     path reference
-    path excluded_samples
 
     output:
     path("${bam_file.simpleName}.txt"), emit: mutserve_txt_ch
@@ -26,7 +25,6 @@ process MUTSERVE {
         --baseQ ${params.baseQ} \
         --output ${bam_file.baseName}.vcf.gz \
         --no-ansi \
-        --excluded-samples ${excluded_samples} \
         --write-raw \
         ${bam_file} 
 

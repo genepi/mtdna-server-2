@@ -51,10 +51,10 @@ workflow MTDNA_SERVER_2 {
     )
 
     INPUT_VALIDATION(
+        bams_ch.collect(),
         CALCULATE_STATISTICS.out.stats_ch.collect(),
         CALCULATE_STATISTICS.out.mapping_ch.collect()
     )
-
 
     def detected_contig = INPUT_VALIDATION.out.contig_ch.text.trim()
 
@@ -69,9 +69,8 @@ workflow MTDNA_SERVER_2 {
     if (params.mode == 'mutserve') {
 
         MUTSERVE(
-            bams_ch,
-            ref_file_mutserve,
-            INPUT_VALIDATION.out.excluded_ch
+            INPUT_VALIDATION.out.validated_files,
+            ref_file_mutserve
         )
 
         MERGING_VARIANTS(
@@ -89,9 +88,8 @@ workflow MTDNA_SERVER_2 {
     else if (params.mode == 'mutect2') {
 
         MUTECT2(
-            bams_ch,
+            INPUT_VALIDATION.out.validated_files,
             ref_file_mutect2,
-            INPUT_VALIDATION.out.excluded_ch,
             INDEX.out.fasta_index_ch,
             detected_contig
         )
@@ -110,15 +108,13 @@ workflow MTDNA_SERVER_2 {
     else if (params.mode == 'fusion') {
 
         MUTSERVE(
-            bams_ch,
-            ref_file_mutserve,
-            INPUT_VALIDATION.out.excluded_ch
+            INPUT_VALIDATION.out.validated_files,
+            ref_file_mutserve
         )
 
         MUTECT2(
-            bams_ch,
+           INPUT_VALIDATION.out.validated_files,
             ref_file_mutect2,
-            INPUT_VALIDATION.out.excluded_ch,
             INDEX.out.fasta_index_ch,
             detected_contig
         )

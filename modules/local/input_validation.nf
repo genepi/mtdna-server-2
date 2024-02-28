@@ -3,6 +3,7 @@ process INPUT_VALIDATION {
     publishDir "${params.output_auxiliary}", mode: 'copy',pattern: '*s.txt'
 
     input:
+    path bams_ch
     path statistics
     path mapping
 
@@ -11,6 +12,7 @@ process INPUT_VALIDATION {
     path("sample_mappings.txt"), emit: mapping_ch
     path("excluded_samples.txt"), emit: excluded_ch
     path("contig.txt"), emit: contig_ch
+    path("*.bam"), includeInputs: true, emit: validated_files
 
     """
     csvtk concat \
@@ -31,5 +33,8 @@ process INPUT_VALIDATION {
         --output-excluded-samples excluded_samples.txt \
         --output-contig contig.txt \
         --tool ${params.mode}
+    
+    # delete excluded_samples from BAM input channel directly
+    awk -v q='"' '{print "rm " q \$1 q }' excluded_samples.txt | sh
     """
 }

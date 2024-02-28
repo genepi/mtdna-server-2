@@ -16,5 +16,16 @@
             "variants.annotated.txt:md5,d68e6fed173c766228164438a24ecf5a"
         ],
         "timestamp": "2024-02-26T23:03:07.470112898"
+    },
+    "Runs with two files and one goes through QC": {
+        "content": [
+            "variants.annotated.txt:md5,3946a3bd26ceafe8f61903499bfcbb35",
+            {
+                "tasksFailed": 0,
+                "tasksCount": 10,
+                "tasksSucceeded": 10
+            }
+        ],
+        "timestamp": "2024-02-28T12:32:40.624776"
     }
 }

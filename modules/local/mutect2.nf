@@ -3,7 +3,6 @@ process MUTECT2 {
     input:
     path bam_file
     path reference
-    path excluded_samples
     path fasta_index_files
     val detected_contig
 

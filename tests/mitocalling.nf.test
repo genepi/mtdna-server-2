@@ -62,4 +62,25 @@ nextflow_pipeline {
 
     }
 
+
+        test("Runs with two files and one goes through QC") {
+
+        when {
+            params {
+               project = "test-job"
+               files = "$projectDir/tests/data/input_validation/*.bam"
+               mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
+
 }
