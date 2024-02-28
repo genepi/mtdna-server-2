@@ -17,6 +17,7 @@ process MUTSERVE {
     }    
 
     """
+    #todo: check used mutserve strand-bias with default parameter
     java -Xmx${avail_mem}M -jar /opt/mutserve/mutserve.jar \
         call \
         --level ${params.detection_limit} \
@@ -25,6 +26,7 @@ process MUTSERVE {
         --baseQ ${params.baseQ} \
         --output ${bam_file.baseName}.vcf.gz \
         --no-ansi \
+        --strand-bias 1.6 \
         --write-raw \
         ${bam_file} 
 
