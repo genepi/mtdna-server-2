@@ -26,6 +26,9 @@ process REPORT {
   echo -e "Base Quality\t${params.baseQ}" >> params.txt
   echo -e "Map Quality\t${params.mapQ}" >> params.txt
   echo -e "Alignment Quality\t${params.alignQ}" >> params.txt  
+  echo -e "Mutserv\t\${MUTSERV_VERSION}" >> params.txt 
+  echo -e "Haplocheck\t\${HAPLOCHECK_VERSION}" >> params.txt 
+  echo -e "Haplogrep\t\${HAPLOGREP_VERSION}" >> params.txt 
 
   Rscript -e "require('rmarkdown'); render('${report}',
    params = list(

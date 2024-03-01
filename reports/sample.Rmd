@@ -1,0 +1,192 @@
+---
+title: "`r params$sample`"
+output:
+  html_document:
+    
+
+params:
+  haplogroups: ../tests/data/report/haplogroups.txt
+  haplocheck: ../tests/data/report/haplocheck.txt
+  variants:  ../tests/data/report/variants_ann.txt
+  statistics:  ../tests/data/report/sample_statistics.txt
+  mapping:  ../tests/data/report/sample_mappings.txt  
+  excluded_samples:  ../tests/data/report/excluded_samples.txt
+  pipeline_parameters:  ../tests/data/report/params.txt
+  sample: HG00180
+---
+
+```{css, echo=FALSE}
+.level3 {
+  margin-top: 40px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.level3 h3 {
+  margin-top: 0px;
+  padding-top: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #cccccc;
+  background-color: #00000008;
+}
+.level3 p {
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 15px;
+}
+```
+
+```{r setup, include=FALSE}
+
+
+MIN_COVERAGE_PERCENTAGE = 90;
+MIN_MEAN_BASE_QUALITY = 15;
+MIN_MEAN_DEPTH = 50
+
+library(ggplot2)
+library(DT)
+library(tidyverse)
+library(data.table)
+library(plotly)
+library(flexdashboard)
+library(knitr)
+
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r echo=FALSE, results='asis'}
+
+link_to_sample <- function(sample) {
+  paste0('<a target="_blank" href=samples/', sample, '.html>', sample,'</a>' )
+}
+
+link_to_variant <- function(pos, ref, alt) {
+  paste0('<a target="blank" href="https://haplogrep.i-med.ac.at/phylogenies/phylotree-fu-rcrs@1.2/mutations/', pos, '_', ref, '_', alt, '">',pos, ' (', ref, '>', alt,')</a>')
+}
+
+create_label <- function(text, color) {
+  paste0('<span class="label label-', color, '">', text, '</span>')
+}
+
+variants <- read.delim(params$variants)
+contamination <- read.delim(params$haplocheck)
+haplogroups <- read.delim(params$haplogroups)
+statistics <- read.delim(params$statistics)
+pipeline_params <- read.delim(params$pipeline_parameters)
+
+excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE, ))
+if(inherits(excluded_samples, "try-error")) {
+  excluded_samples = data.frame(V1=c())
+}
+
+
+mapping <- read.delim(params$mapping)
+mapping <- mapping %>%
+  rename(Sample_Label = Sample)
+mapping <- mapping %>%
+  mutate(
+    qc = case_when(
+        Filename %in% excluded_samples$V1 ~ "FAILED",
+        TRUE ~ "PASSED"
+      )
+  )
+
+
+statistics <- merge(statistics, mapping, by.x="Sample", by.y="Filename") %>%
+  filter(Sample_Label == params$sample)
+
+
+haplogroups <- merge(haplogroups, mapping, by.x="SampleID", by.y="Filename") %>%
+  filter(Sample_Label == params$sample)
+
+contamination <- merge(contamination, mapping, by.x="Sample", by.y="Filename") %>%
+  filter(Sample_Label == params$sample)
+
+contaminated_samples = contamination %>%
+  rename("Contamination_Status" = "Contamination.Status") %>%
+  filter(Sample_Label == params$sample)
+
+variants_count <- data.table(t(table(variants$ID)))
+variants_count <- merge(variants_count, mapping, by.x="V2", by.y="Filename") %>%
+  filter(Sample_Label == params$sample)
+
+variants <- merge(variants, mapping, by.x="ID", by.y="Filename") %>%
+  filter(Sample_Label == params$sample)
+
+variants <- variants %>%
+  mutate(Type = case_when(
+    Type == "0/1" ~ "2",
+    Type == "1/0" ~ "2",
+    Type == "INDEL" ~ "3",
+    TRUE ~ as.character(Type)
+  )) %>%
+  mutate(Type_Label = case_when(
+    Type == 1 ~ create_label('Variant', 'primary'),
+    Type == 2 ~ create_label('Heteroplasmy', 'default'),
+    Type == 3 ~ create_label('InDel', 'info'),
+    TRUE ~ "Unknown"
+  ))
+
+variant_caller <- pipeline_params %>%
+  filter(Parameter == "Variant Caller")
+
+```
+
+    
+### Summary 
+
+**Haplogroup:** `r haplogroups$Haplogroup` (`r haplogroups$Quality`)
+
+**Contaminated:** `r contaminated_samples$Contamination_Status`
+
+
+### Statistics
+
+```{r echo=FALSE}
+statistics %>% 
+  select("Parameter", "Value") %>%
+  datatable(
+    options = list(
+      bPaginate = FALSE,
+      bFilter = FALSE,
+      bSort = FALSE,
+      info = FALSE
+    ),
+    escape = FALSE,
+    rownames = FALSE,
+    class = 'cell-border stripe'
+  )
+```
+
+
+
+### Variants and Hetroplasmies
+
+Detected **`r variants %>% filter(Type_Label == "Variant") %>% nrow()` variants**, **`r variants %>% filter(Type_Label == "Heteroplasmie") %>% nrow()` heteroplasmies** and **`r  variants %>% filter(Type_Label == "Indel") %>% nrow()` InDels**.
+
+```{r echo=FALSE}
+variants %>% 
+  mutate(
+    Variant_Label = link_to_variant(Pos, Ref, Variant)
+  ) %>% 
+  select("Variant_Label", "VariantLevel", "Type_Label") %>%
+  datatable(
+    colnames=c("Variant", "Level", ""),
+    options = list(
+      bPaginate = FALSE,
+      bFilter = FALSE,
+      bSort = FALSE,
+      bFooter = FALSE,
+      info = FALSE
+    ),
+    escape = FALSE,
+    rownames = FALSE,
+    class = 'cell-border stripe'
+  )
+```
+

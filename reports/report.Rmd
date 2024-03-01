@@ -35,6 +35,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r echo=FALSE, results='asis'}
 
+link_to_sample <- function(sample) {
+  paste0('<a  target=_blank href=samples/', sample, '.html>', sample,'</a>' )
+}
+
 variants <- read.delim(params$variants)
 contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
@@ -131,12 +135,15 @@ colors <- c("#28a745", "#dc3545")
 names(colors) <- c("PASSED", "FAILED")
 
 statistics %>%
-  select("Sample_Label", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc") %>%
   datatable(
     colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality", "QC"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   ) %>% 
   formatStyle(
     'qc',
@@ -194,12 +201,15 @@ ggplotly(
 
 ```{r echo=FALSE, results='asis'}
 contaminated_samples %>%
-  select("Sample_Label", "Contamination_Status", "Contamination.Level") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "Contamination_Status", "Contamination.Level") %>%
   datatable(
     colnames=c("Sample", "Contamination","Level"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   )
 ```
 
@@ -214,12 +224,15 @@ Row
 
 ```{r echo=FALSE, results='asis'}
 variants_count %>%
-  select("Sample_Label", "N") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "N") %>%
   datatable(
     colnames=c("Sample", "Number of Variants"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   )
 ```
 
@@ -271,12 +284,15 @@ Row
 
 ```{r echo=FALSE, results='asis'}
 haplogroups %>%
-  select("Sample_Label", "Haplogroup", "Quality") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "Haplogroup", "Quality") %>%
   datatable(
     colnames=c("Sample", "Haplogroup", "Quality"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   )
 ```
 
