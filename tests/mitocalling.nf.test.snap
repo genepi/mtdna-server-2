@@ -22,8 +22,8 @@
             "variants.annotated.txt:md5,3946a3bd26ceafe8f61903499bfcbb35",
             {
                 "tasksFailed": 0,
-                "tasksCount": 10,
-                "tasksSucceeded": 10
+                "tasksCount": 12,
+                "tasksSucceeded": 12
             }
         ],
         "timestamp": "2024-02-28T12:32:40.624776"
