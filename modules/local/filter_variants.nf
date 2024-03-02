@@ -21,10 +21,6 @@ process FILTER_VARIANTS {
     
     if [[ ${method} == "mutserve_fusion" ]]
     then
-        bcftools query \
-            -f '${vcf_name}.bam\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP\t%GT]\n' \
-             ${vcf_file} >> ${vcf_file.baseName}.${method}.txt
-        
         awk -F'\t' 'NR == 1 || (length(\$4) == 1 && length(\$5) == 1)' \
             ${vcf_file.baseName}.${method}.txt > ${vcf_file.baseName}.${method}.filtered.tmp.txt
 
@@ -35,7 +31,8 @@ process FILTER_VARIANTS {
     else 
         mv ${vcf_file.baseName}.${method}.txt ${vcf_file.baseName}.${method}.filtered.tmp.txt  
     fi
-
+    
+    ## annotating SNVS and INDELs for reporting
     awk 'BEGIN {OFS="\t"} {
         if (NR == 1) { print \$0, "Type"; next }
         if ((length(\$4) > 1 || length(\$5) > 1) && length(\$4) != length(\$5)) { \$9="3" }
