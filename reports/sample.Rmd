@@ -59,7 +59,7 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r echo=FALSE, results='asis'}
+```{r echo=FALSE, warning=FALSE, error=FALSE, include=FALSE}
 
 link_to_sample <- function(sample) {
   paste0('<a target="_blank" href=samples/', sample, '.html>', sample,'</a>' )
@@ -147,7 +147,7 @@ variant_caller <- pipeline_params %>%
 
 ### Statistics
 
-```{r echo=FALSE}
+```{r}
 statistics %>% 
   select("Parameter", "Value") %>%
   datatable(
@@ -169,7 +169,7 @@ statistics %>%
 
 Detected **`r variants %>% filter(Type_Label == "Variant") %>% nrow()` variants**, **`r variants %>% filter(Type_Label == "Heteroplasmie") %>% nrow()` heteroplasmies** and **`r  variants %>% filter(Type_Label == "Indel") %>% nrow()` InDels**.
 
-```{r echo=FALSE}
+```{r}
 variants %>% 
   mutate(
     Variant_Label = link_to_variant(Pos, Ref, Variant)

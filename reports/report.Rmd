@@ -33,10 +33,10 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r echo=FALSE, results='asis'}
+```{r echo=FALSE, warning=FALSE, error=FALSE, include=FALSE}
 
 link_to_sample <- function(sample) {
-  paste0('<a  target=_blank href=samples/', sample, '.html>', sample,'</a>' )
+  paste0('<a target=_blank href=samples/', sample, '.html>', sample,'</a>' )
 }
 
 variants <- read.delim(params$variants)
@@ -45,7 +45,7 @@ haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
 pipeline_params <- read.delim(params$pipeline_parameters)
 
-excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE, ))
+excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE))
 if(inherits(excluded_samples, "try-error")) {
   excluded_samples = data.frame(V1=c())
 }
@@ -129,7 +129,7 @@ Row
     
 ### Summary  {data-width=750}
 
-```{r echo=FALSE, results='asis'}
+```{r}
 
 colors <- c("#28a745", "#dc3545")
 names(colors) <- c("PASSED", "FAILED")
@@ -155,7 +155,7 @@ statistics %>%
 
 ### Workflow parameters and Software versions {data-width=250}
 
-```{r echo=FALSE, results='asis'}
+```{r}
 pipeline_params %>%
   kable()
 ```
@@ -166,7 +166,7 @@ Row
 
 ### Mean Coverage per sample
 
-```{r echo=FALSE, results='asis'}
+```{r}
 
 ggplotly(
   ggplot(statistics) +
@@ -182,7 +182,7 @@ ggplotly(
 
 ### Mean Base Quality per sample
 
-```{r echo=FALSE, results='asis'}
+```{r}
 ggplotly(
   ggplot(statistics) +
     geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc)) +
@@ -199,7 +199,7 @@ ggplotly(
 
 # Contamination
 
-```{r echo=FALSE, results='asis'}
+```{r}
 contaminated_samples %>%
   mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
   select("Sample_Link", "Contamination_Status", "Contamination.Level") %>%
@@ -222,7 +222,7 @@ Row
 
 ### Summary
 
-```{r echo=FALSE, results='asis'}
+```{r}
 variants_count %>%
   mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
   select("Sample_Link", "N") %>%
@@ -242,7 +242,7 @@ Row
 ### Common Variants and Hetereoplasmies
 
 
-```{r echo=FALSE, results='asis'}
+```{r}
 variants <- variants %>%
   mutate(Type = case_when(
     Type == "0/1" ~ "2",
@@ -282,7 +282,7 @@ Row
 
 ### Summary
 
-```{r echo=FALSE, results='asis'}
+```{r}
 haplogroups %>%
   mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
   select("Sample_Link", "Haplogroup", "Quality") %>%
@@ -301,7 +301,7 @@ Row
 
 ### Quality per Sample
 
-```{r echo=FALSE, results='asis'}
+```{r}
 ggplotly(
   ggplot(haplogroups) +
     geom_col(aes(y=Quality, x=Sample_Label), alpha=0.7) +
