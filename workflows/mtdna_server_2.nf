@@ -174,9 +174,14 @@ workflow MTDNA_SERVER_2 {
         INPUT_VALIDATION.out.excluded_ch
     )
 
+    bams_filenames = bams_ch
+        .map (bam_file -> tuple(bam_file.name, file(bam_file)))
+
     samples = INPUT_VALIDATION.out.mapping_ch
         .splitCsv(header: true, sep: '\t')
-        .map { row -> row.Sample }
+        .map { row -> tuple(row.Filename, row.Sample) }
+        .join(bams_filenames)
+
 
     SAMPLE_REPORT(
         sample_report_file_ch,

@@ -10,7 +10,7 @@ process SAMPLE_REPORT {
     path statistics
     path mapping
     path excluded
-    val sample
+    tuple val(sample_filename), val(sample), file(sample_bam_file)
 
     output:
     file "*.html" 
@@ -28,6 +28,10 @@ process SAMPLE_REPORT {
     echo -e "Map Quality\t${params.mapQ}" >> params.txt
     echo -e "Alignment Quality\t${params.alignQ}" >> params.txt  
 
+    #TODO: split fwd and reverse? https://bioinformatics.stackexchange.com/questions/8649/how-can-i-calculate-coverage-at-single-bases-using-a-bam-file
+    echo -e "Contig\tPosition\tCoverage" > coverage.tsv
+    samtools depth -a  ${sample_bam_file} >> coverage.tsv
+
     Rscript -e "require('rmarkdown'); render('${report}',
     params = list(
         pipeline_parameters = 'params.txt',
@@ -37,7 +41,8 @@ process SAMPLE_REPORT {
         statistics = '${statistics}',
         mapping = '${mapping}',
         excluded_samples = '${excluded}',
-        sample = '${sample}'
+        sample = '${sample}',
+        coverage = 'coverage.tsv'
     ),
     knit_root_dir='\$PWD', output_file='\$PWD/${sample}.html')"
     """

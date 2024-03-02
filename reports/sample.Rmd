@@ -14,6 +14,7 @@ params:
   pipeline_parameters:  ../tests/data/report/params.txt
   #sample: HG00245
   sample: HG00180
+  coverage: ../tests/data/report/coverage.tsv
 ---
 
 ```{css, echo=FALSE}
@@ -79,6 +80,7 @@ contamination <- read.delim(params$haplocheck)
 haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
 pipeline_params <- read.delim(params$pipeline_parameters)
+coverage <- read.delim(params$coverage)
 
 excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE, ))
 if(inherits(excluded_samples, "try-error")) {
@@ -167,6 +169,18 @@ statistics %>%
 ```
 
 
+### Coverage
+
+```{r, fig.width=9, warning=FALSE}
+#ggplotly(
+  ggplot(coverage) +
+    geom_hline(yintercept=mean(coverage$Coverage), color="black", linetype="dashed") +
+    geom_hline(yintercept=mean(coverage$Coverage) + sd(coverage$Coverage), color="gray", linetype="dashed") +
+    geom_hline(yintercept=mean(coverage$Coverage) - sd(coverage$Coverage), color="gray", linetype="dashed") +
+    geom_line(aes(x=Position, y=Coverage), color = "darkblue") +
+    theme_bw()
+#)
+```
 
 ### Variants and Hetroplasmies
 
@@ -192,4 +206,3 @@ variants %>%
     class = 'cell-border stripe'
   )
 ```
-
