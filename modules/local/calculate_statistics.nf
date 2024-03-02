@@ -21,7 +21,7 @@ process CALCULATE_STATISTICS {
     ## calculate summary statistics
     samtools coverage ${bam_file} > samtools_coverage_${bam_file.baseName}.txt
     csvtk grep -t -f3 -p 16569 -C '\$' samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt
-
+        
     contig=\$(csvtk cut -t -f 1 mtdna.txt)
     numreads=\$(csvtk cut -t -f 4 mtdna.txt)
     covered_bases=\$(csvtk cut -t -f 5 mtdna.txt)
@@ -29,6 +29,8 @@ process CALCULATE_STATISTICS {
     mean_depth=\$(csvtk cut -t -f 7 mtdna.txt)
     mean_base_quality=\$(csvtk cut -t -f 8 mtdna.txt)
     mean_map_quality=\$(csvtk cut -t -f 9 mtdna.txt)
+    readgroup=\$(samtools view -H ${bam_file} | csvtk grep -H -r -p "^@RG" | sed 's/\t/,/g')
+    
     echo -e "Sample\tParameter\tValue" > $output_name
     echo -e "${bam_file}\tContig\t\${contig}" >> $output_name
     echo -e "${bam_file}\tNumberofReads\t\${numreads}" >> $output_name
@@ -37,6 +39,7 @@ process CALCULATE_STATISTICS {
     echo -e "${bam_file}\tMeanDepth\t\${mean_depth}" >> $output_name
     echo -e "${bam_file}\tMeanBaseQuality\t\${mean_base_quality}" >> $output_name
     echo -e "${bam_file}\tMeanMapQuality\t\${mean_map_quality}" >> $output_name
+    echo -e "${bam_file}\tRG\t\${readgroup}" >> $output_name
 
     fastqc $bam_file -o .
 
