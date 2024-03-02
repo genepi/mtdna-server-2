@@ -13,7 +13,7 @@ RUN \
 
 # Install mutserve (not as conda package available)
 
-ENV MUTSERV_VERSION=2.0.0-rc12
+ENV MUTSERVE_VERSION=2.0.0-rc12
 RUN mkdir /opt/mutserve
 WORKDIR "/opt/mutserve"
 #RUN wget https://github.com/seppinho/mutserve/releases/download/v${MUTSERV_VERSION}/mutserve.zip
