@@ -52,7 +52,7 @@ nextflow run main.nf -c tests/test_single_bam.config -profile development
 #### Installation
 
 - Install cloudgene3: `curl -s install.cloudgene.io | bash -s 3.0.0-beta4`
-- Install mtDNA-Server 2 workflow: `./cloudgene install https://github.com/genepi/mtdna-server-2/archive/refs/tags/v2.1.2.zip`
+- Install mtDNA-Server 2 workflow: `./cloudgene install https://github.com/genepi/mtdna-server-2/archive/refs/tags/v2.1.3.zip`
 - Start cloudgene server: `./cloudgene server`
 - Open [http://localhost:8082](http://localhost:8082)
 - Login with default admin account: username `admin` and password `admin1978`
