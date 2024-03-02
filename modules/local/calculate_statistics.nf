@@ -29,7 +29,7 @@ process CALCULATE_STATISTICS {
     mean_depth=\$(csvtk cut -t -f 7 mtdna.txt)
     mean_base_quality=\$(csvtk cut -t -f 8 mtdna.txt)
     mean_map_quality=\$(csvtk cut -t -f 9 mtdna.txt)
-    readgroup=\$(samtools view -H ${bam_file} | csvtk grep -H -r -p "^@RG" | sed 's/\t/,/g')
+    readgroup=\$(samtools view -H ${bam_file} | csvtk grep -I -H -r -p "^@RG" | sed 's/\t/,/g' | head -n 1)
     
     echo -e "Sample\tParameter\tValue" > $output_name
     echo -e "${bam_file}\tContig\t\${contig}" >> $output_name
