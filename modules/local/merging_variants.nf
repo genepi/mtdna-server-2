@@ -14,7 +14,7 @@ process MERGING_VARIANTS {
     
     csvtk sort \
         -t variants.concat.txt \
-        -k ID:N -k Pos:n -k Type:r \
+        -k ID:N -k Pos:n -k Type:nr \
         -T -o variants.sorted.txt
 
     if [[ ${mode} == "fusion" ]]

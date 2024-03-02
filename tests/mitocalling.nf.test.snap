@@ -1,92 +1,31 @@
 {
     "Runs with single BAM file and mutect2": {
         "content": [
-            "variants.annotated.txt:md5,94fa4b4d0613f61410618a7eba4c5c97"
+            "variants.annotated.txt:md5,52dc3737a73bb80cf3a1c8946990c3e4"
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-02-26T23:09:58.251860914"
-    },
-    "Runs with 6 samples provided as testdata with mutect2": {
-        "content": [
-            "variants.annotated.txt:md5,efeb591e666bd107fbb0ce47898b6304",
-            {
-                "tasksFailed": 0,
-                "tasksCount": 24,
-                "tasksSucceeded": 24
-            }
-        ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-03-02T10:54:19.802653"
+        "timestamp": "2024-03-02T13:11:34.901277407"
     },
     "Runs with single BAM file and mutserve": {
         "content": [
-            "variants.annotated.txt:md5,aac0aee87ce1a91f8c35264be248b52e"
+            "variants.annotated.txt:md5,ee00b39fc49e1f34e6affab00368181f"
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-02-27T15:19:15.934593072"
+        "timestamp": "2024-03-02T13:09:45.954385792"
     },
     "Runs with BAM file including different header contigs": {
         "content": [
-            "variants.annotated.txt:md5,d68e6fed173c766228164438a24ecf5a"
+            "variants.annotated.txt:md5,a5345c7718757ded27246ae342b5f25b"
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-02-26T23:03:07.470112898"
+        "timestamp": "2024-03-02T13:10:28.843431233"
     },
     "Runs with two files and one goes through QC": {
         "content": [
-            "variants.annotated.txt:md5,3946a3bd26ceafe8f61903499bfcbb35",
+            "variants.annotated.txt:md5,ef402762b03356a208583e434d96dfa3",
             {
                 "tasksFailed": 0,
-                "tasksCount": 12,
-                "tasksSucceeded": 12
+                "tasksCount": 10,
+                "tasksSucceeded": 10
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-02-28T12:32:40.624776"
-    },
-    "Runs with 6 samples provided as testdata with fusion": {
-        "content": [
-            "variants.annotated.txt:md5,b8a0bbf624f5b0ecaac01ca441b50a76",
-            {
-                "tasksFailed": 0,
-                "tasksCount": 40,
-                "tasksSucceeded": 40
-            }
-        ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-03-02T10:58:52.06124"
-    },
-    "Runs with 6 samples provided as testdata with mutserve": {
-        "content": [
-            "variants.annotated.txt:md5,5c726eaa61eacfb09c64ebaeb9a2a75a",
-            {
-                "tasksFailed": 0,
-                "tasksCount": 25,
-                "tasksSucceeded": 25
-            }
-        ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.3"
-        },
-        "timestamp": "2024-03-02T10:50:44.742545"
+        "timestamp": "2024-03-02T13:12:29.64633988"
     }
 }
