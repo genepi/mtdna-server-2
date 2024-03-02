@@ -134,11 +134,21 @@ Row
 colors <- c("#28a745", "#dc3545")
 names(colors) <- c("PASSED", "FAILED")
 
+colors_contamination <- c("#dddddd","#28a745", "#dc3545")
+names(colors_contamination) <- c("-", "NO", "YES")
+
 statistics %>%
-  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
-  select("Sample_Link", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc") %>%
+  mutate (
+    Sample_Link = link_to_sample(Sample_Label),
+    contamination = case_when(
+      qc == "FAILED" ~ "-",
+      Sample_Label %in% contaminated_samples$Sample_Label ~ "YES",
+      TRUE ~ "NO"
+    )
+  ) %>%
+  select("Sample_Link", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc", "contamination") %>%
   datatable(
-    colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality", "QC"),
+    colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality", "QC", "Cont."),
     options = list(
       bPaginate = FALSE
     ),
@@ -148,6 +158,11 @@ statistics %>%
   formatStyle(
     'qc',
     backgroundColor = styleEqual(c("PASSED", "FAILED"), colors),
+    color = 'white'
+  ) %>% 
+  formatStyle(
+    'contamination',
+    backgroundColor = styleEqual(c("-", "NO", "YES"), colors_contamination),
     color = 'white'
   )
 ```
