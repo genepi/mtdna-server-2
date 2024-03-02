@@ -3,10 +3,10 @@ process MUTSERVE {
     input:
     path bam_file
     path reference
+    val method
 
     output:
-    path("${bam_file.simpleName}.txt"), emit: mutserve_txt_ch
-    tuple path("${bam_file.baseName}.vcf.gz"), val('mutserve_fusion'), emit: mutserve_fusion_vcf_ch
+    tuple path("${bam_file.baseName}.vcf.gz"), val(method), emit: mutserve_fusion_vcf_ch
     path("${bam_file.baseName}.vcf.gz"), emit: mutserve_vcf_ch
     path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutserve_vcf_idx_ch
     
