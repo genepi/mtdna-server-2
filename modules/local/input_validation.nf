@@ -25,6 +25,7 @@ process INPUT_VALIDATION {
     
     java -jar /opt/mutserve/mutserve.jar stats \
         --input sample_statistics.txt \
+        --mapping sample_mappings.txt \
         --detection-limit ${params.detection_limit}  \
         --reference ${params.reference}  \
         --baseQ ${params.baseQ}\
