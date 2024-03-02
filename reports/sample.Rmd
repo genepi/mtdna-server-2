@@ -12,6 +12,7 @@ params:
   mapping:  ../tests/data/report/sample_mappings.txt  
   excluded_samples:  ../tests/data/report/excluded_samples.txt
   pipeline_parameters:  ../tests/data/report/params.txt
+  #sample: HG00245
   sample: HG00180
 ---
 
@@ -94,8 +95,8 @@ mapping <- mapping %>%
         Filename %in% excluded_samples$V1 ~ "FAILED",
         TRUE ~ "PASSED"
       )
-  )
-
+  ) %>%
+  filter(Sample_Label == params$sample)
 
 statistics <- merge(statistics, mapping, by.x="Sample", by.y="Filename") %>%
   filter(Sample_Label == params$sample)
@@ -140,9 +141,11 @@ variant_caller <- pipeline_params %>%
     
 ### Summary 
 
-**Haplogroup:** `r haplogroups$Haplogroup` (`r haplogroups$Quality`)
+**Quality Control: ** `r if (mapping$qc == "PASSED") create_label(mapping$qc, 'success') else create_label(mapping$qc, 'danger')` 
 
-**Contaminated:** `r contaminated_samples$Contamination_Status`
+**Haplogroup:** `r if (mapping$qc == "PASSED") haplogroups$Haplogroup else '-'` `r if (mapping$qc == "PASSED") paste('(', haplogroups$Quality, ')') else ''`
+
+**Contaminated:** `r if (mapping$qc == "PASSED") contaminated_samples$Contamination_Status  else '-'`
 
 
 ### Statistics
@@ -167,7 +170,7 @@ statistics %>%
 
 ### Variants and Hetroplasmies
 
-Detected **`r variants %>% filter(Type_Label == "Variant") %>% nrow()` variants**, **`r variants %>% filter(Type_Label == "Heteroplasmie") %>% nrow()` heteroplasmies** and **`r  variants %>% filter(Type_Label == "Indel") %>% nrow()` InDels**.
+Detected **`r variants %>% filter(Type == 1) %>% nrow()` variants**, **`r variants %>% filter(Type == 2) %>% nrow()` heteroplasmies** and **`r  variants %>% filter(Type == 3) %>% nrow()` InDels**.
 
 ```{r}
 variants %>% 
