@@ -3,7 +3,7 @@ process FILTER_VARIANTS {
     //publishDir "${params.output}", mode: 'copy'
 
     input:
-    tuple path(vcf_file), val(method)
+    tuple path(vcf_file), path(vcf_file_idx), val(method)
 
     output:
     path("${vcf_file.baseName}.${method}.filtered.txt"), emit: combined_methods_ch

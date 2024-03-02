@@ -76,10 +76,8 @@ workflow MTDNA_SERVER_2 {
             "mutserve_single"
         )
 
-        vcf_ch = MUTSERVE.out.mutserve_fusion_vcf_ch
-        variants_vcf_ch = MUTSERVE.out.mutserve_vcf_ch.collect()
-        variants_vcf_idx_ch = MUTSERVE.out.mutserve_vcf_idx_ch.collect()
-        file_count =  MUTSERVE.out.mutserve_vcf_ch.count()
+        vcf_ch = MUTSERVE.out.mutserve_ch
+        file_count =  MUTSERVE.out.mutserve_ch.count()
        
     } 
 
@@ -93,10 +91,8 @@ workflow MTDNA_SERVER_2 {
             "mutect2_single"
         )
 
-        vcf_ch = MUTECT2.out.mutect2_fusion_vcf_ch
-        variants_vcf_ch = MUTECT2.out.mutect2_vcf_ch.collect()
-        variants_vcf_idx_ch = MUTECT2.out.mutect2_vcf_idx_ch.collect()
-        file_count =  MUTECT2.out.mutect2_vcf_ch.count()
+        vcf_ch = MUTECT2.out.mutect2_ch
+        file_count =  MUTECT2.out.mutect2_ch.count()
     }
 
     else if (params.mode == 'fusion') {
@@ -115,11 +111,8 @@ workflow MTDNA_SERVER_2 {
             "mutect2_fusion"
         )
         
-        vcf_ch = MUTSERVE.out.mutserve_fusion_vcf_ch.concat(MUTECT2.out.mutect2_fusion_vcf_ch)
-        // only use mutserve calls for haplogroup and contamination detection
-        variants_vcf_ch = MUTSERVE.out.mutserve_vcf_ch.collect()
-        variants_vcf_idx_ch = MUTSERVE.out.mutserve_vcf_idx_ch.collect()
-        file_count =  MUTSERVE.out.mutserve_vcf_ch.count()
+        vcf_ch = MUTSERVE.out.mutserve_ch.concat(MUTECT2.out.mutect2_ch)
+        file_count =  MUTSERVE.out.mutserve_ch.count()
     }
 
     FILTER_VARIANTS (
@@ -133,21 +126,28 @@ workflow MTDNA_SERVER_2 {
     
     variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch    
 
-    VCF_MERGE (
-        variants_vcf_ch,
-        variants_vcf_idx_ch,
-        file_count
+    if (params.mode != 'mutect2') {
+
+        variants_vcf_ch = vcf_ch
+            .filter { it[2].contains("mutserve") }
+            .collect { it[0]}
+
+        variants_vcf_idx_ch = vcf_ch
+            .filter { it[2].contains("mutserve") }
+            .collect { it[1]}
+
+        VCF_MERGE (
+            variants_vcf_ch,
+            variants_vcf_idx_ch,
+            file_count
         )
 
-    if (params.mode != 'mutect2') {
         HAPLOGROUPS_CONTAMINATION (
             VCF_MERGE.out.vcf_merged_ch
         )
         haplogrep_ch = HAPLOGROUPS_CONTAMINATION.out.haplogroups_ch
         contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
     }
-
-
 
     ANNOTATE(
         variants_txt_ch,

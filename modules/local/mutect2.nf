@@ -8,9 +8,7 @@ process MUTECT2 {
     val method
 
     output:
-    tuple path("${bam_file.baseName}.vcf.gz"), val(method), emit: mutect2_fusion_vcf_ch
-    path("${bam_file.baseName}.vcf.gz"), emit: mutect2_vcf_ch
-    path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutect2_vcf_idx_ch
+    tuple path("${bam_file.baseName}.vcf.gz"), path("${bam_file.baseName}.vcf.gz.tbi"), val(method), emit: mutect2_ch
 
     """
     samtools index ${bam_file}

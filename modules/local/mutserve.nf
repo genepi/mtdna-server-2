@@ -6,9 +6,7 @@ process MUTSERVE {
     val method
 
     output:
-    tuple path("${bam_file.baseName}.vcf.gz"), val(method), emit: mutserve_fusion_vcf_ch
-    path("${bam_file.baseName}.vcf.gz"), emit: mutserve_vcf_ch
-    path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutserve_vcf_idx_ch
+    tuple path("${bam_file.baseName}.vcf.gz"), path("${bam_file.baseName}.vcf.gz.tbi"), val(method), emit: mutserve_ch
     
     script:
     def avail_mem = 1024
