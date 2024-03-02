@@ -5,12 +5,10 @@ process MUTECT2 {
     path reference
     path fasta_index_files
     val detected_contig
+    val method
 
     output:
-    path("${bam_file.baseName}.txt"), emit: mutect2_txt_ch
-    tuple path("${bam_file.baseName}.vcf.gz"), val('mutect2_fusion'), emit: mutect2_fusion_vcf_ch
-    path("${bam_file.baseName}.vcf.gz"), emit: mutect2_vcf_ch
-    path("${bam_file.baseName}.vcf.gz.tbi"), emit: mutect2_vcf_idx_ch
+    tuple path("${bam_file.baseName}.vcf.gz"), path("${bam_file.baseName}.vcf.gz.tbi"), val(method), emit: mutect2_ch
 
     """
     samtools index ${bam_file}
@@ -38,14 +36,6 @@ process MUTECT2 {
     mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
     tabix -f ${bam_file.baseName}.vcf.gz
 
-    #required for mutect2-only mode!
-    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tType" \
-        > ${bam_file.baseName}.txt
-    
-    bcftools query \
-        -f '${bam_file}\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP]\tMUTECT2\n' \
-        ${bam_file.baseName}.vcf.gz >> ${bam_file.baseName}.txt
-    
     rm raw.vcf.gz
     """
 }

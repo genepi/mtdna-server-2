@@ -72,18 +72,12 @@ workflow MTDNA_SERVER_2 {
 
         MUTSERVE(
             validated_files,
-            ref_file_mutserve
+            ref_file_mutserve,
+            "mutserve_single"
         )
 
-        MERGING_VARIANTS(
-            MUTSERVE.out.mutserve_txt_ch.collect(),
-            params.mode
-        )
-
-        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
-        variants_vcf_ch = MUTSERVE.out.mutserve_vcf_ch.collect()
-        variants_vcf_idx_ch = MUTSERVE.out.mutserve_vcf_idx_ch.collect()
-        file_count =  MUTSERVE.out.mutserve_vcf_ch.count()
+        vcf_ch = MUTSERVE.out.mutserve_ch
+        file_count =  MUTSERVE.out.mutserve_ch.count()
        
     } 
 
@@ -93,68 +87,67 @@ workflow MTDNA_SERVER_2 {
             validated_files,
             ref_file_mutect2,
             INDEX.out.fasta_index_ch,
-            detected_contig
+            detected_contig,
+            "mutect2_single"
         )
 
-        MERGING_VARIANTS(
-            MUTECT2.out.mutect2_txt_ch.collect(),
-            params.mode
-        )
-
-        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
-        variants_vcf_ch = MUTECT2.out.mutect2_vcf_ch.collect()
-        variants_vcf_idx_ch = MUTECT2.out.mutect2_vcf_idx_ch.collect()
-        file_count =  MUTECT2.out.mutect2_vcf_ch.count()
+        vcf_ch = MUTECT2.out.mutect2_ch
+        file_count =  MUTECT2.out.mutect2_ch.count()
     }
 
     else if (params.mode == 'fusion') {
 
         MUTSERVE(
             validated_files,
-            ref_file_mutserve
+            ref_file_mutserve,
+            "mutserve_fusion"
         )
 
         MUTECT2(
             validated_files,
             ref_file_mutect2,
             INDEX.out.fasta_index_ch,
-            detected_contig
+            detected_contig,
+            "mutect2_fusion"
         )
         
-        merged_ch = MUTSERVE.out.mutserve_fusion_vcf_ch.concat(MUTECT2.out.mutect2_fusion_vcf_ch)
-
-        FILTER_VARIANTS (
-            merged_ch
-        )
-
-        MERGING_VARIANTS(
-            FILTER_VARIANTS.out.combined_methods_ch.collect(),
-            params.mode
-        )
-
-        variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch
-        // only use mutserve calls for haplogroup and contamination detection
-        variants_vcf_ch = MUTSERVE.out.mutserve_vcf_ch.collect()
-        variants_vcf_idx_ch = MUTSERVE.out.mutserve_vcf_idx_ch.collect()
-        file_count =  MUTSERVE.out.mutserve_vcf_ch.count()
+        vcf_ch = MUTSERVE.out.mutserve_ch.concat(MUTECT2.out.mutect2_ch)
+        file_count =  MUTSERVE.out.mutserve_ch.count()
     }
 
-    VCF_MERGE (
-        variants_vcf_ch,
-        variants_vcf_idx_ch,
-        file_count
-        )
+    FILTER_VARIANTS (
+        vcf_ch
+    )
+
+    MERGING_VARIANTS(
+        FILTER_VARIANTS.out.combined_methods_ch.collect(),
+        params.mode
+    )
+    
+    variants_txt_ch = MERGING_VARIANTS.out.txt_summarized_ch    
 
     if (params.mode != 'mutect2') {
+
+        variants_vcf_ch = vcf_ch
+            .filter { it[2].contains("mutserve") }
+            .collect { it[0]}
+
+        variants_vcf_idx_ch = vcf_ch
+            .filter { it[2].contains("mutserve") }
+            .collect { it[1]}
+
+        VCF_MERGE (
+            variants_vcf_ch,
+            variants_vcf_idx_ch,
+            file_count
+        )
+
         HAPLOGROUPS_CONTAMINATION (
             VCF_MERGE.out.vcf_merged_ch
         )
         haplogrep_ch = HAPLOGROUPS_CONTAMINATION.out.haplogroups_ch
         contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
-        
     }
-
-
 
     ANNOTATE(
         variants_txt_ch,
