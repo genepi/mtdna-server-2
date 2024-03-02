@@ -42,7 +42,7 @@ nextflow_pipeline {
 
     }
 
-        test("Runs with single BAM file and mutect2") {
+    test("Runs with single BAM file and mutect2") {
 
         when {
             params {
@@ -63,13 +63,85 @@ nextflow_pipeline {
     }
 
 
-        test("Runs with two files and one goes through QC") {
+    test("Runs with two files and one goes through QC") {
 
         when {
             params {
                project = "test-job"
                files = "$projectDir/tests/data/input_validation/*.bam"
                mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
+
+    test("Runs with 6 samples provided as testdata with mutserve") {
+
+        setup {
+            DownloadUtil.downloadAndExtractZip("https://mitoverse.i-med.ac.at/downloads/6-samples.zip", "${launchDir}/input")
+        }
+
+        when {
+            params {
+               project = "test-job"
+               files = "${launchDir}/input/*.bam"
+               mode = "mutserve"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
+
+    test("Runs with 6 samples provided as testdata with mutect2") {
+
+        setup {
+            DownloadUtil.downloadAndExtractZip("https://mitoverse.i-med.ac.at/downloads/6-samples.zip", "${launchDir}/input")
+        }
+
+        when {
+            params {
+               project = "test-job"
+               files = "${launchDir}/input/*.bam"
+               mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
+
+    test("Runs with 6 samples provided as testdata with fusion") {
+
+        setup {
+            DownloadUtil.downloadAndExtractZip("https://mitoverse.i-med.ac.at/downloads/6-samples.zip", "${launchDir}/input")
+        }
+
+        when {
+            params {
+               project = "test-job"
+               files = "${launchDir}/input/*.bam"
+               mode = "fusion"
                output = "out"
                output_reports = "reports"
                output_auxiliary = "files"

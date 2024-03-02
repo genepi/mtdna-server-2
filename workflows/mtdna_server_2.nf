@@ -27,11 +27,13 @@ include { VCF_MERGE } from '../modules/local/vcf_merge'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUPS_CONTAMINATION } from '../modules/local/haplogroups_contamination'
 include { REPORT } from '../modules/local/report'
+include { SAMPLE_REPORT } from '../modules/local/sample_report'
 
 
 workflow MTDNA_SERVER_2 {
  
-    report_file_ch = file("$projectDir/reports/report.Rmd")
+    report_file_ch = file("$projectDir/reports/report.Rmd", checkIfExists:true)
+    sample_report_file_ch = file("$projectDir/reports/sample.Rmd", checkIfExists:true)
     bams_ch = Channel.fromPath(params.files, checkIfExists:true)
 
     if(params.reference.equals("rcrs")){
@@ -164,6 +166,27 @@ workflow MTDNA_SERVER_2 {
         INPUT_VALIDATION.out.mapping_ch,
         INPUT_VALIDATION.out.excluded_ch
     )
+
+    bams_filenames = bams_ch
+        .map (bam_file -> tuple(bam_file.name, file(bam_file)))
+
+    samples = INPUT_VALIDATION.out.mapping_ch
+        .splitCsv(header: true, sep: '\t')
+        .map { row -> tuple(row.Filename, row.Sample) }
+        .join(bams_filenames)
+
+
+    SAMPLE_REPORT(
+        sample_report_file_ch,
+        variants_txt_ch,
+        haplogrep_ch,
+        contamination_ch,
+        INPUT_VALIDATION.out.summarized_ch,
+        INPUT_VALIDATION.out.mapping_ch,
+        INPUT_VALIDATION.out.excluded_ch,
+        samples
+    )
+
 
 }
 

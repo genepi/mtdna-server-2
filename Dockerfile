@@ -13,9 +13,10 @@ RUN \
 
 # Install mutserve (not as conda package available)
 
+ENV MUTSERV_VERSION=2.0.0-rc12
 RUN mkdir /opt/mutserve
 WORKDIR "/opt/mutserve"
-#RUN wget https://github.com/seppinho/mutserve/releases/download/v2.0.0-rc12/mutserve.zip
+#RUN wget https://github.com/seppinho/mutserve/releases/download/v${MUTSERV_VERSION}/mutserve.zip
 COPY files/mutserve.zip .
 RUN unzip mutserve.zip && \
     rm mutserve.zip
@@ -24,18 +25,20 @@ ENV PATH="/opt/mutserve:${PATH}"
 
 # Install haplocheck 1.3.3
 
+ENV HAPLOCHECK_VERSION=1.3.3
 RUN mkdir /opt/haplocheck
 WORKDIR "/opt/haplocheck"
-RUN wget https://github.com/genepi/haplocheck/releases/download/v1.3.3/haplocheck.zip
+RUN wget https://github.com/genepi/haplocheck/releases/download/v${HAPLOCHECK_VERSION}/haplocheck.zip
 RUN unzip haplocheck.zip && \
     rm haplocheck.zip
 ENV PATH="/opt/haplocheck:${PATH}"
 
+ENV HAPLOGREP_VERSION=3.2.1
 RUN mkdir /opt/haplogrep
 WORKDIR "/opt/haplogrep"
-RUN wget https://github.com/genepi/haplogrep3/releases/download/v3.2.1/haplogrep3-3.2.1-linux.zip && \
-    unzip haplogrep3-3.2.1-linux.zip && \
-    rm haplogrep3-3.2.1-linux.zip
+RUN wget https://github.com/genepi/haplogrep3/releases/download/v${HAPLOGREP_VERSION}/haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
+    unzip haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
+    rm haplogrep3-${HAPLOGREP_VERSION}-linux.zip
 ENV PATH="/opt/haplogrep:${PATH}"
 
 WORKDIR "/opt"

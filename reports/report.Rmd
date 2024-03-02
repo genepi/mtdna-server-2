@@ -4,7 +4,8 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     navbar:
-      - { title: "About", href: "https://mitoverse.i-med.ac.at/#!pages/contact", align: right }
+      - { title: "MultiQC", target: "_blank", href: "multiqc/index.html" }
+      - { title: "About",  target: "_blank", href: "https://mitoverse.i-med.ac.at/#!pages/contact", align: right }
 params:
   haplogroups: ../tests/data/report/haplogroups.txt
   haplocheck: ../tests/data/report/haplocheck.txt
@@ -33,7 +34,11 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r echo=FALSE, results='asis'}
+```{r echo=FALSE, warning=FALSE, error=FALSE, include=FALSE}
+
+link_to_sample <- function(sample) {
+  paste0('<a target=_blank href=samples/', sample, '.html>', sample,'</a>' )
+}
 
 variants <- read.delim(params$variants)
 contamination <- read.delim(params$haplocheck)
@@ -41,7 +46,7 @@ haplogroups <- read.delim(params$haplogroups)
 statistics <- read.delim(params$statistics)
 pipeline_params <- read.delim(params$pipeline_parameters)
 
-excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE, ))
+excluded_samples <- try(read.delim(params$excluded_samples, header = FALSE))
 if(inherits(excluded_samples, "try-error")) {
   excluded_samples = data.frame(V1=c())
 }
@@ -125,22 +130,40 @@ Row
     
 ### Summary  {data-width=750}
 
-```{r echo=FALSE, results='asis'}
+```{r}
 
 colors <- c("#28a745", "#dc3545")
 names(colors) <- c("PASSED", "FAILED")
 
+colors_contamination <- c("#dddddd","#28a745", "#dc3545")
+names(colors_contamination) <- c("-", "NO", "YES")
+
 statistics %>%
-  select("Sample_Label", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc") %>%
+  mutate (
+    Sample_Link = link_to_sample(Sample_Label),
+    contamination = case_when(
+      qc == "FAILED" ~ "-",
+      Sample_Label %in% contaminated_samples$Sample_Label ~ "YES",
+      TRUE ~ "NO"
+    )
+  ) %>%
+  select("Sample_Link", "MeanDepth", "CoveragePercentage", "CoveredBases", "MeanBaseQuality", "MeanMapQuality", "qc", "contamination") %>%
   datatable(
-    colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality", "QC"),
+    colnames=c("Sample", "Mean Coverage", "Covered Bases (%)", "Covered Bases", "Mean Base Quality", "Mean Mapping Quality", "QC", "Cont."),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   ) %>% 
   formatStyle(
     'qc',
     backgroundColor = styleEqual(c("PASSED", "FAILED"), colors),
+    color = 'white'
+  ) %>% 
+  formatStyle(
+    'contamination',
+    backgroundColor = styleEqual(c("-", "NO", "YES"), colors_contamination),
     color = 'white'
   )
 ```
@@ -148,7 +171,7 @@ statistics %>%
 
 ### Workflow parameters and Software versions {data-width=250}
 
-```{r echo=FALSE, results='asis'}
+```{r}
 pipeline_params %>%
   kable()
 ```
@@ -159,7 +182,7 @@ Row
 
 ### Mean Coverage per sample
 
-```{r echo=FALSE, results='asis'}
+```{r}
 
 ggplotly(
   ggplot(statistics) +
@@ -175,7 +198,7 @@ ggplotly(
 
 ### Mean Base Quality per sample
 
-```{r echo=FALSE, results='asis'}
+```{r}
 ggplotly(
   ggplot(statistics) +
     geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc)) +
@@ -192,14 +215,17 @@ ggplotly(
 
 # Contamination
 
-```{r echo=FALSE, results='asis'}
+```{r}
 contaminated_samples %>%
-  select("Sample_Label", "Contamination_Status", "Contamination.Level") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "Contamination_Status", "Contamination.Level") %>%
   datatable(
     colnames=c("Sample", "Contamination","Level"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   )
 ```
 
@@ -212,14 +238,17 @@ Row
 
 ### Summary
 
-```{r echo=FALSE, results='asis'}
+```{r}
 variants_count %>%
-  select("Sample_Label", "N") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "N") %>%
   datatable(
     colnames=c("Sample", "Number of Variants"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   )
 ```
 
@@ -229,7 +258,7 @@ Row
 ### Common Variants and Hetereoplasmies
 
 
-```{r echo=FALSE, results='asis'}
+```{r}
 variants <- variants %>%
   mutate(Type = case_when(
     Type == "0/1" ~ "2",
@@ -269,14 +298,17 @@ Row
 
 ### Summary
 
-```{r echo=FALSE, results='asis'}
+```{r}
 haplogroups %>%
-  select("Sample_Label", "Haplogroup", "Quality") %>%
+  mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
+  select("Sample_Link", "Haplogroup", "Quality") %>%
   datatable(
     colnames=c("Sample", "Haplogroup", "Quality"),
     options = list(
       bPaginate = FALSE
-    )
+    ),
+    escape = FALSE,
+    class = 'cell-border stripe'
   )
 ```
 
@@ -285,7 +317,7 @@ Row
 
 ### Quality per Sample
 
-```{r echo=FALSE, results='asis'}
+```{r}
 ggplotly(
   ggplot(haplogroups) +
     geom_col(aes(y=Quality, x=Sample_Label), alpha=0.7) +
