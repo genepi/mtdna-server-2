@@ -1,6 +1,6 @@
 process QUALITY_CONTROL {
     
-    publishDir "${params.output_reports}", mode: "copy", pattern: '*.html'
+    publishDir "${params.output_reports}/multiqc", mode: "copy", pattern: '*.html'
     
     input:
     path excluded_samples
@@ -10,6 +10,6 @@ process QUALITY_CONTROL {
 	path "*.html"
 
 	"""
-	multiqc . 
+	multiqc . --filename index.html
 	"""
 }

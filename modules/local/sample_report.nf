@@ -27,10 +27,18 @@ process SAMPLE_REPORT {
     echo -e "Base Quality\t${params.baseQ}" >> params.txt
     echo -e "Map Quality\t${params.mapQ}" >> params.txt
     echo -e "Alignment Quality\t${params.alignQ}" >> params.txt  
+    echo -e "Mutserv\t\${MUTSERV_VERSION}" >> params.txt 
+    echo -e "Haplocheck\t\${HAPLOCHECK_VERSION}" >> params.txt 
+    echo -e "Haplogrep\t\${HAPLOGREP_VERSION}" >> params.txt 
 
     #TODO: split fwd and reverse? https://bioinformatics.stackexchange.com/questions/8649/how-can-i-calculate-coverage-at-single-bases-using-a-bam-file
+
+    # Extract the value of Contig and store it in a variable
+    contig=`awk '\$2 == "Contig" {print \$3; exit}' "${statistics}"`
+
     echo -e "Contig\tPosition\tCoverage" > coverage.tsv
-    samtools depth -a  ${sample_bam_file} >> coverage.tsv
+    samtools index ${sample_bam_file}
+    samtools depth -a  ${sample_bam_file} -r \$contig >> coverage.tsv
 
     Rscript -e "require('rmarkdown'); render('${report}',
     params = list(

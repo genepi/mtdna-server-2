@@ -191,6 +191,7 @@ variants %>%
   mutate(
     Variant_Label = link_to_variant(Pos, Ref, Variant)
   ) %>% 
+  arrange(Pos, Ref, Variant) %>%
   select("Variant_Label", "VariantLevel", "Type_Label") %>%
   datatable(
     colnames=c("Variant", "Level", ""),
@@ -206,3 +207,18 @@ variants %>%
     class = 'cell-border stripe'
   )
 ```
+
+
+### Paramteres and Software Version
+
+```{r}
+pipeline_params %>%
+  kable()
+```
+
+
+---
+
+<small>
+This report has been created with **[mtDNA-Server 2](https://mitoverse.i-med.ac.at)**, a nextflow pipeline developed by [Sebastian Schönherr](mailto:sebastian.schoenherr@i-med.ac.at), [Hansi Weissensteiner](mailto:hansi.weissensteiner@i-med.ac.at) and [Lukas Forer](mailto:lukas.forer@i-med.ac.at), Institute of Genetic Epidemiology, Medical University of Innsbruck.
+</small>

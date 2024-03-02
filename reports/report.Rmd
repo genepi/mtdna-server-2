@@ -4,7 +4,8 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     navbar:
-      - { title: "About", href: "https://mitoverse.i-med.ac.at/#!pages/contact", align: right }
+      - { title: "MultiQC", target: "_blank", href: "multiqc/index.html" }
+      - { title: "About",  target: "_blank", href: "https://mitoverse.i-med.ac.at/#!pages/contact", align: right }
 params:
   haplogroups: ../tests/data/report/haplogroups.txt
   haplocheck: ../tests/data/report/haplocheck.txt
