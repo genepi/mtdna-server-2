@@ -17,11 +17,13 @@ process INPUT_VALIDATION {
     """
     csvtk concat \
         -t ${statistics} \
-        -T -o sample_statistics.txt
+        -T -o sample_statistics.txt \
+        --num-cpus ${task.cpus}
     
     csvtk concat \
         -t ${mapping} \
-        -T -o sample_mappings.txt
+        -T -o sample_mappings.txt \
+        --num-cpus ${task.cpus}
     
     java -jar /opt/mutserve/mutserve.jar stats \
         --input sample_statistics.txt \

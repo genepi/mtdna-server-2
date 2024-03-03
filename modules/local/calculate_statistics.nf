@@ -20,16 +20,16 @@ process CALCULATE_STATISTICS {
 
     ## calculate summary statistics
     samtools coverage ${bam_file} > samtools_coverage_${bam_file.baseName}.txt
-    csvtk grep -t -f3 -p 16569 -C '\$' samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt
+    csvtk grep -t -f3 -p 16569 -C '\$' samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt --num-cpus ${task.cpus} 
         
-    contig=\$(csvtk cut -t -f 1 mtdna.txt)
-    numreads=\$(csvtk cut -t -f 4 mtdna.txt)
-    covered_bases=\$(csvtk cut -t -f 5 mtdna.txt)
-    covered_bases_percentage=\$(csvtk cut -t -f 6 mtdna.txt)
-    mean_depth=\$(csvtk cut -t -f 7 mtdna.txt)
-    mean_base_quality=\$(csvtk cut -t -f 8 mtdna.txt)
-    mean_map_quality=\$(csvtk cut -t -f 9 mtdna.txt)
-    readgroup=\$(samtools view -H ${bam_file} | csvtk grep -I -H -r -p "^@RG" | sed 's/\t/,/g' | head -n 1)
+    contig=\$(csvtk cut -t -f 1 mtdna.txt --num-cpus ${task.cpus})
+    numreads=\$(csvtk cut -t -f 4 mtdna.txt --num-cpus ${task.cpus})
+    covered_bases=\$(csvtk cut -t -f 5 mtdna.txt --num-cpus ${task.cpus})
+    covered_bases_percentage=\$(csvtk cut -t -f 6 mtdna.txt --num-cpus ${task.cpus})
+    mean_depth=\$(csvtk cut -t -f 7 mtdna.txt --num-cpus ${task.cpus})
+    mean_base_quality=\$(csvtk cut -t -f 8 mtdna.txt --num-cpus ${task.cpus})
+    mean_map_quality=\$(csvtk cut -t -f 9 mtdna.txt --num-cpus ${task.cpus})
+    readgroup=\$(samtools view -H ${bam_file} | csvtk grep -I -H -r -p "^@RG" --num-cpus ${task.cpus} | sed 's/\t/,/g' | head -n 1)
     
     echo -e "Sample\tParameter\tValue" > $output_name
     echo -e "${bam_file}\tContig\t\${contig}" >> $output_name

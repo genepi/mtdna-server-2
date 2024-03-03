@@ -17,7 +17,9 @@ process MUTECT2 {
         -R ${reference} \
         -L ${detected_contig} \
         --min-base-quality-score ${params.baseQ} \
-        -callable-depth 6 --max-reads-per-alignment-start 0 \
+        -callable-depth 6 \
+        --native-pair-hmm-threads ${task.cpus} \
+        --max-reads-per-alignment-start 0 \
         -I ${bam_file} \
         -O raw.vcf.gz
     
