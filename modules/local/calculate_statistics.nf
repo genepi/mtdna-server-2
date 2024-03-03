@@ -41,7 +41,7 @@ process CALCULATE_STATISTICS {
     echo -e "${bam_file}\tMeanMapQuality\t\${mean_map_quality}" >> $output_name
     echo -e "${bam_file}\tRG\t\${readgroup}" >> $output_name
 
-    fastqc $bam_file -o .
+    fastqc --threads ${task.cpus} $bam_file -o .
 
     """
 }
