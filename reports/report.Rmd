@@ -19,7 +19,7 @@ params:
 ```{r setup, include=FALSE}
 
 
-MIN_COVERAGE_PERCENTAGE = 90;
+MIN_COVERAGE_PERCENTAGE = 0.90;
 MIN_MEAN_BASE_QUALITY = 15;
 MIN_MEAN_DEPTH = 50
 
@@ -36,8 +36,27 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r echo=FALSE, warning=FALSE, error=FALSE, include=FALSE}
 
+PRIMARY <- "#2780e3"
+PRIMARY_DARK <- "#1a68be"
+RED <- "#dc3545"
+GREEN <- "#28a745"
+ORANGE <- "#ff8800"
+
 link_to_sample <- function(sample) {
   paste0('<a target=_blank href=samples/', sample, '.html>', sample,'</a>' )
+}
+
+
+formatStyleTresholdValue <- function(datatable, column, threshold) {
+  formatStyle(
+    datatable,
+    column,
+    color = styleInterval(threshold, c(RED, ""))
+  )
+}
+
+formatStyleSample <- function(datatable) {
+    formatStyle(datatable, 'Sample_Link', fontWeight = 'bold')
 }
 
 variants <- read.delim(params$variants)
@@ -66,6 +85,8 @@ mapping <- mapping %>%
 statistics <- spread(statistics, key = Parameter, value = Value)
 statistics$MeanCoverage <- as.numeric(statistics$MeanDepth)
 statistics$MeanBaseQuality <- as.numeric(statistics$MeanBaseQuality)
+statistics$CoveredBases <- as.numeric(statistics$CoveredBases)
+statistics$MeanMapQuality <- as.numeric(statistics$MeanMapQuality)
 statistics <- merge(statistics, mapping, by.x="Sample", by.y="Filename")
 
 
@@ -132,17 +153,17 @@ Row
 
 ```{r}
 
-colors <- c("#28a745", "#dc3545")
+colors <- c(GREEN, RED)
 names(colors) <- c("PASSED", "FAILED")
 
-colors_contamination <- c("#dddddd","#28a745", "#dc3545")
+colors_contamination <- c("", GREEN, RED)
 names(colors_contamination) <- c("-", "NO", "YES")
 
 statistics %>%
   mutate (
     Sample_Link = link_to_sample(Sample_Label),
     contamination = case_when(
-      qc == "FAILED" ~ "-",
+      qc == "FAILED" ~ "",
       Sample_Label %in% contaminated_samples$Sample_Label ~ "YES",
       TRUE ~ "NO"
     )
@@ -154,8 +175,13 @@ statistics %>%
       bPaginate = FALSE
     ),
     escape = FALSE,
+    rowname = FALSE,
     class = 'cell-border stripe'
-  ) %>% 
+  ) %>%
+  formatStyleSample() %>%
+  formatStyleTresholdValue('MeanDepth', MIN_MEAN_DEPTH) %>%
+  formatStyleTresholdValue('CoveragePercentage', MIN_COVERAGE_PERCENTAGE) %>%
+  formatStyleTresholdValue('MeanBaseQuality', MIN_MEAN_BASE_QUALITY) %>%
   formatStyle(
     'qc',
     backgroundColor = styleEqual(c("PASSED", "FAILED"), colors),
@@ -182,41 +208,62 @@ Row
 -----------------------------------------------------------------------
     
 
-### Mean Coverage per sample
+### Mean Coverage
 
 ```{r}
 
 ggplotly(
   ggplot(statistics) +
-    geom_col(aes(x=Sample_Label, y=MeanCoverage, fill=qc)) +
-    theme(axis.text.x=element_text(angle=+90)) + 
-    geom_hline(yintercept=MIN_MEAN_DEPTH, color="black", linetype="dashed") +
-    scale_fill_manual(values=colors) +
-    xlab("Samples") +
-    ylab("Mean Coverage") +
-    labs(fill = "")
+    geom_histogram(aes(x=MeanCoverage), fill=PRIMARY) +
+    geom_vline(xintercept=MIN_MEAN_DEPTH, color=RED, linetype="dashed") +
+    ylab("Samples") +
+    xlab("Mean Coverage") +
+    theme_bw()
+)
+```
+
+### Covered Bases
+
+```{r}
+
+ggplotly(
+  ggplot(statistics) +
+    geom_histogram(aes(x=CoveredBases), fill=PRIMARY) +
+    geom_vline(xintercept=MIN_COVERAGE_PERCENTAGE*16569, color=RED, linetype="dashed") +
+    ylab("Samples") +
+    xlab("Covered Bases (%)") +
+    theme_bw()
 )
 ```
 
 Row
 -----------------------------------------------------------------------
 
-### Mean Base Quality per sample
+### Mean Base Quality
 
 ```{r}
 ggplotly(
   ggplot(statistics) +
-    geom_col(aes(x=Sample_Label, y=MeanBaseQuality, fill=qc)) +
-    theme(axis.text.x=element_text(angle=+90)) + 
-    geom_hline(yintercept=MIN_MEAN_BASE_QUALITY, color="black", linetype="dashed") +
-    scale_fill_manual(values=colors) +
-    xlab("Samples") +
-    ylab("Mean Base Quality") +
-    labs(fill = "")
+    geom_histogram(aes(x=MeanBaseQuality), fill=PRIMARY) +
+    geom_vline(xintercept=MIN_MEAN_BASE_QUALITY, color=RED, linetype="dashed") +
+    ylab("Samples") +
+    xlab("Mean Base Quality") +
+    theme_bw()
 )
 ```
 
 
+### Mean Map Quality
+
+```{r}
+ggplotly(
+  ggplot(statistics) +
+    geom_histogram(aes(x=MeanMapQuality), fill=PRIMARY) +
+    ylab("Samples") +
+    xlab("Mean Mapping Quality") +
+    theme_bw()
+)
+```
 
 # Contamination
 
@@ -230,8 +277,10 @@ contaminated_samples %>%
       bPaginate = FALSE
     ),
     escape = FALSE,
+    rowname = FALSE,
     class = 'cell-border stripe'
-  )
+  ) %>%
+  formatStyleSample()
 ```
 
 ---
@@ -253,8 +302,10 @@ variants_count %>%
       bPaginate = FALSE
     ),
     escape = FALSE,
+    rowname = FALSE,
     class = 'cell-border stripe'
-  )
+  ) %>%
+  formatStyleSample()
 ```
 
 Row
@@ -313,7 +364,14 @@ haplogroups %>%
       bPaginate = FALSE
     ),
     escape = FALSE,
+    rowname = FALSE,
     class = 'cell-border stripe'
+  ) %>%
+  formatStyleSample() %>%
+  formatStyle(
+    "Quality",
+    backgroundColor = styleInterval(c(0.8,0.9), c(RED, ORANGE, GREEN)),
+    color ="white"
   )
 ```
 
@@ -325,12 +383,12 @@ Row
 ```{r}
 ggplotly(
   ggplot(haplogroups) +
-    geom_col(aes(y=Quality, x=Sample_Label), alpha=0.7) +
-    geom_hline(yintercept=0.90, color="green", linetype="dashed") +
-    geom_hline(yintercept=0.80, color="orange", linetype="dashed") +
-    geom_hline(yintercept=0.70, color="red", linetype="dashed") +
-    xlab("Samples") +
-    ylab("Haplogroup Quality") +
-    theme(axis.text.x=element_text(angle=+90))
+    geom_histogram(aes(x=Quality), fill=PRIMARY) +
+    geom_vline(xintercept=0.90, color=GREEN, linetype="dashed") +
+    geom_vline(xintercept=0.80, color="orange", linetype="dashed") +
+    geom_vline(xintercept=0.70, color=RED, linetype="dashed") +
+    ylab("Samples") +
+    xlab("Haplogroup Quality") +
+    theme_bw()
 )
 ```
