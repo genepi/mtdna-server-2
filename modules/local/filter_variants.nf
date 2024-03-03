@@ -12,11 +12,11 @@ process FILTER_VARIANTS {
     def vcf_name = "${vcf_file}".replaceAll('.vcf.gz', '')
 
     """
-    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tCoverage\tGT" \
+    echo -e "ID\tFilter\tPos\tRef\tVariant\tVariantLevel\tMeanBaseQuality\tCoverage\tGT" \
         > ${vcf_file.baseName}.${method}.txt
 
-    bcftools query \
-        -f '${vcf_name}.bam\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%DP\t%GT]\n' \
+    bcftools query -u \
+        -f '${vcf_name}.bam\t%FILTER\t%POS\t%REF\t%ALT\t[%AF\t%BQ\t%DP\t%GT]\n' \
         ${vcf_file} >> ${vcf_file.baseName}.${method}.txt    
     
     if [[ ${method} == "mutserve_fusion" ]]
@@ -35,10 +35,10 @@ process FILTER_VARIANTS {
     ## annotating SNVS and INDELs for reporting
     awk 'BEGIN {OFS="\t"} {
         if (NR == 1) { print \$0, "Type"; next }
-        if ((length(\$4) > 1 || length(\$5) > 1) && length(\$4) != length(\$5)) { \$9="3" }
-        else if (\$8 == "1") { \$9="1" }
-        else if (\$8 == "0/1" || \$8 == "1/0" || \$8 == "0|1" || \$8 == "1|0" ) { \$9="2" }
-        else { \$9="UNKNOWN" }
+        if ((length(\$4) > 1 || length(\$5) > 1) && length(\$4) != length(\$5)) { \$10="3" }
+        else if (\$9 == "1") { \$10="1" }
+        else if (\$9 == "0/1" || \$9 == "1/0" || \$9 == "0|1" || \$9 == "1|0") { \$10="2" }
+        else { \$10="UNKNOWN" }
         print
     }' ${vcf_file.baseName}.${method}.filtered.tmp.txt > ${vcf_file.baseName}.${method}.filtered.txt
 

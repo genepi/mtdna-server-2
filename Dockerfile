@@ -11,6 +11,16 @@ RUN \
    && mamba env update -n root -f environment.yml \
    && conda clean -a
 
+# Install software
+RUN apt-get update && \
+    apt-get install -y gfortran \
+    python3 \
+    zlib1g-dev \
+    libgomp1 \
+    procps \
+    libx11-6
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Install mutserve (not as conda package available)
 
 ENV MUTSERVE_VERSION=2.0.0-rc12
@@ -52,4 +62,8 @@ ENV PATH="/opt/jbang/bin:${PATH}"
 WORKDIR "/opt"
 COPY ./bin/VariantMerger.java ./
 RUN jbang export portable -O=VariantMerger.jar VariantMerger.java
+
+COPY ./bin/CoverageCorrection.java ./
+RUN jbang export portable -O=CoverageCorrection.jar CoverageCorrection.java
+
 
