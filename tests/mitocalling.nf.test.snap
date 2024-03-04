@@ -11,7 +11,7 @@
     },
     "Runs with 6 samples provided as testdata with mutect2": {
         "content": [
-            "variants.annotated.txt:md5,2d1c3d572deeb1dd984b959d3ac0a725",
+            "variants.annotated.txt:md5,60f38bd59aaa986644d1df365ae62948",
             {
                 "tasksFailed": 0,
                 "tasksCount": 28,
@@ -20,9 +20,9 @@
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "23.04.2"
+            "nextflow": "22.10.4"
         },
-        "timestamp": "2024-03-03T14:03:36.092783262"
+        "timestamp": "2024-03-04T13:37:55.902842"
     },
     "Runs with single BAM file and mutserve": {
         "content": [
@@ -46,7 +46,7 @@
     },
     "Runs with two files and one goes through QC": {
         "content": [
-            "variants.annotated.txt:md5,e5afb1949eb12a245a376f1c20e71f4e",
+            "variants.annotated.txt:md5,f728fe0907897e67b0a69d0f1258adec",
             {
                 "tasksFailed": 0,
                 "tasksCount": 12,
@@ -55,13 +55,13 @@
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "23.04.2"
+            "nextflow": "22.10.4"
         },
-        "timestamp": "2024-03-03T13:58:45.524872865"
+        "timestamp": "2024-03-04T13:35:32.774801"
     },
     "Runs with 6 samples provided as testdata with fusion": {
         "content": [
-            "variants.annotated.txt:md5,b69c6c19f12b152c15cf260b3e91d6a7",
+            "variants.annotated.txt:md5,eb707d60e249b5cfc7cb2eeb25569b2f",
             {
                 "tasksFailed": 0,
                 "tasksCount": 41,
@@ -70,9 +70,9 @@
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "23.04.2"
+            "nextflow": "22.10.4"
         },
-        "timestamp": "2024-03-03T14:06:53.083993829"
+        "timestamp": "2024-03-04T13:39:42.589344"
     },
     "Runs with 6 samples provided as testdata with mutserve": {
         "content": [
