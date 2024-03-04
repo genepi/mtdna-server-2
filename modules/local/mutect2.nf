@@ -20,6 +20,7 @@ process MUTECT2 {
         -callable-depth 6 \
         --native-pair-hmm-threads ${task.cpus} \
         --max-reads-per-alignment-start 0 \
+        --tmp-dir \$PWD \
         -I ${bam_file} \
         -O raw.vcf.gz
     
@@ -27,6 +28,7 @@ process MUTECT2 {
         -R ${reference} \
         --min-reads-per-strand 2 \
         -V raw.vcf.gz \
+        --tmp-dir \$PWD \
         -O ${bam_file.baseName}.vcf.gz
 
     bcftools norm \
