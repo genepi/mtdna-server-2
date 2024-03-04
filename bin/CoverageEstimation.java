@@ -13,7 +13,7 @@ import genepi.io.table.writer.CsvTableWriter;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 
-public class CoverageCorrection implements Callable<Integer> {
+public class CoverageEstimation implements Callable<Integer> {
 
 	@Option(names = "--input", description = "Input Variants File", required = true)
 	private String input;
@@ -68,7 +68,7 @@ public class CoverageCorrection implements Callable<Integer> {
 	}
 
 	public static void main(String... args) {
-		int exitCode = new CommandLine(new CoverageCorrection()).execute(args);
+		int exitCode = new CommandLine(new CoverageEstimation()).execute(args);
 		System.exit(exitCode);
 	}
 

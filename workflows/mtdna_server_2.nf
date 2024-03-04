@@ -26,7 +26,7 @@ include { MERGING_VARIANTS } from '../modules/local/merging_variants'
 include { VCF_MERGE } from '../modules/local/vcf_merge'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUPS_CONTAMINATION } from '../modules/local/haplogroups_contamination'
-include { COVERAGE_CORRECTION } from '../modules/local/coverage_correction'
+include { COVERAGE_ESTIMATION } from '../modules/local/coverage_estimation'
 include { REPORT } from '../modules/local/report'
 include { SAMPLE_REPORT } from '../modules/local/sample_report'
 
@@ -164,11 +164,11 @@ workflow MTDNA_SERVER_2 {
         contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
     }
 
-    if (params.coverage_correction.equals("on") && params.mode != 'mutect2') {
-        COVERAGE_CORRECTION(
+    if (params.coverage_estimation.equals("on") && params.mode != 'mutect2') {
+        COVERAGE_ESTIMATION(
             variants_txt_ch
         )
-        variants_txt_ch = COVERAGE_CORRECTION.out.variants_verified_ch
+        variants_txt_ch = COVERAGE_ESTIMATION.out.variants_verified_ch
     }    
     
     ANNOTATE(

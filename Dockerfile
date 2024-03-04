@@ -63,7 +63,7 @@ WORKDIR "/opt"
 COPY ./bin/VariantMerger.java ./
 RUN jbang export portable -O=VariantMerger.jar VariantMerger.java
 
-COPY ./bin/CoverageCorrection.java ./
-RUN jbang export portable -O=CoverageCorrection.jar CoverageCorrection.java
+COPY ./bin/CoverageEstimation.java ./
+RUN jbang export portable -O=CoverageEstimation.jar CoverageEstimation.java
 
 
