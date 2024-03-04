@@ -2,7 +2,7 @@ id: mtdna-server-2
 name: mtDNA-Server 2 - Mitochondrial Variant Calling 
 description: "You can upload data in BAM format and the application return homoplasmic and heterplasmic sites.<br><br>No dataset at hand? No problem, download and extract our example dataset: <a href=\"https://mitoverse.i-med.ac.at/downloads/6-samples.zip\" class=\"btn btn-sm btn-secondary\" style=\"color:#ffffff !important\"><i class=\"fa fa-file\"></i> 6-samples.zip</a><br><br>"
 
-version: v2.1.3
+version: v2.1.4
 website: https://mitoverse.readthedocs.io/
 category:
 
