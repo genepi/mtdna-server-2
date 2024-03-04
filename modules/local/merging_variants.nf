@@ -15,7 +15,7 @@ process MERGING_VARIANTS {
     
     csvtk sort \
         -t variants.concat.txt \
-        -k ID:N -k Pos:n -k Ref:N -k Variant:N -k Type:nr \
+        -k ID:N -k Pos:n -k Ref:N -k Type:nr  -k Variant:N \
         -T -o variants.sorted.txt \
         --num-cpus ${task.cpus}
 

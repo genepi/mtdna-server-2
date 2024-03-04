@@ -49,6 +49,9 @@ workflow:
         - process: "MTDNA_SERVER_2:ANNOTATE"
           label: "Annotation"
           view: progressbar
+        - process: "MTDNA_SERVER_2:COVERAGE_ESTIMATION"
+          label: "Calculating VAF Coverage"
+          view: progressbar          
         - process: "MTDNA_SERVER_2:HAPLOGROUPS_CONTAMINATION"
           label: "Haplogroup % Contamination Detection"
           view: progressbar
@@ -81,6 +84,14 @@ workflow:
         0.03: 0.03
         0.05: 0.05
         0.1: 0.1      
+
+    - id: coverage_estimation
+      description: Coverage Estimation for Diagnostic NGS
+      type: list
+      value: off
+      values:
+        on: On
+        off: Off
 
     - id: baseQ
       description: Minimal Base Quality

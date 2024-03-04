@@ -26,6 +26,7 @@ include { MERGING_VARIANTS } from '../modules/local/merging_variants'
 include { VCF_MERGE } from '../modules/local/vcf_merge'
 include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUPS_CONTAMINATION } from '../modules/local/haplogroups_contamination'
+include { COVERAGE_ESTIMATION } from '../modules/local/coverage_estimation'
 include { REPORT } from '../modules/local/report'
 include { SAMPLE_REPORT } from '../modules/local/sample_report'
 
@@ -34,7 +35,19 @@ workflow MTDNA_SERVER_2 {
  
     report_file_ch = file("$projectDir/reports/report.Rmd", checkIfExists:true)
     sample_report_file_ch = file("$projectDir/reports/sample.Rmd", checkIfExists:true)
-    bams_ch = Channel.fromPath(params.files, checkIfExists:true)
+    bams_ch = Channel.fromPath(params.files)
+
+    if ( params.max_samples != 0 && (bams_ch.count() > params.max_samples)) {
+        def report = new CloudgeneReport()
+        report.error("The maximum number of allowed samples is " + params.max_samples +".")
+        exit 1
+    }
+
+    if ( bams_ch.count() == 0) {
+        def report = new CloudgeneReport()
+        report.error("No BAM files found.")
+        exit 1
+    }
 
     if(params.reference.equals("rcrs")){
         ref_file_mutserve = file("$projectDir/files/rcrs_mutserve.fasta")
@@ -151,6 +164,13 @@ workflow MTDNA_SERVER_2 {
         contamination_ch =  HAPLOGROUPS_CONTAMINATION.out.contamination_txt_ch
     }
 
+    if (params.coverage_estimation.equals("on") && params.mode != 'mutect2') {
+        COVERAGE_ESTIMATION(
+            variants_txt_ch
+        )
+        variants_txt_ch = COVERAGE_ESTIMATION.out.variants_verified_ch
+    }    
+    
     ANNOTATE(
         variants_txt_ch,
         ref_file_mutserve,
