@@ -50,7 +50,7 @@ workflow:
           label: "Annotation"
           view: progressbar
         - process: "MTDNA_SERVER_2:COVERAGE_ESTIMATION"
-          label: "Calculating VAF Coverage"
+          label: "Estimating required VAF Coverage"
           view: progressbar          
         - process: "MTDNA_SERVER_2:HAPLOGROUPS_CONTAMINATION"
           label: "Haplogroup % Contamination Detection"
@@ -71,27 +71,42 @@ workflow:
     - id: reference
       description: Reference
       type: list
+      visible: true 
       value: "rcrs"
       values:
         "rcrs": "rCRS"
 
+    - id: mode
+      description: Mode
+      type: list
+      value: fusion
+      values:
+        mutserve: mutserve2 (SNV only)
+        mutect2: mutect2  (SNV+INDEL)
+        fusion: fusion (mutserve2 + mutect2)
+
     - id: detection_limit
       description: Detection Limit
       type: list
-      value: 0.01
+      value: 0.02
       values:
         0.01: 0.01
+        0.02: 0.02        
         0.03: 0.03
+        0.04: 0.04        
         0.05: 0.05
         0.1: 0.1      
 
     - id: coverage_estimation
-      description: Coverage Estimation for Diagnostic NGS
+      description: Apply Coverage Estimation for Diagnostic NGS
       type: list
       value: off
       values:
         on: On
         off: Off
+
+     - id: myseparator0
+       type: separator
 
     - id: baseQ
       description: Minimal Base Quality
@@ -104,15 +119,6 @@ workflow:
       type: number
       visible: true
       value: 20      
-
-    - id: mode
-      description: Mode
-      type: list
-      value: fusion
-      values:
-        mutserve: mutserve (SNV only)
-        mutect2: mutect2  (SNV+INDEL)
-        fusion: fusion (mutserve + mutect2)
 
   outputs:
 
