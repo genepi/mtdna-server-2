@@ -105,8 +105,8 @@ workflow:
         on: On
         off: Off
 
-     - id: myseparator0
-       type: separator
+    - id: myseparator0
+      type: separator
 
     - id: baseQ
       description: Minimal Base Quality
