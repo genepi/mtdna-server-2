@@ -71,7 +71,7 @@ workflow:
     - id: reference
       description: Reference
       type: list
-      visible: true 
+      visible: false 
       value: "rcrs"
       values:
         "rcrs": "rCRS"
