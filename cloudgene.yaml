@@ -105,6 +105,12 @@ workflow:
         on: On
         off: Off
 
+    - id: subsampling
+      description: Subsample to specified coverage (Deactived with value 0)
+      type: number
+      visible: true 
+      value: 0  
+              
     - id: myseparator0
       type: separator
 

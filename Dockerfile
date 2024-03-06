@@ -18,7 +18,9 @@ RUN apt-get update && \
     zlib1g-dev \
     libgomp1 \
     procps \
-    libx11-6
+    libx11-6 \
+    bc
+    
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install mutserve (not as conda package available)
