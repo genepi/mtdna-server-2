@@ -28,6 +28,7 @@ include { ANNOTATE } from '../modules/local/annotate'
 include { HAPLOGROUPS_CONTAMINATION } from '../modules/local/haplogroups_contamination'
 include { COVERAGE_ESTIMATION } from '../modules/local/coverage_estimation'
 include { REPORT } from '../modules/local/report'
+include { SUBSAMPLING } from '../modules/local/subsampling'
 include { SAMPLE_REPORT } from '../modules/local/sample_report'
 
 
@@ -82,6 +83,14 @@ workflow MTDNA_SERVER_2 {
     contamination_ch = file("$projectDir/files/haplocheck.txt")
 
     validated_files = INPUT_VALIDATION.out.validated_files.flatten()
+
+    if(params.subsampling != 0) {
+        SUBSAMPLING (
+            validated_files,
+            params.subsampling
+        )
+        validated_files = SUBSAMPLING.out.subsampled_bam_ch
+    }
 
     if (params.mode == 'mutserve') {
 

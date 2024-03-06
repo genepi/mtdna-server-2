@@ -5,6 +5,7 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
+  - conda-forge::ncurses
   - unzip=6.0
   - openjdk=17
   - r-base=4.3.2

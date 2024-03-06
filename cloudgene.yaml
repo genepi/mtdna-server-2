@@ -53,13 +53,16 @@ workflow:
           label: "Estimating required VAF Coverage"
           view: progressbar          
         - process: "MTDNA_SERVER_2:HAPLOGROUPS_CONTAMINATION"
-          label: "Haplogroup % Contamination Detection"
+          label: "Haplogroups & Contamination Detection"
           view: progressbar
         - process: "MTDNA_SERVER_2:VCF_MERGE"
           label: "VCF Merge"
           view: progressbar
+        - process: "MTDNA_SERVER_2:SAMPLE_REPORT"
+          label: "Sample Report Generation"
+          view: progressbar          
         - process: "MTDNA_SERVER_2:REPORT"
-          label: "Report Generation"
+          label: "Dashboard Generation"
           view: progressbar
   inputs:
 
@@ -98,13 +101,19 @@ workflow:
         0.1: 0.1      
 
     - id: coverage_estimation
-      description: Apply Coverage Estimation for Diagnostic NGS
+      description: Apply Coverage Estimate
       type: list
       value: off
       values:
         on: On
         off: Off
 
+    - id: subsampling
+      description: Coverage Subsampling (0 means deactivated)
+      type: number
+      visible: true 
+      value: 0  
+              
     - id: myseparator0
       type: separator
 
