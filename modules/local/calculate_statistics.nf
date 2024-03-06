@@ -12,7 +12,12 @@ process CALCULATE_STATISTICS {
     script:
     def output_name = "${bam_file.baseName}.summary.txt"
     def mapping_name = "${bam_file.baseName}.mapping.txt"
-
+ 
+    def avail_mem = 1024
+    if (task.memory) {
+        avail_mem = (task.memory.mega*0.8).intValue()
+    }    
+ 
     """
     ## determine mapping
     echo -e "Sample\tFilename" > $mapping_name
@@ -41,7 +46,7 @@ process CALCULATE_STATISTICS {
     echo -e "${bam_file}\tMeanMapQuality\t\${mean_map_quality}" >> $output_name
     echo -e "${bam_file}\tRG\t\${readgroup}" >> $output_name
 
-    fastqc --threads ${task.cpus} $bam_file -o .
+    fastqc --threads ${task.cpus} --memory ${avail_mem} $bam_file -o .
 
     """
 }

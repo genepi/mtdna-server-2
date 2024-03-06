@@ -39,5 +39,8 @@ process INPUT_VALIDATION {
     
     # delete excluded_samples from BAM input channel directly
     awk -v q='"' '{print "rm " q \$1 q }' excluded_samples.txt | sh
+
+    python -m json.tool cloudgene.report.json
+        
     """
 }
