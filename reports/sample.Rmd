@@ -133,6 +133,10 @@ variants <- variants %>%
     Type == 2 ~ create_label('Heteroplasmy', 'default'),
     Type == 3 ~ create_label('InDel', 'info'),
     TRUE ~ "Unknown"
+  )) %>%
+  mutate(Filter_Label = case_when(
+    Filter == "PASS" ~ create_label('PASS', 'success'),
+    TRUE ~ create_label(Filter, 'warning')
   ))
 
 variant_caller <- pipeline_params %>%
@@ -182,9 +186,30 @@ statistics %>%
 #)
 ```
 
+### Variant Flags
+
+```{r}
+variants %>% count(Filter_Label) %>%
+  datatable(
+    colnames=c("Filter Flag", "Variants"),
+    options = list(
+      bPaginate = FALSE,
+      bFilter = FALSE,
+      bSort = FALSE,
+      bFooter = FALSE,
+      info = FALSE
+    ),
+    escape = FALSE,
+    rownames = FALSE,
+    class = 'cell-border stripe'
+  )
+  
+```
+
 ### Variants and Hetroplasmies
 
 Detected **`r variants %>% filter(Type == 1) %>% nrow()` variants**, **`r variants %>% filter(Type == 2) %>% nrow()` heteroplasmies** and **`r  variants %>% filter(Type == 3) %>% nrow()` InDels**.
+
 
 ```{r}
 variants %>% 
@@ -192,9 +217,9 @@ variants %>%
     Variant_Label = link_to_variant(Pos, Ref, Variant)
   ) %>% 
   arrange(Pos, Ref, Variant) %>%
-  select("Variant_Label", "VariantLevel", "Type_Label") %>%
+  select("Variant_Label", "VariantLevel", "Type_Label","Filter_Label") %>%
   datatable(
-    colnames=c("Variant", "Level", ""),
+    colnames=c("Variant", "Level", "Type","Flags"),
     options = list(
       bPaginate = FALSE,
       bFilter = FALSE,

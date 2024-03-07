@@ -43,8 +43,7 @@ GREEN <- "#28a745"
 ORANGE <- "#ff8800"
 
 link_to_sample <- function(sample) {
-  return (sample)
-  #paste0('<a target=_blank href=samples/', sample, '.html>', sample,'</a>' )
+  paste0('<a target=_blank href="samples/', sample, '.html">', sample,'</a>' )
 }
 
 
@@ -100,13 +99,20 @@ contamination <- merge(contamination, mapping, by.x="Sample", by.y="Filename") %
 contaminated_samples = contamination %>%
   rename("Contamination_Status" = "Contamination.Status") %>%
   filter(Contamination_Status == "YES");
-
-variants_count <- data.table(t(table(variants$ID)))
-variants_count <- merge(variants_count, mapping, by.x="V2", by.y="Filename") %>%
-  arrange(Sample_Label)
+#variants_count <- data.table(t(table(variants$ID)))
+#variants_count <- merge(variants_count, mapping, by.x="V2", by.y="Filename") %>%
+#  arrange(Sample_Label)
 
 variants <- merge(variants, mapping, by.x="ID", by.y="Filename") %>%
   arrange(Sample_Label)
+
+variants_count <- variants %>% group_by(Sample_Label) %>% 
+  summarise(
+    N = n(),
+    Filtered = sum(Filter != "PASS")
+  ) %>%
+  arrange(Sample_Label)
+
 
 variant_caller <- pipeline_params %>%
   filter(Parameter == "Variant Caller")
@@ -296,9 +302,9 @@ Row
 ```{r}
 variants_count %>%
   mutate (Sample_Link = link_to_sample(Sample_Label)) %>%
-  select("Sample_Link", "N") %>%
+  select("Sample_Link", "N", "Filtered") %>%
   datatable(
-    colnames=c("Sample", "Number of Variants"),
+    colnames=c("Sample", "Number of Variants", "Flagged Variants"),
     options = list(
       bPaginate = FALSE
     ),
