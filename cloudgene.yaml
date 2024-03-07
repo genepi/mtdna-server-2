@@ -101,7 +101,7 @@ workflow:
         0.1: 0.1      
 
     - id: coverage_estimation
-      description: Apply Coverage Estimate
+      description: Apply VAF Coverage Estimation
       type: list
       value: off
       values:
@@ -109,10 +109,12 @@ workflow:
         off: Off
 
     - id: subsampling
-      description: Coverage Subsampling (0 means deactivated)
+      description: Subsample to 2000x
       type: number
       visible: true 
-      value: 0  
+      values:
+        on: On
+        off: Off 
               
     - id: myseparator0
       type: separator

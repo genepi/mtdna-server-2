@@ -84,10 +84,10 @@ workflow MTDNA_SERVER_2 {
 
     validated_files = INPUT_VALIDATION.out.validated_files.flatten()
 
-    if(params.subsampling != 0) {
+    if(params.subsampling.equals("on") ) {
         SUBSAMPLING (
             validated_files,
-            params.subsampling
+            params.subsampling_coverage
         )
         validated_files = SUBSAMPLING.out.subsampled_bam_ch
     }
