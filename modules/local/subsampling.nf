@@ -16,12 +16,16 @@ process SUBSAMPLING {
     # convert to integer
     mean_cov_int=\$(printf "%.0f" "\$mean_cov")
     
-    # set seed to 1 (for reproducbility) and FRAC to coverage/mean_cov (e.g. 1.2)
-    fraction=\$(echo "scale=4; 1+(${coverage} / \${mean_cov})" | bc)
+    fraction=\$(echo "scale=4; ${coverage} / \${mean_cov}" | bc)
     
     if [ \${mean_cov_int} -gt ${coverage} ]
     then
-        samtools view -s \$fraction -b -o ${bam_file.baseName}.subsampled.bam ${bam_file}
+        samtools view \
+        --subsample-seed 1 \
+        --subsample \$fraction \
+        -b \
+        -o ${bam_file.baseName}.subsampled.bam ${bam_file}
+        
         mv ${bam_file.baseName}.subsampled.bam ${bam_file}
     fi 
     """

@@ -62,6 +62,14 @@ workflow MTDNA_SERVER_2 {
         ref_file_mutect2
     )
 
+    if(params.subsampling.equals("on") ) {
+        SUBSAMPLING (
+            bams_ch,
+            params.subsampling_coverage
+        )
+        bams_ch = SUBSAMPLING.out.subsampled_bam_ch
+    }
+
     CALCULATE_STATISTICS(
         bams_ch
     )
@@ -83,14 +91,6 @@ workflow MTDNA_SERVER_2 {
     contamination_ch = file("$projectDir/files/haplocheck.txt")
 
     validated_files = INPUT_VALIDATION.out.validated_files.flatten()
-
-    if(params.subsampling.equals("on") ) {
-        SUBSAMPLING (
-            validated_files,
-            params.subsampling_coverage
-        )
-        validated_files = SUBSAMPLING.out.subsampled_bam_ch
-    }
 
     if (params.mode == 'mutserve') {
 

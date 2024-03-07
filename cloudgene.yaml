@@ -109,12 +109,14 @@ workflow:
         off: Off
 
     - id: subsampling
-      description: Subsample to 2000x
+      description: Coverage Subsampling
       type: number
       visible: true 
+      default: off
       values:
-        on: On
-        off: Off 
+        off: No subsampling
+        on: Subsample to 2000x 
+
               
     - id: myseparator0
       type: separator
