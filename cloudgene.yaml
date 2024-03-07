@@ -111,7 +111,7 @@ workflow:
     - id: subsampling
       description: Coverage Subsampling
       type: list
-      default: off
+      value: off
       values:
         off: No subsampling
         on: Subsample to 2000x 
