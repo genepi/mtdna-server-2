@@ -28,7 +28,7 @@ Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-serv
 - Nextflow
 
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.6 -profile test,docker
+nextflow run genepi/mtdna-server-2 -r v2.1.7 -profile test,docker
 ```
 
 ## Publication
