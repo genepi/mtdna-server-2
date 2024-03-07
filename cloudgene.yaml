@@ -27,7 +27,10 @@ workflow:
           view: progressbar
         - process: "MTDNA_SERVER_2:INDEX"
           label: "Index Reference"
-          view: progressbar          
+          view: progressbar     
+        - process: "MTDNA_SERVER_2:SUBSAMPLING"
+          label: "Calculate Sample Statistics"
+          view: progressbar               
         - process: "MTDNA_SERVER_2:INPUT_VALIDATION"
           label: "Input Validation"
           view: progressbar
