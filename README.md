@@ -3,7 +3,9 @@
 [![mtdna-server-2](https://github.com/genepi/mtdna-server-2/actions/workflows/run-tests.yml/badge.svg)](https://github.com/genepi/mtdna-server-2/actions/workflows/run-tests.yml)
 [![nf-test](https://img.shields.io/badge/tested_with-nf--test-337ab7.svg)](https://github.com/askimed/nf-test)
 
-mtDNA-Server 2 is based on Nextflow and accurately detects heteroplasmic and homoplasmic variants in mitochondrial genomes. It supports different variant callers and is able to call insertions, deletions and single nucleotide variants at once. Furthmore it includes (a) quality control and input validation modules, (b) haplogroup classification and contamination detected, (c) a method to estimate the individual required coverage to minimize false positives and (d) an interactive analytics dashboard. 
+mtDNA-Server 2 is based on Nextflow with the overall goal to accurately detect heteroplasmic and homoplasmic variants in mitochondrial (mtDNA) genomes. 
+
+It supports different variant callers and is able to call insertions, deletions (INDELs) and single nucleotide variants (SNVs). Furthmore it includes several modules for (a) quality control and input validation (b) haplogroup classification and contamination detection, (c) minimal VAF estimation based on the coverage to minimize false positives and (d) an interactive analytics dashboard. 
 
 ![image](docs/images/report.png)
 
