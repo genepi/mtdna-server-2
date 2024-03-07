@@ -5,6 +5,7 @@
 
 mtDNA-Server 2 is based on Nextflow and accurately detects heteroplasmic and homoplasmic variants in mitochondrial genomes. It supports different variant callers and is able to call insertions, deletions and single nucleotide variants at once. Furthmore it includes (a) quality control and input validation modules, (b) haplogroup classification and contamination detected, (c) a method to estimate the individual required coverage to minimize false positives and (d) an interactive analytics dashboard. 
 
+![image](docs/images/report.png)
 
 ## Web Service
 
@@ -13,6 +14,8 @@ mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitove
 ## Documentation
 
 Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/).
+
+![image](docs/images/workflow.png)
 
 ## Command-Line Execution with Nextflow 
 
