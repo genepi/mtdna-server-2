@@ -23,6 +23,7 @@ process SAMPLE_REPORT {
     echo -e "Repository\t${params.service.github}" >> params.txt    
     echo -e "Variant Caller\t${params.mode}" >> params.txt
     echo -e "Detection Limit\t${params.detection_limit}" >> params.txt
+    echo -e "Coverage Subsampling\t${params.subsampling}" >> params.txt
     echo -e "Reference\t${params.reference}" >> params.txt
     echo -e "Base Quality\t${params.baseQ}" >> params.txt
     echo -e "Map Quality\t${params.mapQ}" >> params.txt
