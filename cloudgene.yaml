@@ -110,8 +110,7 @@ workflow:
 
     - id: subsampling
       description: Coverage Subsampling
-      type: number
-      visible: true 
+      type: list
       default: off
       values:
         off: No subsampling
