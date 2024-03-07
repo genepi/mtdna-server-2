@@ -36,7 +36,7 @@ process MUTECT2 {
         -R ${reference} \
         --min-reads-per-strand 2 \
         -V raw.vcf.gz \
-        --tmp-dir \$PWD \
+        --tmp-dir . \
         -O ${bam_file.baseName}.vcf.gz
 
     bcftools norm \
@@ -44,10 +44,15 @@ process MUTECT2 {
         -f ${reference} \
         -o ${bam_file.baseName}.norm.vcf.gz -Oz \
         ${bam_file.baseName}.vcf.gz 
+
+    bcftools view \
+    -i 'FORMAT/AF>=${params.detection_limit}' \
+    -o ${bam_file.baseName}.vcf.gz -Oz \
+    ${bam_file.baseName}.norm.vcf.gz 
     
-    mv ${bam_file.baseName}.norm.vcf.gz ${bam_file.baseName}.vcf.gz
     tabix -f ${bam_file.baseName}.vcf.gz
 
+    rm ${bam_file.baseName}.norm.vcf.gz 
     rm raw.vcf.gz
     """
 }
