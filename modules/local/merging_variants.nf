@@ -10,12 +10,14 @@ process MERGING_VARIANTS {
     """
     csvtk concat \
         -t ${variants_txt} \
-        -T -o variants.concat.txt
+        -T -o variants.concat.txt \
+        --num-cpus ${task.cpus}
     
     csvtk sort \
         -t variants.concat.txt \
-        -k ID:N -k Pos:n -k Ref:N -k Variant:N -k Type:nr \
-        -T -o variants.sorted.txt
+        -k ID:N -k Pos:n -k Ref:N -k Type:nr  -k Variant:N \
+        -T -o variants.sorted.txt \
+        --num-cpus ${task.cpus}
 
     if [[ ${mode} == "fusion" ]]
     then

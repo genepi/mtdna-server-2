@@ -4,7 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     navbar:
-      - { title: "MultiQC", target: "_blank", href: "multiqc/index.html" }
+      # - { title: "MultiQC", target: "_blank", href: "multiqc/index.html" }
       - { title: "About",  target: "_blank", href: "https://mitoverse.i-med.ac.at/#!pages/contact", align: right }
 params:
   haplogroups: ../tests/data/report/haplogroups.txt
@@ -43,7 +43,8 @@ GREEN <- "#28a745"
 ORANGE <- "#ff8800"
 
 link_to_sample <- function(sample) {
-  paste0('<a target=_blank href=samples/', sample, '.html>', sample,'</a>' )
+  return (sample)
+  #paste0('<a target=_blank href=samples/', sample, '.html>', sample,'</a>' )
 }
 
 

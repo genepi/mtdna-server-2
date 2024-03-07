@@ -10,21 +10,33 @@ process MUTECT2 {
     output:
     tuple path("${bam_file.baseName}.vcf.gz"), path("${bam_file.baseName}.vcf.gz.tbi"), val(method), emit: mutect2_ch
 
+    script:
+    def avail_mem = 1024
+    if (task.memory) {
+        avail_mem = (task.memory.mega*0.8).intValue()
+    }    
+
     """
     samtools index ${bam_file}
 
-    gatk Mutect2 \
+    gatk --java-options "-Xmx${avail_mem}M -XX:-UsePerfData" \
+        Mutect2 \
         -R ${reference} \
         -L ${detected_contig} \
         --min-base-quality-score ${params.baseQ} \
-        -callable-depth 6 --max-reads-per-alignment-start 0 \
+        -callable-depth 6 \
+        --native-pair-hmm-threads ${task.cpus} \
+        --max-reads-per-alignment-start 0 \
+        --tmp-dir . \
         -I ${bam_file} \
         -O raw.vcf.gz
     
-    gatk FilterMutectCalls \
+    gatk --java-options "-Xmx${avail_mem}M -XX:-UsePerfData" \
+        FilterMutectCalls \
         -R ${reference} \
         --min-reads-per-strand 2 \
         -V raw.vcf.gz \
+        --tmp-dir \$PWD \
         -O ${bam_file.baseName}.vcf.gz
 
     bcftools norm \

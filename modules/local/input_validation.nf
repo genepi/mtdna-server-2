@@ -17,11 +17,13 @@ process INPUT_VALIDATION {
     """
     csvtk concat \
         -t ${statistics} \
-        -T -o sample_statistics.txt
+        -T -o sample_statistics.txt \
+        --num-cpus ${task.cpus}
     
     csvtk concat \
         -t ${mapping} \
-        -T -o sample_mappings.txt
+        -T -o sample_mappings.txt \
+        --num-cpus ${task.cpus}
     
     java -jar /opt/mutserve/mutserve.jar stats \
         --input sample_statistics.txt \
@@ -37,5 +39,8 @@ process INPUT_VALIDATION {
     
     # delete excluded_samples from BAM input channel directly
     awk -v q='"' '{print "rm " q \$1 q }' excluded_samples.txt | sh
+
+    python -m json.tool cloudgene.report.json
+        
     """
 }

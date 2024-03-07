@@ -2,7 +2,7 @@ id: mtdna-server-2
 name: mtDNA-Server 2 - Mitochondrial Variant Calling 
 description: "You can upload data in BAM format and the application return homoplasmic and heterplasmic sites.<br><br>No dataset at hand? No problem, download and extract our example dataset: <a href=\"https://mitoverse.i-med.ac.at/downloads/6-samples.zip\" class=\"btn btn-sm btn-secondary\" style=\"color:#ffffff !important\"><i class=\"fa fa-file\"></i> 6-samples.zip</a><br><br>"
 
-version: v2.1.3
+version: v2.1.6
 website: https://mitoverse.readthedocs.io/
 category:
 
@@ -49,14 +49,20 @@ workflow:
         - process: "MTDNA_SERVER_2:ANNOTATE"
           label: "Annotation"
           view: progressbar
+        - process: "MTDNA_SERVER_2:COVERAGE_ESTIMATION"
+          label: "Estimating required VAF Coverage"
+          view: progressbar          
         - process: "MTDNA_SERVER_2:HAPLOGROUPS_CONTAMINATION"
-          label: "Haplogroup % Contamination Detection"
+          label: "Haplogroups & Contamination Detection"
           view: progressbar
         - process: "MTDNA_SERVER_2:VCF_MERGE"
           label: "VCF Merge"
           view: progressbar
+        - process: "MTDNA_SERVER_2:SAMPLE_REPORT"
+          label: "Sample Report Generation"
+          view: progressbar          
         - process: "MTDNA_SERVER_2:REPORT"
-          label: "Report Generation"
+          label: "Dashboard Generation"
           view: progressbar
   inputs:
 
@@ -68,19 +74,48 @@ workflow:
     - id: reference
       description: Reference
       type: list
+      visible: false 
       value: "rcrs"
       values:
         "rcrs": "rCRS"
 
+    - id: mode
+      description: Mode
+      type: list
+      value: fusion
+      values:
+        mutserve: mutserve2 (SNV only)
+        mutect2: mutect2  (SNV+INDEL)
+        fusion: fusion (mutserve2 + mutect2)
+
     - id: detection_limit
       description: Detection Limit
       type: list
-      value: 0.01
+      value: 0.02
       values:
         0.01: 0.01
+        0.02: 0.02        
         0.03: 0.03
+        0.04: 0.04        
         0.05: 0.05
         0.1: 0.1      
+
+    - id: coverage_estimation
+      description: Apply Coverage Estimate
+      type: list
+      value: off
+      values:
+        on: On
+        off: Off
+
+    - id: subsampling
+      description: Coverage Subsampling (0 means deactivated)
+      type: number
+      visible: true 
+      value: 0  
+              
+    - id: myseparator0
+      type: separator
 
     - id: baseQ
       description: Minimal Base Quality
@@ -93,15 +128,6 @@ workflow:
       type: number
       visible: true
       value: 20      
-
-    - id: mode
-      description: Mode
-      type: list
-      value: fusion
-      values:
-        mutserve: mutserve (SNV only)
-        mutect2: mutect2  (SNV+INDEL)
-        fusion: fusion (mutserve + mutect2)
 
   outputs:
 
