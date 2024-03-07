@@ -8,7 +8,7 @@ mtDNA-Server 2 is based on Nextflow and accurately detects heteroplasmic and hom
 
 ## Web Service
 
-mtDNA-Server 2 is hosted as a service on our [mitoverse](https://mitoverse.i-med.ac.at/) platform.
+mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitoverse.i-med.ac.at/) platform.
 
 ## Documentation
 
