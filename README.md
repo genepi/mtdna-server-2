@@ -35,7 +35,7 @@ nextflow run genepi/mtdna-server-2 -r v2.1.8 -profile test,<docker,singularity,s
 ### Run Pipeline on own data
 To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohpc_fusion.config) and run the following command:
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.8 -c test.config -profile docker
+nextflow run genepi/mtdna-server-2 -r v2.1.8 -c <your-config-file> -profile docker
 ```
 
 ### Development
