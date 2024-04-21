@@ -1,7 +1,7 @@
 println "Welcome to ${params.service.name} ${workflow.manifest.version}"
 println "(c) ${workflow.manifest.author}"
 requiredParams = [
-    'project', 'files', 'output'
+    'project', 'files'
 ]
 
 for (param in requiredParams) {
@@ -9,10 +9,16 @@ for (param in requiredParams) {
         exit 1, "Parameter ${param} is required."
     }
 }   
-   
+
+if(params.output == null) {
+    params.pubDir = "output/${params.project}"
+} else {
+    params.pubDir = params.output
+}
+
 if (params.output_reports == null || params.output_auxiliary == null ) {
-    params.output_reports = params.output
-    params.output_auxiliary = params.output    
+    params.output_reports = params.pubDir
+    params.output_auxiliary = params.pubDir    
 }
    
 include { INDEX } from '../modules/local/index'

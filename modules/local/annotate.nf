@@ -1,6 +1,6 @@
 process ANNOTATE {
 
-    publishDir "${params.output}", mode: 'copy'
+    publishDir "${params.pubDir}", mode: 'copy'
 
     input:
     path variants_ch
