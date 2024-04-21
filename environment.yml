@@ -17,7 +17,7 @@ dependencies:
   - r-flexdashboard=0.6.2
   - r-data.table=1.14.10
   - r-dt=0.31
-  - r-htmltools=0.5.7
+  - r-htmltools=0.5.8
   - r-rmdformats=1.0.4
   - r-knitr=1.45
   - pandoc=3.1.3
