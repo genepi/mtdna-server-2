@@ -9,27 +9,60 @@ It supports different variant callers and is able to call insertions, deletions 
 
 ![image](docs/images/report.png)
 
+mtDNA-Server 2 is available as a graphical web-service or a Nextflow pipeline for local execution. 
+
 ## Web Service
 
 mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitoverse.i-med.ac.at/) platform.
 
-## Documentation
+### Documentation
 
 Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/).
 
 ![image](docs/images/workflow.png)
 
-## Command-Line Execution with Nextflow 
+## Local Execution
+To run mtDNA-Server 2 locally, please execute the following steps. 
 
-### Requirements
+### Quick Start
 
-- Docker or Singularity
-- Java
-- Nextflow
+1. Install [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html#installation) (>=22.10.4)
 
+2. Run the pipeline on our test dataset and select either Docker, Singluarity or Slurm. 
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.7 -profile test,docker
+nextflow run genepi/mtdna-server-2 -r v2.1.8 -profile test,<docker,singularity,slurm>
 ```
+### Run Pipeline on own data
+To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohpc_fusion.config) and run the following command:
+```
+nextflow run genepi/mtdna-server-2 -r v2.1.8 -c test.config -profile docker
+```
+
+### Development
+```
+git clone https://github.com/genepi/mtdna-server-2
+cd mtdna-server-2
+docker build -t genepi/mtdna-server-2 . # don't ignore the dot
+nextflow run main.nf -profile test,development
+```
+
+### Documentation
+The following parameters can be set in the configuration file. 
+| Parameter            | Default Value        | Comment        |
+|----------------------|--------------|----------------|
+| project              | null         | Project name (required)   |
+| files                | null         | Input BAM files (required) |
+| mode                 | fusion       | Mode of operation (mutserve,mutect2,fusion) |
+| detection_limit      | 0.02         | Detection limit for heteroplasmic sites |
+| coverage_estimation  | on           | Coverage estimation enabled |
+| subsampling          | off          | Subsampling on/off |
+| subsampling_coverage | 2000         | Subsampling coverage |
+| mapQ                 | 20           | Mapping quality threshold |
+| baseQ                | 20           | Base quality threshold |
+| alignQ               | 30           | Alignment quality threshold |
+| output               | null         | Specific Output folder   |
+
+
 
 ## Publication
 
