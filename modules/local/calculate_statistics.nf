@@ -25,7 +25,7 @@ process CALCULATE_STATISTICS {
     SAMPLES_CMD_OUTPUT=\$(samtools samples ${bam_file})
     SAMPLE_NAME=\$(echo "\$SAMPLES_CMD_OUTPUT" | awk '{print \$1}')
 
-    if [ "\$SAMPLE_NAME" == "." ]; then
+    if [ "\$SAMPLE_NAME" != "." ]; then
         echo "\$SAMPLES_CMD_OUTPUT" >> $mapping_name
     else
         echo -e "${bam_file.baseName}\t${bam_file}"  >> $mapping_name
