@@ -21,6 +21,11 @@ Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-serv
 
 ![image](docs/images/workflow.png)
 
+
+## Publication
+Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
+
+
 ## Local Execution
 To run mtDNA-Server 2 locally, please execute the following steps. 
 
@@ -62,11 +67,6 @@ The following parameters can be set in the configuration file.
 | alignQ               | 30           | Alignment quality threshold |
 | output               | null         | Specific Output folder   |
 
-
-
-## Publication
-
-Weissensteiner H*, Forer L*, Fuchsberger C, Schöpf B, Kloss-Brandstätter A, Specht G, Kronenberg F, Schönherr S: mtDNA-Server: next-generation sequencing data analysis of human mitochondrial DNA in the cloud. Nucleic Acids Res. 44:W64-9, 2016. PMID: [27084948](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4987870/)
 
 ## Contact
 
