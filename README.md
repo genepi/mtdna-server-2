@@ -30,12 +30,12 @@ To run mtDNA-Server 2 locally, please execute the following steps.
 
 2. Run the pipeline on our test dataset and select either Docker, Singluarity or Slurm. 
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.8 -profile test,<docker,singularity,slurm>
+nextflow run genepi/mtdna-server-2 -r v2.1.9 -profile test,<docker,singularity,slurm>
 ```
 ### Run Pipeline on own data
 To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohpc_fusion.config) and run the following command:
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.8 -c <your-config-file> -profile docker
+nextflow run genepi/mtdna-server-2 -r v2.1.9 -c <your-config-file> -profile docker
 ```
 
 ### Development
