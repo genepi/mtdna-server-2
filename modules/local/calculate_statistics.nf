@@ -19,11 +19,19 @@ process CALCULATE_STATISTICS {
     }    
  
     """
-    ## determine mapping
+    ## Create Mapping File
     echo -e "Sample\tFilename" > $mapping_name
-    samtools samples ${bam_file} >> $mapping_name
 
-    ## calculate summary statistics
+    SAMPLES_CMD_OUTPUT=\$(samtools samples ${bam_file})
+    SAMPLE_NAME=\$(echo "\$SAMPLES_CMD_OUTPUT" | awk '{print \$1}')
+
+    if [ "\$SAMPLE_NAME" == "." ]; then
+        echo "\$SAMPLES_CMD_OUTPUT" >> $mapping_name
+    else
+        echo -e "${bam_file.baseName}\t${bam_file}"  >> $mapping_name
+    fi
+
+    ## Calculate summary statistics
     samtools coverage ${bam_file} > samtools_coverage_${bam_file.baseName}.txt
     csvtk grep -t -f3 -p 16569 -C '\$' samtools_coverage_${bam_file.baseName}.txt -T -o mtdna.txt --num-cpus ${task.cpus} 
         
