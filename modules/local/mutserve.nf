@@ -16,6 +16,7 @@ process MUTSERVE {
 
     """
     #todo: check used mutserve strand-bias with default parameter
+    samtools index ${bam_file} 
     java -Xmx${avail_mem}M -jar /opt/mutserve/mutserve.jar \
         call \
         --level ${params.detection_limit} \

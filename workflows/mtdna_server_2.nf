@@ -79,7 +79,7 @@ workflow MTDNA_SERVER_2 {
     )
 
     INPUT_VALIDATION(
-        bams_ch.collect(),
+        CALCULATE_STATISTICS.out.fixed_file.collect(),
         CALCULATE_STATISTICS.out.stats_ch.collect(),
         CALCULATE_STATISTICS.out.mapping_ch.collect()
     )

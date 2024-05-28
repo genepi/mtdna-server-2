@@ -7,6 +7,8 @@ process CALCULATE_STATISTICS {
     path "*summary.txt", emit: stats_ch
     path "*mapping.txt", emit: mapping_ch
     path "*.zip", emit: fastqc_ch
+    path("*.bam"), includeInputs: true, emit: fixed_file
+
 
 
     script:
@@ -22,14 +24,16 @@ process CALCULATE_STATISTICS {
     ## Create Mapping File
     echo -e "Sample\tFilename" > $mapping_name
 
-    SAMPLES_CMD_OUTPUT=\$(samtools samples ${bam_file})
-    SAMPLE_NAME=\$(echo "\$SAMPLES_CMD_OUTPUT" | awk '{print \$1}')
+    SAMPLE_NAME=\$(echo "\$(samtools samples ${bam_file})" | awk '{print \$1}')
 
-    if [ "\$SAMPLE_NAME" != "." ]; then
-        echo "\$SAMPLES_CMD_OUTPUT" >> $mapping_name
-    else
-        echo -e "${bam_file.baseName}\t${bam_file}"  >> $mapping_name
+    ## ADD RG-Tag to work with mutect2
+    if [ "\$SAMPLE_NAME" == "." ]
+    then
+        samtools addreplacerg -r '@RG\tID:${bam_file.baseName}\tSM:${bam_file.baseName}' ${bam_file}  -o ${bam_file.baseName}_tmp.bam
+        mv ${bam_file.baseName}_tmp.bam ${bam_file}
     fi
+
+    echo "\$(samtools samples ${bam_file})" >> $mapping_name
 
     ## Calculate summary statistics
     samtools coverage ${bam_file} > samtools_coverage_${bam_file.baseName}.txt
