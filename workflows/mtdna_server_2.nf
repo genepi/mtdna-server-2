@@ -92,7 +92,6 @@ workflow MTDNA_SERVER_2 {
     )
 
     QUALITY_CONTROL(
-        INPUT_VALIDATION.out.excluded_ch,
         CALCULATE_STATISTICS.out.fastqc_ch.collect()
     )
 
