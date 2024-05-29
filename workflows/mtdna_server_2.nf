@@ -1,3 +1,6 @@
+
+
+
 println "Welcome to ${params.service.name} ${workflow.manifest.version}"
 println "(c) ${workflow.manifest.author}"
 requiredParams = [
@@ -21,7 +24,7 @@ if (params.output_reports == null || params.output_auxiliary == null ) {
     params.output_auxiliary = params.pubDir    
 }
    
-include { INDEX } from '../modules/local/index'
+include { INDEX_CREATION } from '../modules/local/index_creation'
 include { CALCULATE_STATISTICS } from '../modules/local/calculate_statistics'
 include { INPUT_VALIDATION } from '../modules/local/input_validation'
 include { QUALITY_CONTROL } from '../modules/local/quality_control'
@@ -58,15 +61,10 @@ workflow MTDNA_SERVER_2 {
 
     if(params.reference.equals("rcrs")){
         ref_file_mutserve = file("$projectDir/files/rcrs_mutserve.fasta")
-        ref_file_mutect2 = file("$projectDir/files/mt_contigs.fasta")
         annotation_file= file("$projectDir/files/rCRS_annotation.txt")
     } else {
         exit 1, "Reference " + params.reference + "not supported"
     }
-
-    INDEX(
-        ref_file_mutect2
-    )
 
     if(params.subsampling.equals("on") ) {
         SUBSAMPLING (
@@ -81,15 +79,19 @@ workflow MTDNA_SERVER_2 {
     )
 
     INPUT_VALIDATION(
-        bams_ch.collect(),
+        CALCULATE_STATISTICS.out.fixed_file.collect(),
         CALCULATE_STATISTICS.out.stats_ch.collect(),
         CALCULATE_STATISTICS.out.mapping_ch.collect()
     )
 
     def detected_contig = INPUT_VALIDATION.out.contig_ch.text.trim()
 
+    INDEX_CREATION(
+        ref_file_mutserve,
+        detected_contig
+    )
+
     QUALITY_CONTROL(
-        INPUT_VALIDATION.out.excluded_ch,
         CALCULATE_STATISTICS.out.fastqc_ch.collect()
     )
 
@@ -115,8 +117,8 @@ workflow MTDNA_SERVER_2 {
 
         MUTECT2(
             validated_files,
-            ref_file_mutect2,
-            INDEX.out.fasta_index_ch,
+            INDEX_CREATION.out.ref_ch,
+            INDEX_CREATION.out.fasta_index_ch,
             detected_contig,
             "mutect2_single"
         )
@@ -135,8 +137,8 @@ workflow MTDNA_SERVER_2 {
 
         MUTECT2(
             validated_files,
-            ref_file_mutect2,
-            INDEX.out.fasta_index_ch,
+            INDEX_CREATION.out.ref_ch,
+            INDEX_CREATION.out.fasta_index_ch,
             detected_contig,
             "mutect2_fusion"
         )

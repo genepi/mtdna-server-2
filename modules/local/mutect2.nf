@@ -22,7 +22,7 @@ process MUTECT2 {
     gatk --java-options "-Xmx${avail_mem}M -XX:-UsePerfData" \
         Mutect2 \
         -R ${reference} \
-        -L ${detected_contig} \
+        -L '${detected_contig}' \
         --min-base-quality-score ${params.baseQ} \
         -callable-depth 6 \
         --native-pair-hmm-threads ${task.cpus} \

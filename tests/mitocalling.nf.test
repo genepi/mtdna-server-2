@@ -47,7 +47,7 @@ nextflow_pipeline {
         when {
             params {
                project = "test-job"
-               files = "$projectDir/tests/data/bam/*.bam"
+               files = "$projectDir/tests/data/bam/HG00096*.bam"
                mode = "mutect2"
                output = "out"
                output_reports = "reports"
@@ -155,4 +155,43 @@ nextflow_pipeline {
 
     }
 
+    test("Run sample without readgroup and mutect2") {
+
+        when {
+            params {
+               project = "test-job"
+               files = "$projectDir/tests/data/bam/no_rg/HG002.bam"
+               mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
+
+    test("Run sample with complex ref tag and mutect2") {
+
+        when {
+            params {
+               project = "test-job"
+               files = "$projectDir/tests/data/bam/complex_ref/*.bam"
+               mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
 }

@@ -74,6 +74,36 @@
         },
         "timestamp": "2024-03-07T23:06:50.681516749"
     },
+    "Run sample without readgroup an mutect2": {
+        "content": [
+            "variants.annotated.txt:md5,0fea21d7e7fc9881a2c959f1ca0c0923",
+            {
+                "tasksFailed": 0,
+                "tasksCount": 10,
+                "tasksSucceeded": 10
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0-rc1",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-29T12:04:01.840857"
+    },
+    "Run sample with complex ref tag and mutect2": {
+        "content": [
+            "variants.annotated.txt:md5,0fb750229ec7e82272cc650c0773d420",
+            {
+                "tasksFailed": 0,
+                "tasksCount": 10,
+                "tasksSucceeded": 10
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.0-rc1",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-29T14:14:51.109111"
+    },
     "Runs with 6 samples provided as testdata with mutserve": {
         "content": [
             "variants.annotated.txt:md5,4f06be3759a04ff20fa189dd9f5d2685",
