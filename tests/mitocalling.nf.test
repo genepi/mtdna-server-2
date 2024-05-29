@@ -155,11 +155,7 @@ nextflow_pipeline {
 
     }
 
-    test("Run sample without readgroup an mutect2") {
-
-        setup {
-            DownloadUtil.downloadAndExtractZip("https://mitoverse.i-med.ac.at/downloads/6-samples.zip", "${launchDir}/input")
-        }
+    test("Run sample without readgroup and mutect2") {
 
         when {
             params {
@@ -179,4 +175,23 @@ nextflow_pipeline {
 
     }
 
+    test("Run sample with complex ref tag and mutect2") {
+
+        when {
+            params {
+               project = "test-job"
+               files = "$projectDir/tests/data/bam/complex_ref/*.bam"
+               mode = "mutect2"
+               output = "out"
+               output_reports = "reports"
+               output_auxiliary = "files"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(path("${launchDir}/out/variants.annotated.txt"),workflow.trace).match()
+        }
+
+    }
 }
