@@ -164,7 +164,7 @@ nextflow_pipeline {
         when {
             params {
                project = "test-job"
-               files = "$projectDir/tests/data/bam/HG002.bam"
+               files = "$projectDir/tests/data/bam/no_rg/HG002.bam"
                mode = "mutect2"
                output = "out"
                output_reports = "reports"
