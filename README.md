@@ -17,14 +17,18 @@ mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitove
 
 ### Documentation
 
-Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/).
+Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
 
 ![image](docs/images/workflow.png)
 
+We want to steadily improve mtDNA-Server 2. If your files are not working, please create a issue or contact [[Sebastian](mailto:sebastian.schoenherr@i-med.ac.at)] directly. 
+
+
+### Version History
+Release [v2.1.10](releases/tag/v2.1.10) - Improved mutect2 support: create missing RG tags, write inidividual reference sequence on the fly, support complex ref tags.
 
 ## Publication
 Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
-
 
 ## Local Execution
 To run mtDNA-Server 2 locally, please execute the following steps. 
@@ -35,12 +39,12 @@ To run mtDNA-Server 2 locally, please execute the following steps.
 
 2. Run the pipeline on our test dataset and select either Docker, Singluarity or Slurm. 
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.9 -profile test,<docker,singularity,slurm>
+nextflow run genepi/mtdna-server-2 -r v2.1.10 -profile test,<docker,singularity,slurm>
 ```
 ### Run Pipeline on own data
 To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohpc_fusion.config) and run the following command:
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.9 -c <your-config-file> -profile docker
+nextflow run genepi/mtdna-server-2 -r v2.1.10 -c <your-config-file> -profile docker
 ```
 
 ### Development

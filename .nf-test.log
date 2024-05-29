@@ -1,0 +1,24 @@
+May-29 14:15:49.869 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.0-rc1
+May-29 14:15:49.876 [main] INFO  com.askimed.nf.test.App - Arguments: [test, tests/mitocalling.nf.test@1a7901f2, --verbose, --debug]
+May-29 14:15:50.293 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 23.10.1
+May-29 14:15:50.294 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /Users/seb/repositories/mtdna-server-2/nf-test.config...
+May-29 14:15:50.474 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 19 files from directory /Users/seb/repositories/mtdna-server-2 in 0.02 sec
+May-29 14:15:50.475 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 tests.
+May-29 14:15:50.475 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found tests: [/Users/seb/repositories/mtdna-server-2/tests/mitocalling.nf.test@1a7901f2]
+May-29 14:15:50.475 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Detected 1 test files.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Workflow main.nf' from file '/Users/seb/repositories/mtdna-server-2/tests/mitocalling.nf.test'.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '7e071ab6: Runs with single BAM file and mutserve' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '43f21514: Runs with BAM file including different header contigs' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '9a9b8647: Runs with single BAM file and mutect2' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '174031f7: Runs with two files and one goes through QC' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '5e87182d: Runs with 6 samples provided as testdata with mutserve' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '80a87f45: Runs with 6 samples provided as testdata with mutect2' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '37e8e015: Runs with 6 samples provided as testdata with fusion' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'e9c8ac0f: Run sample without readgroup and mutect2' skipped.
+May-29 14:15:50.848 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '1a7901f2: Run sample with complex ref tag and mutect2'. type: com.askimed.nf.test.lang.pipeline.PipelineTest
+May-29 14:16:15.996 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Load snapshots from file '/Users/seb/repositories/mtdna-server-2/tests/mitocalling.nf.test.snap'
+May-29 14:16:16.001 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'Run sample with complex ref tag and mutect2' match.
+May-29 14:16:16.001 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '1a7901f2: Run sample with complex ref tag and mutect2' finished. status: PASSED
+May-29 14:16:16.002 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Workflow main.nf' finished. snapshot file: true, skipped tests: true, failed tests: false
+May-29 14:16:16.002 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 1 tests. 0 tests failed. Done!
