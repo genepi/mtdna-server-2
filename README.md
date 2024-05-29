@@ -3,35 +3,19 @@
 [![mtdna-server-2](https://github.com/genepi/mtdna-server-2/actions/workflows/run-tests.yml/badge.svg)](https://github.com/genepi/mtdna-server-2/actions/workflows/run-tests.yml)
 [![nf-test](https://img.shields.io/badge/tested_with-nf--test-337ab7.svg)](https://github.com/askimed/nf-test)
 
-mtDNA-Server 2 is a Nextflow DSL2 pipeline to accurately detect heteroplasmic and homoplasmic variants in mitochondrial (mtDNA) genomes. 
-
-It supports different variant callers and is able to call insertions, deletions (INDELs) and single nucleotide variants (SNVs). Furthmore it includes several modules for (a) quality control and input validation (b) haplogroup classification and contamination detection, (c) minimal VAF estimation based on the coverage to minimize false positives and (d) an interactive analytics dashboard. 
+mtDNA-Server 2 is a Nextflow DSL2 pipeline to accurately detect heteroplasmic and homoplasmic variants in mitochondrial (mtDNA) genomes, details can be found in our [NAR publication](https://doi.org/10.1093/nar/gkae296). 
 
 ![image](docs/images/report.png)
 
-mtDNA-Server 2 is available as a graphical web-service or a Nextflow pipeline for local execution. 
+## How to execute mtDNA-Server 2?
+mtDNA-Server 2 is available as a **hosted web-service** at the Medical University of Innsbruck or as a **Nextflow pipeline**.
 
 ## Web Service
 
 mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitoverse.i-med.ac.at/) platform.
 
-### Documentation
-
-Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
-
-![image](docs/images/workflow.png)
-
-We want to steadily improve mtDNA-Server 2. If your files are not working, please create a issue or contact [[Sebastian](mailto:sebastian.schoenherr@i-med.ac.at)] directly. 
-
-
-### Version History
-Release [v2.1.10](releases/tag/v2.1.10) - Improved mutect2 support: create missing RG tags, write inidividual reference sequence on the fly, support complex ref tags.
-
-## Publication
-Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
-
-## Local Execution
-To run mtDNA-Server 2 locally, please execute the following steps. 
+## Nextflow Pipeline
+To run mtDNA-Server 2 via Nextflow, please execute the following steps. 
 
 ### Quick Start
 
@@ -46,6 +30,21 @@ To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohp
 ```
 nextflow run genepi/mtdna-server-2 -r v2.1.10 -c <your-config-file> -profile docker
 ```
+
+## Documentation
+
+Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
+
+![image](docs/images/workflow.png)
+
+## Publication
+Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
+
+### Version History
+Release [v2.1.10](../../releases/tag/v2.1.10) - Improved mutect2 support: create missing RG tags, write inidividual reference sequence on the fly, support complex ref tags.
+
+## Are your files not working?
+We want to steadily improve mtDNA-Server 2. If your files are not working, please feel free to create a issue or contact [[Sebastian](mailto:sebastian.schoenherr@i-med.ac.at)] directly. 
 
 ### Development
 ```
