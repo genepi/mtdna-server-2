@@ -7,9 +7,6 @@ mtDNA-Server 2 is a Nextflow DSL2 pipeline to accurately detect heteroplasmic an
 
 ![image](docs/images/report.png)
 
-## Publication
-Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
-
 ## Version History
 Release [v2.1.11](../../releases/tag/v2.1.11) - Improve QC command, update to latest mutserve v2.0.1.
 
@@ -70,7 +67,8 @@ docker build -t genepi/mtdna-server-2 . # don't ignore the dot
 nextflow run main.nf -profile test,development
 ```
 
-
+## Publication
+Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
 
 
 ## Contact
