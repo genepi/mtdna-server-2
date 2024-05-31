@@ -7,12 +7,27 @@ mtDNA-Server 2 is a Nextflow DSL2 pipeline to accurately detect heteroplasmic an
 
 ![image](docs/images/report.png)
 
+## Publication
+Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
+
+## Version History
+Release [v2.1.11](../../releases/tag/v2.1.11) - Improve QC command, update to latest mutserve v2.0.1.
+
+Release [v2.1.10](../../releases/tag/v2.1.10) - Improved mutect2 support: create missing RG tags, write inidividual reference sequence on the fly, support complex ref tags.
+
+### Are your files not working?
+We want to steadily improve mtDNA-Server 2. If your files are not working, please feel free to create a issue or contact [[Sebastian](mailto:sebastian.schoenherr@i-med.ac.at)] directly. 
+
 ## How to execute mtDNA-Server 2?
 mtDNA-Server 2 is available as a **hosted web-service** at the Medical University of Innsbruck or as a **Nextflow pipeline**.
 
 ## Web Service
 
 mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitoverse.i-med.ac.at/) platform.
+
+### Documentation
+
+The web-service documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
 
 ## Nextflow Pipeline
 To run mtDNA-Server 2 via Nextflow, please execute the following steps. 
@@ -31,32 +46,7 @@ To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohp
 nextflow run genepi/mtdna-server-2 -r v2.1.11 -c <your-config-file> -profile docker
 ```
 
-## Documentation
-
-Documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
-
-![image](docs/images/workflow.png)
-
-## Publication
-Weissensteiner H*, Forer L*, Kronenberg F, Schönherr S. [mtDNA-Server 2: advancing mitochondrial DNA analysis through highly parallelized data processing and interactive analytics](https://doi.org/10.1093/nar/gkae296). Nucleic Acids Res. 2024 May 6:gkae296. doi: 10.1093/nar/gkae296. Epub ahead of print. PMID: 38709886.
-
-### Version History
-Release [v2.1.11](../../releases/tag/v2.1.11) - Improve QC command, update to latest mutserve v2.0.1.
-
-Release [v2.1.10](../../releases/tag/v2.1.10) - Improved mutect2 support: create missing RG tags, write inidividual reference sequence on the fly, support complex ref tags.
-
-## Are your files not working?
-We want to steadily improve mtDNA-Server 2. If your files are not working, please feel free to create a issue or contact [[Sebastian](mailto:sebastian.schoenherr@i-med.ac.at)] directly. 
-
-### Development
-```
-git clone https://github.com/genepi/mtdna-server-2
-cd mtdna-server-2
-docker build -t genepi/mtdna-server-2 . # don't ignore the dot
-nextflow run main.nf -profile test,development
-```
-
-### Documentation
+### Parameters
 The following parameters can be set in the configuration file. 
 | Parameter            | Default Value        | Comment        |
 |----------------------|--------------|----------------|
@@ -71,6 +61,16 @@ The following parameters can be set in the configuration file.
 | baseQ                | 20           | Base quality threshold |
 | alignQ               | 30           | Alignment quality threshold |
 | output               | null         | Specific Output folder   |
+
+## Development
+```
+git clone https://github.com/genepi/mtdna-server-2
+cd mtdna-server-2
+docker build -t genepi/mtdna-server-2 . # don't ignore the dot
+nextflow run main.nf -profile test,development
+```
+
+
 
 
 ## Contact
