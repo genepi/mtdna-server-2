@@ -51,7 +51,7 @@ WORKDIR "/opt/haplogrep"
 RUN wget https://github.com/genepi/haplogrep3/releases/download/v${HAPLOGREP_VERSION}/haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
     unzip haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
     rm haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
-     ./haplogrep3 install-tree phylotree-fu-rcrs@1.2
+     ./haplogrep3 
 ENV PATH="/opt/haplogrep:${PATH}"
 
 WORKDIR "/opt"
