@@ -25,7 +25,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install mutserve (not as conda package available)
 
-ENV MUTSERVE_VERSION=2.0.1®
+ENV MUTSERVE_VERSION=2.0.1
 RUN mkdir /opt/mutserve
 WORKDIR "/opt/mutserve"
 RUN wget https://github.com/seppinho/mutserve/releases/download/v${MUTSERVE_VERSION}/mutserve.zip
