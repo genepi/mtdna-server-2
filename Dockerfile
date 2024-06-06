@@ -45,13 +45,13 @@ RUN unzip haplocheck.zip && \
     rm haplocheck.zip
 ENV PATH="/opt/haplocheck:${PATH}"
 
-ENV HAPLOGREP_VERSION=3.2.1
+ENV HAPLOGREP_VERSION=3.2.2
 RUN mkdir /opt/haplogrep
 WORKDIR "/opt/haplogrep"
 RUN wget https://github.com/genepi/haplogrep3/releases/download/v${HAPLOGREP_VERSION}/haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
     unzip haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
     rm haplogrep3-${HAPLOGREP_VERSION}-linux.zip && \
-     ./haplogrep3 
+    ./haplogrep3 install-tree phylotree-fu-rcrs@1.2
 ENV PATH="/opt/haplogrep:${PATH}"
 
 WORKDIR "/opt"
