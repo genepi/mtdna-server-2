@@ -8,7 +8,10 @@ mtDNA-Server 2 is a Nextflow DSL2 pipeline to accurately detect heteroplasmic an
 ![image](docs/images/report.png)
 
 ## Version History
-Release [v2.1.11](../../releases/tag/v2.1.12) - Install Haplogrep3 tree directly.
+
+Release [v2.1.13](../../releases/tag/v2.1.13) - Update to latest Haplogrep3 
+
+Release [v2.1.12](../../releases/tag/v2.1.12) - Install Haplogrep3 tree directly.
 
 Release [v2.1.11](../../releases/tag/v2.1.11) - Improve QC command, update to latest mutserve v2.0.1.
 
@@ -37,12 +40,12 @@ To run mtDNA-Server 2 via Nextflow, please execute the following steps.
 
 2. Run the pipeline on our test dataset and select either Docker, Singluarity or Slurm. 
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.12 -profile test,<docker,singularity,slurm>
+nextflow run genepi/mtdna-server-2 -r v2.1.13 -profile test,<docker,singularity,slurm>
 ```
 ### Run Pipeline on own data
 To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohpc_fusion.config) and run the following command:
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.12 -c <your-config-file> -profile docker
+nextflow run genepi/mtdna-server-2 -r v2.1.13 -c <your-config-file> -profile docker
 ```
 
 ### Parameters
