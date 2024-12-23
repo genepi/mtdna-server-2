@@ -9,6 +9,8 @@ mtDNA-Server 2 is a Nextflow DSL2 pipeline to accurately detect heteroplasmic an
 
 ## Version History
 
+Release [v2.1.15](../../releases/tag/v2.1.15) - Add option for min mean coverage
+
 Release [v2.1.14](../../releases/tag/v2.1.14) - Load resource conf
 
 Release [v2.1.13](../../releases/tag/v2.1.13) - Update to latest Haplogrep3 
@@ -42,12 +44,12 @@ To run mtDNA-Server 2 via Nextflow, please execute the following steps.
 
 2. Run the pipeline on our test dataset and select either Docker, Singluarity or Slurm. 
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.14 -profile test,<docker,singularity,slurm>
+nextflow run genepi/mtdna-server-2 -r v2.X.XX -profile test,<docker,singularity,slurm>
 ```
 ### Run Pipeline on own data
 To run mtDNA-Server 2 on your own data, create a [config file](tests/test_mitohpc_fusion.config) and run the following command:
 ```
-nextflow run genepi/mtdna-server-2 -r v2.1.14 -c <your-config-file> -profile <docker,singularity,slurm>
+nextflow run genepi/mtdna-server-2 -r v2.X.XX -c <your-config-file> -profile <docker,singularity,slurm>
 ```
 
 ### Parameters
@@ -64,6 +66,7 @@ The following parameters can be set in the configuration file.
 | mapQ                 | 20           | Mapping quality threshold |
 | baseQ                | 20           | Base quality threshold |
 | alignQ               | 30           | Alignment quality threshold |
+| min_mean_coverage               | 50           | Min Mean coverage |
 | output               | null         | Specific Output folder   |
 
 ## Development

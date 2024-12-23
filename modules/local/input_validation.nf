@@ -37,7 +37,7 @@ process INPUT_VALIDATION {
         --output-excluded-samples excluded_samples.txt \
         --output-contig contig.txt \
         --report validation_report.txt \
-        --min-mean-depth ${params.min_mean_depth} \
+        --min-mean-depth ${params.min_mean_coverage} \
         --tool ${params.mode}
     exit_code_a=\$?
 
