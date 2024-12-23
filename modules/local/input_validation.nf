@@ -15,6 +15,7 @@ process INPUT_VALIDATION {
     path("*.bam"), includeInputs: true, emit: validated_files
 
     """
+    set +e   
     csvtk concat \
         -t ${statistics} \
         -T -o sample_statistics.txt \
@@ -35,12 +36,15 @@ process INPUT_VALIDATION {
         --alignQ ${params.alignQ} \
         --output-excluded-samples excluded_samples.txt \
         --output-contig contig.txt \
+        --report validation_report.txt \
+        --min-mean-depth ${params.min_mean_depth} \
         --tool ${params.mode}
-    
+    exit_code_a=\$?
+
     # delete excluded_samples from BAM input channel directly
     awk -v q='"' '{print "rm " q \$1 q }' excluded_samples.txt | sh
 
-    python -m json.tool cloudgene.report.json
-        
+    cat validation_report.txt
+    exit \$exit_code_a
     """
 }

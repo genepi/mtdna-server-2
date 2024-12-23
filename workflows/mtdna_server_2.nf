@@ -48,14 +48,12 @@ workflow MTDNA_SERVER_2 {
     bams_ch = Channel.fromPath(params.files)
 
     if ( params.max_samples != 0 && (bams_ch.count() > params.max_samples)) {
-        def report = new CloudgeneReport()
-        report.error("The maximum number of allowed samples is " + params.max_samples +".")
+        println "::error:: The maximum number of allowed samples is "+ params.max_samples +"."
         exit 1
     }
 
-    if ( bams_ch.count() == 0) {
-        def report = new CloudgeneReport()
-        report.error("No BAM files found.")
+    bams_ch.ifEmpty {
+        println "::error:: No BAM input files detected."
         exit 1
     }
 
@@ -228,11 +226,10 @@ workflow MTDNA_SERVER_2 {
 }
 
 workflow.onComplete {
-  
-    def report = new CloudgeneReport()
    
     //job failed
     if (!workflow.success) {
+        def statusMessage = workflow.exitStatus != null ? "failed" : "canceled"
         if (params.config.send_mail){
             sendMail{
                 to "${params.user.email}"
@@ -242,10 +239,10 @@ workflow.onComplete {
 
             }
         }
-        report.error("Job failed. Reason: " + workflow.errorMessage)
+        println "::error:: mtDNA Server job ${statusMessage}." 
         return
     } else {
-        report.ok("Job terminated successfully. Duration: " + workflow.duration)
+        println "::message:: " + "Job terminated successfully. Duration: " + workflow.duration
     }
 
     //job successful

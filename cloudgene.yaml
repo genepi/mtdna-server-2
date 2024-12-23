@@ -29,7 +29,7 @@ workflow:
           label: "Index Reference"
           view: progressbar     
         - process: "MTDNA_SERVER_2:SUBSAMPLING"
-          label: "Calculate Sample Statistics"
+          label: "Subsampling"
           view: progressbar               
         - process: "MTDNA_SERVER_2:INPUT_VALIDATION"
           label: "Input Validation"
@@ -122,6 +122,12 @@ workflow:
               
     - id: myseparator0
       type: separator
+
+    - id: min_mean_depth
+      description: Minimal Mean Coverage 
+      type: number
+      visible: true
+      value: 50  
 
     - id: baseQ
       description: Minimal Base Quality
