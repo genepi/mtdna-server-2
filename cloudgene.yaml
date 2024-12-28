@@ -126,17 +126,17 @@ workflow:
     - id: min_mean_coverage
       description: Minimal Mean Coverage 
       type: number
-      visible: true
+      visible: false
       value: 50  
 
     - id: baseQ
-      description: Minimal Base Quality
+      description: Minimal Base Quality (Variant Calling)
       type: number
       visible: true 
-      value: 20  
+      value: 20
       
     - id: mapQ
-      description: Minimal Map Quality
+      description: Minimal Map Quality (Variant Calling)
       type: number
       visible: true
       value: 20      
