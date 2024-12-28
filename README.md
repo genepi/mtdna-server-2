@@ -22,7 +22,7 @@ Release [v2.1.11](../../releases/tag/v2.1.11) - Improve QC command, update to la
 Release [v2.1.10](../../releases/tag/v2.1.10) - Improved mutect2 support: create missing RG tags, write inidividual reference sequence on the fly, support complex ref tags.
 
 ### Are your files not working?
-We want to steadily improve mtDNA-Server 2. If your files are not working, please feel free to create a issue or contact [[Sebastian](mailto:sebastian.schoenherr@i-med.ac.at)] directly. 
+We want to steadily improve mtDNA-Server 2. If your files are not working, please feel free to create a [issue](https://github.com/genepi/mtdna-server-2/issues).
 
 ## How to execute mtDNA-Server 2?
 mtDNA-Server 2 is available as a **hosted web-service** at the Medical University of Innsbruck or as a **Nextflow pipeline**.
@@ -33,7 +33,7 @@ mtDNA-Server 2 is hosted as a **free** service on our [mitoverse](https://mitove
 
 ### Documentation
 
-The web-service documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
+The documentation can be accessed [here](https://mitoverse.readthedocs.io/mtdna-server/mtdna-server/). 
 
 ## Nextflow Pipeline
 To run mtDNA-Server 2 via Nextflow, please execute the following steps. 
