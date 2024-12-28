@@ -253,7 +253,7 @@ workflow.onComplete {
             subject "[${params.service.name}] Job ${params.project} is complete."
             body "Hi ${params.user.name}, your job completed successfully and can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
         }
-        report.ok("Sent email notification to <b>${params.user.email}</b>")
+        println "::message:: " + "Sent email notification to <b>${params.user.email}</b>"
     } else {
 
     }
