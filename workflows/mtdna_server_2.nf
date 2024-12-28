@@ -235,7 +235,7 @@ workflow.onComplete {
                 to "${params.user.email}"
                 from "${params.service.email}"
                 subject "[${params.service.name}] Job ${params.project} failed."
-                body "Hi ${params.user.name}, your job failed :(. Logs can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
+                body "Dear ${params.user.name}, your job has ${statusMessage}. More details can be found at the following link: ${params.service.url}/index.html#!jobs/${params.project}"
 
             }
         }
@@ -250,8 +250,8 @@ workflow.onComplete {
         sendMail{
             to "${params.user.email}"
             from "${params.service.email}"
-            subject "[${params.service.name}] Job ${params.project} is complete."
-            body "Hi ${params.user.name}, your job completed successfully and can be accessed at ${params.service.url}/index.html#!jobs/${params.project}"
+            subject "[${params.service.name}] Job ${params.project} is complete"
+            body "Dear ${params.user.name}, \n your mtDNA-Server 2 job has finished succesfully.\n You can download the results from the following link: ${params.service.url}/index.html#!jobs/${params.project}"
         }
         println "::message:: " + "Sent email notification to <b>${params.user.email}</b>"
     } else {
