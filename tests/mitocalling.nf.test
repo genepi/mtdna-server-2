@@ -92,7 +92,7 @@ nextflow_pipeline {
         when {
             params {
                project = "test-job"
-               files = "${launchDir}/input/*.bam"
+               files = "${launchDir}/input/6samples/*.bam"
                mode = "mutserve"
                output = "out"
                output_reports = "reports"
@@ -116,7 +116,7 @@ nextflow_pipeline {
         when {
             params {
                project = "test-job"
-               files = "${launchDir}/input/*.bam"
+               files = "${launchDir}/input/6samples/*.bam"
                mode = "mutect2"
                output = "out"
                output_reports = "reports"
@@ -140,7 +140,7 @@ nextflow_pipeline {
         when {
             params {
                project = "test-job"
-               files = "${launchDir}/input/*.bam"
+               files = "${launchDir}/input/6samples/*.bam"
                mode = "fusion"
                output = "out"
                output_reports = "reports"
