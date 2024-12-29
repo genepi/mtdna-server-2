@@ -126,7 +126,7 @@ workflow:
     - id: min_mean_coverage
       description: Minimal Mean Coverage 
       type: number
-      visible: false
+      visible: true
       value: 50  
 
     - id: baseQ
