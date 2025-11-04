@@ -206,7 +206,7 @@ variants %>% count(Filter_Label) %>%
   
 ```
 
-### Variants and Hetroplasmies
+### Variants and Heteroplasmies
 
 Detected **`r variants %>% filter(Type == 1) %>% nrow()` variants**, **`r variants %>% filter(Type == 2) %>% nrow()` heteroplasmies** and **`r  variants %>% filter(Type == 3) %>% nrow()` InDels**.
 
@@ -234,7 +234,7 @@ variants %>%
 ```
 
 
-### Paramteres and Software Version
+### Parameters and Software Version
 
 ```{r}
 pipeline_params %>%
