@@ -7,12 +7,17 @@ process MUTSERVE {
 
     output:
     tuple path("${bam_file.baseName}.vcf.gz"), path("${bam_file.baseName}.vcf.gz.tbi"), val(method), emit: mutserve_ch
+    path("*_raw.txt", optional: true)
     
+    publishDir "${params.pubDir}/mutserve_raw_files", mode: 'copy', pattern: '*_raw.txt'
+
     script:
     def avail_mem = 1024
     if (task.memory) {
         avail_mem = (task.memory.mega*0.8).intValue()
     }    
+    def raw_option = params.mutserve_write_raw ? "--write-raw" : ""
+
 
     """
     #todo: check used mutserve strand-bias with default parameter
@@ -26,7 +31,7 @@ process MUTSERVE {
         --output ${bam_file.baseName}.vcf.gz \
         --no-ansi \
         --strand-bias 1.6 \
-        --write-raw \
+        $raw_option \
         ${bam_file} 
 
     bcftools norm \
